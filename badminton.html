@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏸 Badminton Match Randomizer</title>
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #f8fafc;
+    --border: #e2e8f0;
+    --text: #1a202c;
+    --text2: #4a5568;
+    --text3: #a0aec0;
+    --primary: #4f46e5;
+    --primary-light: #eef2ff;
+    --primary-dark: #3730a3;
+    --success: #10b981;
+    --success-light: #d1fae5;
+    --danger: #ef4444;
+    --danger-light: #fee2e2;
+    --warning: #f59e0b;
+    --warning-light: #fef3c7;
+    --nav-height: 64px;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface2: #162032;
+      --border: #334155;
+      --text: #f1f5f9;
+      --text2: #94a3b8;
+      --text3: #475569;
+      --primary: #6366f1;
+      --primary-light: #1e1b4b;
+      --primary-dark: #818cf8;
+      --success: #34d399;
+      --success-light: #064e3b;
+      --danger: #f87171;
+      --danger-light: #450a0a;
+      --warning: #fbbf24;
+      --warning-light: #451a03;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,0.4), 0 4px 6px rgba(0,0,0,0.2);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans Thai', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: calc(var(--nav-height) + 16px);
+  }
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+  .header h1 { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .header p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+  .page { display: none; padding: 16px 16px 8px; max-width: 640px; margin: 0 auto; }
+  .page.active { display: block; }
+  .nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: flex;
+    z-index: 200;
+    height: var(--nav-height);
+    backdrop-filter: blur(10px);
+  }
+  .nav-btn {
+    flex: 1; border: none; background: none; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4px; color: var(--text3); font-size: 10px; font-weight: 500;
+    transition: color 0.2s;
+    padding: 8px 4px;
+  }
+  .nav-btn.active { color: var(--primary); }
+  .nav-btn svg { width: 22px; height: 22px; }
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+  }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--text2); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 18px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    border: none; cursor: pointer; transition: all 0.2s; text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .btn-success { background: var(--success); color: white; }
+  .btn-success:hover { filter: brightness(0.9); }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn-danger:hover { filter: brightness(0.9); }
+  .btn-ghost { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { background: var(--border); }
+  .btn-warning { background: var(--warning); color: white; }
+  .btn-warning:hover { filter: brightness(0.9); }
+  .btn-sm { padding: 6px 12px; font-size: 13px; border-radius: 6px; }
+  .btn-full { width: 100%; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+  .input {
+    width: 100%; padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border);
+    background: var(--surface2); color: var(--text); font-size: 14px;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+  .select {
+    width: 100%; padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border);
+    background: var(--surface2); color: var(--text); font-size: 14px;
+    transition: border-color 0.2s; outline: none; cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+  .select:focus { border-color: var(--primary); }
+  .form-group { margin-bottom: 12px; }
+  .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 6px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .player-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px; border-radius: 10px;
+    background: var(--surface2); border: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .player-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--primary-light); color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; flex-shrink: 0;
+  }
+  .player-info { flex: 1; min-width: 0; }
+  .player-name { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .player-skill { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .skill-badge {
+    display: inline-flex; align-items: center; padding: 2px 8px;
+    border-radius: 99px; font-size: 11px; font-weight: 600;
+  }
+  .skill-1 { background: #dbeafe; color: #1d4ed8; }
+  .skill-2 { background: #dcfce7; color: #15803d; }
+  .skill-3 { background: #fef9c3; color: #a16207; }
+  .skill-4 { background: #fed7aa; color: #c2410c; }
+  .skill-5 { background: #fecdd3; color: #be123c; }
+  .skill-6 { background: #e9d5ff; color: #7e22ce; }
+  .skill-7 { background: #1f2937; color: #f9fafb; }
+  @media (prefers-color-scheme: dark) {
+    .skill-1 { background: #1e3a5f; color: #93c5fd; }
+    .skill-2 { background: #14532d; color: #86efac; }
+    .skill-3 { background: #3f3007; color: #fde047; }
+    .skill-4 { background: #431407; color: #fdba74; }
+    .skill-5 { background: #4c0519; color: #fda4af; }
+    .skill-6 { background: #3b0764; color: #d8b4fe; }
+    .skill-7 { background: #f1f5f9; color: #0f172a; }
+  }
+  .match-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+  }
+  .match-court { font-size: 12px; font-weight: 700; color: var(--text3); letter-spacing: 1px; margin-bottom: 10px; text-transform: uppercase; }
+  .match-teams { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .match-team { flex: 1; }
+  .match-team-label { font-size: 11px; font-weight: 600; color: var(--text3); margin-bottom: 4px; }
+  .match-player { font-weight: 600; font-size: 14px; }
+  .match-player-skill { font-size: 12px; color: var(--text2); }
+  .match-vs { font-weight: 800; font-size: 16px; color: var(--text3); flex-shrink: 0; }
+  .match-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .match-btn-single { grid-template-columns: 1fr; }
+  .section-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .section-sub { font-size: 13px; color: var(--text2); margin-bottom: 16px; }
+  .empty-state {
+    text-align: center; padding: 40px 20px; color: var(--text3);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; }
+  .tab-group { display: flex; background: var(--surface2); border-radius: 10px; padding: 4px; margin-bottom: 16px; border: 1px solid var(--border); }
+  .tab-btn {
+    flex: 1; padding: 8px; border: none; background: none; cursor: pointer;
+    border-radius: 7px; font-size: 13px; font-weight: 600; color: var(--text2);
+    transition: all 0.2s;
+  }
+  .tab-btn.active { background: var(--primary); color: white; box-shadow: var(--shadow); }
+  .stat-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-rank { font-size: 16px; font-weight: 800; color: var(--text3); width: 28px; text-align: center; flex-shrink: 0; }
+  .stat-info { flex: 1; min-width: 0; }
+  .stat-name { font-weight: 600; font-size: 14px; }
+  .stat-detail { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .stat-nums { text-align: right; flex-shrink: 0; }
+  .stat-wr { font-size: 18px; font-weight: 800; color: var(--primary); }
+  .stat-wl { font-size: 12px; color: var(--text2); }
+  .badge { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; padding: 2px 7px; border-radius: 99px; font-weight: 600; margin-left: 4px; }
+  .badge-fire { background: #fef3c7; color: #d97706; }
+  .badge-champ { background: #fef9c3; color: #a16207; }
+  .badge-try { background: var(--primary-light); color: var(--primary); }
+  @media (prefers-color-scheme: dark) {
+    .badge-fire { background: #451a03; color: #fbbf24; }
+    .badge-champ { background: #3f3007; color: #fde047; }
+    .badge-try { background: #1e1b4b; color: #818cf8; }
+  }
+  .alert {
+    padding: 12px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;
+    margin-bottom: 12px; display: flex; align-items: flex-start; gap: 8px;
+  }
+  .alert-info { background: var(--primary-light); color: var(--primary-dark); border: 1px solid rgba(99,102,241,0.2); }
+  .alert-success { background: var(--success-light); color: var(--success); border: 1px solid rgba(16,185,129,0.2); }
+  .alert-warning { background: var(--warning-light); color: var(--warning); border: 1px solid rgba(245,158,11,0.2); }
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 1000; align-items: flex-end; justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--surface); border-radius: 20px 20px 0 0;
+    padding: 24px 20px; width: 100%; max-width: 480px;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.3s ease;
+    max-height: 90vh; overflow-y: auto;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+  .modal-btns { display: flex; gap: 10px; margin-top: 16px; }
+  .toggle-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .toggle-btn {
+    padding: 8px 16px; border-radius: 8px; border: 1.5px solid var(--border);
+    background: var(--surface2); color: var(--text2); cursor: pointer; font-size: 13px; font-weight: 600;
+    transition: all 0.2s;
+  }
+  .toggle-btn.selected { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+  .bench-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .bench-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 99px;
+    background: var(--surface2); border: 1px solid var(--border);
+    font-size: 13px; font-weight: 500;
+  }
+  .progress-bar { background: var(--border); border-radius: 99px; height: 6px; overflow: hidden; margin-top: 6px; }
+  .progress-fill { height: 100%; background: var(--primary); border-radius: 99px; transition: width 0.5s ease; }
+  .chips-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+  .round-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--primary-light); color: var(--primary);
+    padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 700;
+  }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+  .win-btn { background: var(--success); color: white; }
+  .win-btn:hover { filter: brightness(0.9); }
+  .complete-banner {
+    background: linear-gradient(135deg, var(--primary), #7c3aed);
+    color: white; border-radius: var(--radius); padding: 20px;
+    text-align: center; margin-bottom: 16px;
+  }
+  .complete-banner h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+  .complete-banner p { font-size: 13px; opacity: 0.85; }
+  .floating-fab {
+    position: fixed; bottom: calc(var(--nav-height) + 16px); right: 16px;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--primary); color: white; font-size: 22px;
+    border: none; cursor: pointer; box-shadow: var(--shadow-lg);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s;
+    z-index: 50;
+  }
+  .floating-fab:hover { transform: scale(1.1); }
+  .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .summary-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px; text-align: center;
+  }
+  .summary-num { font-size: 24px; font-weight: 800; color: var(--primary); }
+  .summary-label { font-size: 11px; color: var(--text2); margin-top: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .match-done {
+    opacity: 0.5; filter: grayscale(0.5);
+  }
+  .match-done-overlay {
+    position: absolute; inset: 0; border-radius: var(--radius);
+    background: rgba(16,185,129,0.05); display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .match-wrap { position: relative; }
+  .winner-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--success-light); color: var(--success);
+    padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 700;
+  }
+  /* Stock history table */
+  .stock-history-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .stock-history-table th { text-align: left; padding: 6px 8px; color: var(--text3); font-weight: 600; border-bottom: 1px solid var(--border); font-size: 11px; }
+  .stock-history-table td { padding: 5px 8px; border-bottom: 1px solid var(--border); }
+  .stock-history-table tr:last-child td { border-bottom: none; }
+  .stock-history-table tr:nth-child(even) td { background: var(--surface2); }
+  .stock-in { color: var(--success); font-weight: 700; }
+  .stock-out { color: var(--danger); font-weight: 700; }
+  /* History list */
+  .history-item {
+    padding: 10px 12px; border-radius: 8px;
+    background: var(--surface2); border: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .history-winner { color: var(--success); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🏸 Badminton Match</h1>
+  <p id="header-sub">จัดการผู้เล่นและสุ่มคู่แข่งขัน</p>
+</div>
+
+<!-- PAGE: Players -->
+<div class="page active" id="page-players">
+  <div class="section-title">ผู้เล่น</div>
+  <div class="section-sub" id="player-count-sub">เพิ่มผู้เล่นเพื่อเริ่มสุ่มคู่</div>
+
+  <div id="player-list"></div>
+
+  <button class="btn btn-primary btn-full" onclick="openAddPlayer()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12 5v14M5 12h14"/></svg>
+    เพิ่มผู้เล่น
+  </button>
+</div>
+
+<!-- PAGE: Randomize -->
+<div class="page" id="page-random">
+  <div class="section-title">สุ่มคู่</div>
+  <div class="section-sub">ตั้งค่าการแข่งขันและกดสุ่ม</div>
+
+  <div class="card">
+    <div class="card-title">รูปแบบการแข่งขัน</div>
+    <div class="tab-group">
+      <button class="tab-btn active" id="tab-doubles" onclick="setMode('doubles')">คู่ (Doubles)</button>
+      <button class="tab-btn" id="tab-singles" onclick="setMode('singles')">เดี่ยว (Singles)</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">จำนวนสนาม</label>
+      <select class="select" id="court-count" onchange="updateCourtMax()">
+        <option value="1">1 สนาม</option>
+        <option value="2" selected>2 สนาม</option>
+        <option value="3">3 สนาม</option>
+        <option value="4">4 สนาม</option>
+        <option value="5">5 สนาม</option>
+      </select>
+    </div>
+    <!-- Random mode toggle -->
+    <div style="margin-bottom:8px;">
+      <div class="form-label" style="margin-bottom:8px;">โหมดสุ่ม</div>
+      <div class="tab-group" style="margin-bottom:0;">
+        <button class="tab-btn active" id="tab-rand-balanced" onclick="setRandomMode('balanced')">สมดุลฝีมือ</button>
+        <button class="tab-btn" id="tab-rand-free" onclick="setRandomMode('free')">สุ่มอิสระ</button>
+      </div>
+    </div>
+    <div id="rr-toggle-group" style="display:none;">
+      <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
+      <div class="form-label" style="margin-bottom:8px;">โหมดการแข่งขัน</div>
+      <div class="tab-group">
+        <button class="tab-btn active" id="tab-normal" onclick="setRRMode(false)">สุ่มคู่ทั่วไป</button>
+        <button class="tab-btn" id="tab-rr" onclick="setRRMode(true)">🔄 พบทุกคู่ (Round Robin)</button>
+      </div>
+      <div id="rr-info" style="font-size:12px;color:var(--text2);margin-top:8px;"></div>
+    </div>
+    <div id="player-needed-alert"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">ผู้เล่นที่ร่วมแข่ง</div>
+    <div id="active-players-list"></div>
+    <button class="btn btn-ghost btn-sm" onclick="toggleAllPlayers()" id="toggle-all-btn">เลือกทั้งหมด</button>
+  </div>
+
+  <button class="btn btn-primary btn-full" id="randomize-btn" onclick="doRandomize()" style="margin-top:4px; padding: 14px;">
+    🎲 สุ่มคู่แข่งขัน
+  </button>
+</div>
+
+<!-- PAGE: Match -->
+<div class="page" id="page-match">
+  <div id="match-content"></div>
+</div>
+
+<!-- PAGE: Stats -->
+<div class="page" id="page-stats">
+  <div class="section-title">สถิติ</div>
+  <div class="section-sub">ผลการแข่งขันทั้งหมด</div>
+
+  <div class="tab-group" id="stats-tab-group">
+    <button class="tab-btn active" id="stats-tab-stats" onclick="switchStatsTab('stats')">สถิติ</button>
+    <button class="tab-btn" id="stats-tab-history" onclick="switchStatsTab('history')">ประวัติ</button>
+  </div>
+
+  <!-- Stats sub-page -->
+  <div id="stats-sub-stats">
+    <div class="summary-grid" id="stats-summary"></div>
+    <div class="card" id="stats-list-card">
+      <div id="stats-list"></div>
+    </div>
+    <div style="margin-top:8px;">
+      <button class="btn btn-ghost btn-full btn-sm" onclick="confirmReset()">🗑 รีเซ็ตข้อมูลทั้งหมด</button>
+    </div>
+  </div>
+
+  <!-- History sub-page -->
+  <div id="stats-sub-history" style="display:none;">
+    <div id="match-history-list"></div>
+    <div style="margin-top:8px;">
+      <button class="btn btn-ghost btn-full btn-sm" onclick="clearMatchHistory()">🗑 ล้างประวัติ</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: Tools (Stock only) -->
+<div class="page" id="page-tools">
+  <div class="section-title">🪶 สต๊อกลูก</div>
+  <div class="section-sub">จัดการสต๊อกลูกแบดมินตัน</div>
+
+  <!-- Big counter -->
+  <div class="card" style="text-align:center;padding:24px 16px;">
+    <div id="stock-status-icon" style="font-size:36px;margin-bottom:4px;">🪶</div>
+    <div id="stock-count-big" style="font-size:64px;font-weight:900;line-height:1;color:var(--primary);">0</div>
+    <div style="font-size:15px;color:var(--text2);margin-top:4px;">ลูก</div>
+    <div id="stock-box-count" style="font-size:13px;color:var(--text3);margin-top:2px;"></div>
+    <div id="stock-status-badge" style="margin-top:10px;"></div>
+  </div>
+
+  <!-- Quick adjust -->
+  <div class="card">
+    <div class="card-title">ปรับสต๊อก</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+      <button class="btn btn-ghost" onclick="adjustStock(-1)" style="font-size:18px;">−1 ลูก</button>
+      <button class="btn btn-primary" onclick="adjustStock(1)" style="font-size:18px;">+1 ลูก</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <button class="btn btn-ghost" onclick="adjustStock(-12)">−1 กล่อง (12)</button>
+      <button class="btn btn-primary" onclick="adjustStock(12)">+1 กล่อง (12)</button>
+    </div>
+  </div>
+
+  <!-- Use today -->
+  <div class="card">
+    <div class="card-title">บันทึกการใช้วันนี้</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div style="flex:1;">
+        <input class="input" id="stock-use-input" type="number" min="1" max="999" placeholder="จำนวนลูกที่ใช้..." inputmode="numeric">
+      </div>
+      <button class="btn btn-danger" onclick="useStock()">ใช้ไป</button>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
+      <div style="flex:1;">
+        <input class="input" id="stock-add-input" type="number" min="1" max="9999" placeholder="จำนวนลูกที่ซื้อมา..." inputmode="numeric">
+      </div>
+      <button class="btn btn-success" onclick="addStock()">เพิ่ม</button>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div class="card">
+    <div class="card-title">ตั้งค่า</div>
+    <div class="form-group">
+      <label class="form-label">ราคาต่อกล่อง (12 ลูก)</label>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input class="input" id="stock-price-input" type="number" min="0" placeholder="ราคา..." inputmode="numeric">
+        <button class="btn btn-ghost" onclick="saveStockPrice()">บันทึก</button>
+      </div>
+    </div>
+    <div id="stock-value-display"></div>
+  </div>
+
+  <!-- Stock history -->
+  <div style="margin-top:16px;">
+    <div style="font-size:15px;font-weight:700;margin-bottom:8px;">📋 ประวัติการเคลื่อนไหว</div>
+    <div class="card" style="padding:12px;overflow-x:auto;">
+      <div id="stock-history-container"></div>
+    </div>
+    <div style="margin-top:8px;">
+      <button class="btn btn-ghost btn-full btn-sm" onclick="clearStockHistory()">🗑 ล้างประวัติสต๊อก</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: Cost -->
+<div class="page" id="page-cost">
+  <div class="section-title">💰 ค่าใช้จ่าย</div>
+  <div class="section-sub">คำนวณและหารค่าใช้จ่าย</div>
+
+  <div class="card">
+    <div class="card-title">ค่าสนาม</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">ราคา/ชม. (บาท)</label>
+        <input class="input" id="cost-rate" type="number" value="170" inputmode="numeric" oninput="calcCost()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">จำนวนชั่วโมง</label>
+        <input class="input" id="cost-hours" type="number" value="2" inputmode="decimal" oninput="calcCost()">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">จำนวนสนาม</label>
+      <input class="input" id="cost-courts" type="number" value="2" inputmode="numeric" oninput="calcCost()">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">ค่าลูกแบด</div>
+    <div class="form-group">
+      <label class="form-label">ลูกที่ใช้ (ลูก)</label>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input class="input" id="cost-shuttles" type="number" value="0" inputmode="numeric" oninput="calcCost()">
+        <button class="btn btn-ghost btn-sm" onclick="fillShuttlesFromStock()" style="white-space:nowrap;">ดึงจากสต๊อก</button>
+      </div>
+      <div id="cost-shuttle-detail" style="font-size:12px;color:var(--text2);margin-top:4px;"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">ราคาลูก/กล่อง (บาท)</label>
+      <input class="input" id="cost-shuttle-price" type="number" value="170" inputmode="numeric" oninput="calcCost()">
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="card" id="cost-summary-card">
+    <div class="card-title">สรุปค่าใช้จ่าย</div>
+    <div id="cost-summary"></div>
+  </div>
+
+  <!-- Players split -->
+  <div class="card">
+    <div class="card-title">หารค่าใช้จ่าย</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">เลือกคนที่ร่วมจ่าย · ✂️ = มาครึ่งเวลา (จ่ายครึ่ง)</div>
+    <button class="btn btn-ghost btn-sm" onclick="fillFromActivePlayers()" style="margin-bottom:10px;">ดึงจากผู้เล่นที่เลือก</button>
+    <div id="cost-players-list"></div>
+    <div id="cost-result" style="margin-top:12px;"></div>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="nav">
+  <button class="nav-btn active" id="nav-players" onclick="goPage('players')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><path d="M19 8l2 2 4-4"/></svg>
+    ผู้เล่น
+  </button>
+  <button class="nav-btn" id="nav-random" onclick="goPage('random')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l5 5"/><path d="M4 4l5 5"/></svg>
+    สุ่มคู่
+  </button>
+  <button class="nav-btn" id="nav-match" onclick="goPage('match')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    แข่งขัน
+  </button>
+  <button class="nav-btn" id="nav-stats" onclick="goPage('stats')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    สถิติ
+  </button>
+  <button class="nav-btn" id="nav-tools" onclick="goPage('tools')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+    🪶สต๊อก
+  </button>
+  <button class="nav-btn" id="nav-cost" onclick="goPage('cost')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    💰ค่าใช้จ่าย
+  </button>
+</nav>
+
+<!-- Modal: Add/Edit Player -->
+<div class="modal-overlay" id="modal-player">
+  <div class="modal">
+    <div class="modal-title" id="modal-player-title">เพิ่มผู้เล่น</div>
+    <div class="form-group">
+      <label class="form-label">ชื่อผู้เล่น</label>
+      <input class="input" id="input-name" placeholder="กรอกชื่อ..." maxlength="30">
+    </div>
+    <div class="form-group">
+      <label class="form-label">ระดับฝีมือ (ITF 1.0–7.0)</label>
+      <select class="select" id="input-skill">
+        <option value="1">1.0 – มือใหม่ (Beginner)</option>
+        <option value="2">2.0 – เริ่มเล่นได้ (Novice)</option>
+        <option value="3" selected>3.0 – ระดับกลาง (Intermediate)</option>
+        <option value="4">4.0 – ค่อนข้างเก่ง (Advanced)</option>
+        <option value="5">5.0 – ระดับสูง (Expert)</option>
+        <option value="6">6.0 – ระดับแข่งขัน (Competitive)</option>
+        <option value="7">7.0 – ระดับโลก (World Class)</option>
+      </select>
+    </div>
+    <input type="hidden" id="edit-player-id">
+    <div class="modal-btns">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-player')">ยกเลิก</button>
+      <button class="btn btn-primary" style="flex:2" onclick="savePlayer()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Confirm Reset -->
+<div class="modal-overlay" id="modal-reset">
+  <div class="modal">
+    <div class="modal-title">⚠️ ยืนยันการรีเซ็ต</div>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:16px;">ข้อมูลทั้งหมดจะถูกลบ รวมถึงรายชื่อผู้เล่น สถิติ และประวัติการแข่งขัน (ประวัติแมทช์และสต๊อกจะยังคงอยู่) ไม่สามารถกู้คืนได้</p>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-reset')">ยกเลิก</button>
+      <button class="btn btn-danger" style="flex:1" onclick="doReset()">รีเซ็ต</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =================== STATE ===================
+let state = {
+  players: [],
+  mode: 'doubles',
+  courts: 2,
+  activePlayers: new Set(),
+  matches: [],
+  round: 1,
+  pairHistory: [],
+  stats: {},
+  currentMatches: [],
+  roundComplete: false,
+  benchQueue: [],
+  rrActive: false,
+  rrTeams: [],
+  rrRounds: [],
+  rrRoundIdx: 0,
+  rrRoundQueue: [],
+  rrDoneMatches: 0,
+  stockCount: 0,
+  stockPricePerBox: 170,
+  rrTotalMatches: 0,
+  matchHistory: [],   // Feature 1
+  stockHistory: [],   // Feature 4
+};
+
+const SKILL_LABELS = {
+  1: 'มือใหม่', 2: 'เริ่มเล่นได้', 3: 'ระดับกลาง',
+  4: 'ค่อนข้างเก่ง', 5: 'ระดับสูง', 6: 'ระดับแข่งขัน', 7: 'ระดับโลก'
+};
+
+// Feature 2: random mode
+let randomMode = 'balanced';
+
+// =================== STORAGE ===================
+function save() {
+  try {
+    localStorage.setItem('bmt_players', JSON.stringify(state.players));
+    localStorage.setItem('bmt_stats', JSON.stringify(state.stats));
+    localStorage.setItem('bmt_currentMatches', JSON.stringify(state.currentMatches));
+    localStorage.setItem('bmt_pairHistory', JSON.stringify(state.pairHistory));
+    localStorage.setItem('bmt_round', state.round);
+    localStorage.setItem('bmt_mode', state.mode);
+    localStorage.setItem('bmt_courts', state.courts);
+    localStorage.setItem('bmt_activePlayers', JSON.stringify([...state.activePlayers]));
+    localStorage.setItem('bmt_benchQueue', JSON.stringify(state.benchQueue));
+    localStorage.setItem('bmt_rrActive', state.rrActive);
+    localStorage.setItem('bmt_rrTeams', JSON.stringify(state.rrTeams));
+    localStorage.setItem('bmt_rrRounds', JSON.stringify(state.rrRounds));
+    localStorage.setItem('bmt_rrRoundIdx', state.rrRoundIdx);
+    localStorage.setItem('bmt_rrRoundQueue', JSON.stringify(state.rrRoundQueue));
+    localStorage.setItem('bmt_rrDoneMatches', state.rrDoneMatches);
+    localStorage.setItem('bmt_rrTotalMatches', state.rrTotalMatches);
+    localStorage.setItem('bmt_stockCount', state.stockCount);
+    localStorage.setItem('bmt_stockPricePerBox', state.stockPricePerBox);
+    localStorage.setItem('bmt_matchHistory', JSON.stringify(state.matchHistory));
+    localStorage.setItem('bmt_stockHistory', JSON.stringify(state.stockHistory));
+  } catch(e) {}
+}
+
+function load() {
+  try {
+    state.players = JSON.parse(localStorage.getItem('bmt_players') || '[]');
+    state.stats = JSON.parse(localStorage.getItem('bmt_stats') || '{}');
+    state.currentMatches = JSON.parse(localStorage.getItem('bmt_currentMatches') || '[]');
+    state.pairHistory = JSON.parse(localStorage.getItem('bmt_pairHistory') || '[]');
+    state.round = parseInt(localStorage.getItem('bmt_round') || '1');
+    state.mode = localStorage.getItem('bmt_mode') || 'doubles';
+    state.courts = parseInt(localStorage.getItem('bmt_courts') || '2');
+    const ap = JSON.parse(localStorage.getItem('bmt_activePlayers') || '[]');
+    state.activePlayers = new Set(ap);
+    state.benchQueue = JSON.parse(localStorage.getItem('bmt_benchQueue') || '[]');
+    state.rrActive = localStorage.getItem('bmt_rrActive') === 'true';
+    state.rrTeams = JSON.parse(localStorage.getItem('bmt_rrTeams') || '[]');
+    state.rrRounds = JSON.parse(localStorage.getItem('bmt_rrRounds') || '[]');
+    state.rrRoundIdx = parseInt(localStorage.getItem('bmt_rrRoundIdx') || '0');
+    state.rrRoundQueue = JSON.parse(localStorage.getItem('bmt_rrRoundQueue') || '[]');
+    state.rrDoneMatches = parseInt(localStorage.getItem('bmt_rrDoneMatches') || '0');
+    state.rrTotalMatches = parseInt(localStorage.getItem('bmt_rrTotalMatches') || '0');
+    state.stockCount = parseInt(localStorage.getItem('bmt_stockCount') || '0');
+    state.stockPricePerBox = parseInt(localStorage.getItem('bmt_stockPricePerBox') || '170');
+    state.matchHistory = JSON.parse(localStorage.getItem('bmt_matchHistory') || '[]');
+    state.stockHistory = JSON.parse(localStorage.getItem('bmt_stockHistory') || '[]');
+  } catch(e) {}
+}
+
+// =================== NAVIGATION ===================
+let currentPage = 'players';
+function goPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('nav-' + page).classList.add('active');
+  currentPage = page;
+  const subtitles = {
+    players: 'จัดการรายชื่อผู้เล่น',
+    random: 'ตั้งค่าและสุ่มคู่',
+    match: 'ผลการแข่งขัน',
+    stats: 'สถิติและผลรวม',
+    tools: 'สต๊อกลูกแบดมินตัน',
+    cost: 'คำนวณและหารค่าใช้จ่าย'
+  };
+  document.getElementById('header-sub').textContent = subtitles[page] || '';
+  if (page === 'random') renderRandomPage();
+  if (page === 'match') renderMatchPage();
+  if (page === 'stats') renderStats();
+  if (page === 'players') renderPlayers();
+  if (page === 'tools') { renderStock(); renderStockHistory(); }
+  if (page === 'cost') {
+    const priceEl = document.getElementById('cost-shuttle-price');
+    if (priceEl && state.stockPricePerBox) priceEl.value = state.stockPricePerBox;
+    renderCostPlayers();
+    calcCost();
+  }
+}
+
+// =================== PLAYERS ===================
+function getInitial(name) {
+  return name ? name.charAt(0).toUpperCase() : '?';
+}
+
+function skillClass(s) {
+  return 'skill-' + Math.min(7, Math.max(1, Math.round(s)));
+}
+
+function renderPlayers() {
+  const list = document.getElementById('player-list');
+  const sub = document.getElementById('player-count-sub');
+  sub.textContent = state.players.length + ' ผู้เล่น';
+  if (!state.players.length) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">👥</div><p>ยังไม่มีผู้เล่น<br>กดปุ่มด้านล่างเพื่อเพิ่ม</p></div>';
+    return;
+  }
+  const sorted = [...state.players].sort((a, b) => b.skill - a.skill);
+  list.innerHTML = sorted.map(p => {
+    const st = state.stats[p.id] || {};
+    const w = st.wins || 0, l = st.losses || 0;
+    return `<div class="player-item">
+      <div class="player-avatar">${getInitial(p.name)}</div>
+      <div class="player-info">
+        <div class="player-name">${escHtml(p.name)}</div>
+        <div class="player-skill">
+          <span class="skill-badge ${skillClass(p.skill)}">ITF ${p.skill}.0 · ${SKILL_LABELS[p.skill]}</span>
+          <span style="font-size:11px;color:var(--text3);margin-left:6px;">${w}W / ${l}L</span>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="openEditPlayer('${p.id}')" style="margin-right:4px;">แก้ไข</button>
+      <button class="btn btn-sm" style="background:var(--danger-light);color:var(--danger);" onclick="removePlayer('${p.id}')">ลบ</button>
+    </div>`;
+  }).join('');
+}
+
+function openAddPlayer() {
+  document.getElementById('modal-player-title').textContent = 'เพิ่มผู้เล่น';
+  document.getElementById('input-name').value = '';
+  document.getElementById('input-skill').value = '3';
+  document.getElementById('edit-player-id').value = '';
+  openModal('modal-player');
+  setTimeout(() => document.getElementById('input-name').focus(), 300);
+}
+
+function openEditPlayer(id) {
+  const p = state.players.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('modal-player-title').textContent = 'แก้ไขผู้เล่น';
+  document.getElementById('input-name').value = p.name;
+  document.getElementById('input-skill').value = p.skill;
+  document.getElementById('edit-player-id').value = id;
+  openModal('modal-player');
+}
+
+function savePlayer() {
+  const name = document.getElementById('input-name').value.trim();
+  const skill = parseInt(document.getElementById('input-skill').value);
+  const editId = document.getElementById('edit-player-id').value;
+  if (!name) { alert('กรุณากรอกชื่อ'); return; }
+  if (editId) {
+    const p = state.players.find(x => x.id === editId);
+    if (p) { p.name = name; p.skill = skill; }
+  } else {
+    const id = 'p' + Date.now() + Math.random().toString(36).slice(2);
+    state.players.push({ id, name, skill });
+    state.activePlayers.add(id);
+  }
+  save();
+  renderPlayers();
+  closeModal('modal-player');
+}
+
+function removePlayer(id) {
+  if (!confirm('ลบผู้เล่นนี้?')) return;
+  state.players = state.players.filter(p => p.id !== id);
+  state.activePlayers.delete(id);
+  delete state.stats[id];
+  save();
+  renderPlayers();
+}
+
+// =================== RANDOM PAGE ===================
+let modeState = 'doubles';
+let rrModeSelected = false;
+
+function setRRMode(v) {
+  rrModeSelected = v;
+  document.getElementById('tab-normal').classList.toggle('active', !v);
+  document.getElementById('tab-rr').classList.toggle('active', v);
+  renderRandomPage();
+}
+function setMode(m) {
+  modeState = m;
+  document.getElementById('tab-doubles').classList.toggle('active', m === 'doubles');
+  document.getElementById('tab-singles').classList.toggle('active', m === 'singles');
+  renderRandomPage();
+}
+
+// Feature 2: random mode toggle
+function setRandomMode(m) {
+  randomMode = m;
+  document.getElementById('tab-rand-balanced').classList.toggle('active', m === 'balanced');
+  document.getElementById('tab-rand-free').classList.toggle('active', m === 'free');
+}
+
+function renderRandomPage() {
+  state.players.forEach(p => {
+    if (!state.activePlayers.has(p.id)) state.activePlayers.add(p.id);
+  });
+  [...state.activePlayers].forEach(id => {
+    if (!state.players.find(p => p.id === id)) state.activePlayers.delete(id);
+  });
+
+  const courts = parseInt(document.getElementById('court-count').value) || 2;
+  state.courts = courts;
+  const perTeam = modeState === 'doubles' ? 2 : 1;
+  const perCourt = perTeam * 2;
+  const needed = courts * perCourt;
+  const have = [...state.activePlayers].filter(id => state.players.find(p => p.id === id)).length;
+
+  const canRR = have >= perTeam * 2 && have % perTeam === 0;
+  const rrGroup = document.getElementById('rr-toggle-group');
+  rrGroup.style.display = canRR ? '' : 'none';
+  if (!canRR) rrModeSelected = false;
+
+  if (rrModeSelected && canRR) {
+    const nTeams = have / perTeam;
+    const nMatches = nTeams * (nTeams - 1) / 2;
+    document.getElementById('rr-info').innerHTML =
+      `<span style="background:var(--primary-light);color:var(--primary);padding:4px 10px;border-radius:8px;display:inline-block;">` +
+      `📋 ${nTeams} ทีม · ${nMatches} แมทช์ทั้งหมด · ${courts} สนามพร้อมกัน</span>`;
+  } else {
+    document.getElementById('rr-info').innerHTML = '';
+  }
+
+  const alertEl = document.getElementById('player-needed-alert');
+  if (rrModeSelected && canRR) {
+    alertEl.innerHTML = `<div class="alert alert-success" style="margin-top:10px;">✅ พร้อมเริ่ม Round Robin · ทุกคนลงเล่น ไม่มีพัก</div>`;
+    document.getElementById('randomize-btn').disabled = false;
+  } else if (have < needed) {
+    alertEl.innerHTML = `<div class="alert alert-warning" style="margin-top:10px;">⚠️ ต้องการผู้เล่นอย่างน้อย ${needed} คน สำหรับ ${courts} สนาม (มีแค่ ${have} คน)</div>`;
+    document.getElementById('randomize-btn').disabled = true;
+  } else {
+    const bench = have - needed;
+    alertEl.innerHTML = `<div class="alert alert-info" style="margin-top:10px;">✅ พร้อมสุ่ม · ผู้เล่นพัก ${bench} คน</div>`;
+    document.getElementById('randomize-btn').disabled = false;
+  }
+
+  const sorted = [...state.players].sort((a, b) => b.skill - a.skill);
+  const listEl = document.getElementById('active-players-list');
+  listEl.innerHTML = sorted.map(p => {
+    const checked = state.activePlayers.has(p.id);
+    return `<div class="player-item" style="cursor:pointer;" onclick="toggleActivePlayer('${p.id}')">
+      <div style="width:20px;height:20px;border-radius:5px;border:2px solid ${checked ? 'var(--primary)' : 'var(--border)'};
+        background:${checked ? 'var(--primary)' : 'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">
+        ${checked ? '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ''}
+      </div>
+      <div class="player-avatar" style="width:30px;height:30px;font-size:12px;">${getInitial(p.name)}</div>
+      <div class="player-info">
+        <div class="player-name" style="font-size:13px;">${escHtml(p.name)}</div>
+        <div><span class="skill-badge ${skillClass(p.skill)}" style="font-size:10px;">ITF ${p.skill}.0</span></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const allSelected = state.players.every(p => state.activePlayers.has(p.id));
+  document.getElementById('toggle-all-btn').textContent = allSelected ? 'ยกเลิกทั้งหมด' : 'เลือกทั้งหมด';
+}
+
+function toggleActivePlayer(id) {
+  if (state.activePlayers.has(id)) state.activePlayers.delete(id);
+  else state.activePlayers.add(id);
+  save();
+  renderRandomPage();
+}
+
+function toggleAllPlayers() {
+  const allSelected = state.players.every(p => state.activePlayers.has(p.id));
+  if (allSelected) state.activePlayers.clear();
+  else state.players.forEach(p => state.activePlayers.add(p.id));
+  save();
+  renderRandomPage();
+}
+
+function updateCourtMax() {
+  renderRandomPage();
+}
+
+// =================== RANDOMIZE LOGIC ===================
+function generateRRSchedule(nTeams) {
+  if (nTeams < 2) return [];
+  const hasBye = nTeams % 2 === 1;
+  const n = hasBye ? nTeams + 1 : nTeams;
+  const byeIdx = hasBye ? nTeams : -1;
+  const fixed = n - 1;
+  const circleSize = n - 1;
+  const rounds = [];
+
+  for (let r = 0; r < n - 1; r++) {
+    const round = [];
+    const opp = r % circleSize;
+    if (fixed !== byeIdx && opp !== byeIdx) {
+      round.push([Math.min(fixed, opp), Math.max(fixed, opp)]);
+    }
+    for (let i = 1; i < n / 2; i++) {
+      const a = (r - i + circleSize) % circleSize;
+      const b = (r + i) % circleSize;
+      if (a !== byeIdx && b !== byeIdx) {
+        round.push([Math.min(a, b), Math.max(a, b)]);
+      }
+    }
+    if (round.length > 0) rounds.push(round);
+  }
+  return rounds;
+}
+
+function makeRRMatchObj(courtNum, pair, mode) {
+  return {
+    court: courtNum,
+    teams: [state.rrTeams[pair[0]], state.rrTeams[pair[1]]],
+    teamIdxA: pair[0],
+    teamIdxB: pair[1],
+    done: false,
+    winner: null,
+    bench: [],
+    mode,
+    rrMatch: true,
+  };
+}
+
+// Feature 2: count repeat pairs against pairHistory
+function countRepeatPairs(matchesCfg) {
+  // matchesCfg: array of {teams: [[ids],[ids]]}
+  const pairSet = new Set(state.pairHistory.map(p => p.a + '|' + p.b));
+  let count = 0;
+  matchesCfg.forEach(m => {
+    const allIds = [...m.teams[0], ...m.teams[1]];
+    for (let i = 0; i < allIds.length; i++) {
+      for (let j = i + 1; j < allIds.length; j++) {
+        const key = allIds[i] < allIds[j] ? allIds[i] + '|' + allIds[j] : allIds[j] + '|' + allIds[i];
+        if (pairSet.has(key)) count++;
+      }
+    }
+  });
+  return count;
+}
+
+function buildMatchesFromPlaying(playing, courts, mode) {
+  const matches = [];
+  if (mode === 'doubles') {
+    const n = courts;
+    for (let i = 0; i < n; i++) {
+      const a1 = playing[i];
+      const a2 = playing[4 * n - 1 - i];
+      const b1 = playing[2 * n - 1 - i];
+      const b2 = playing[2 * n + i];
+      matches.push({ court: i + 1, teams: [[a1.id, a2.id], [b1.id, b2.id]] });
+    }
+  } else {
+    for (let i = 0; i < courts; i++) {
+      const a = playing[i];
+      const b = playing[courts * 2 - 1 - i];
+      matches.push({ court: i + 1, teams: [[a.id], [b.id]] });
+    }
+  }
+  return matches;
+}
+
+function doRandomize() {
+  const courts = parseInt(document.getElementById('court-count').value);
+  const mode = modeState;
+  state.mode = mode;
+  state.courts = courts;
+
+  const activePlayers = state.players.filter(p => state.activePlayers.has(p.id));
+  const perCourt = mode === 'doubles' ? 4 : 2;
+  const needed = courts * perCourt;
+
+  if (activePlayers.length < needed && !rrModeSelected) return;
+
+  // =================== ROUND ROBIN PATH ===================
+  if (rrModeSelected) {
+    const perTeam = mode === 'doubles' ? 2 : 1;
+    const sorted = [...activePlayers].sort((a, b) => b.skill - a.skill);
+    const nTeams = activePlayers.length / perTeam;
+    const teams = Array.from({ length: nTeams }, () => []);
+
+    if (mode === 'doubles') {
+      for (let i = 0; i < nTeams; i++) {
+        teams[i] = [sorted[i].id, sorted[nTeams + i].id];
+      }
+    } else {
+      sorted.forEach((p, i) => { teams[i] = [p.id]; });
+    }
+    shuffle(teams);
+
+    const rounds = generateRRSchedule(nTeams);
+    rounds.forEach(r => shuffle(r));
+
+    const firstRound = rounds[0] || [];
+    const firstBatch = firstRound.slice(0, courts);
+    const rrRoundQueue = firstRound.slice(courts);
+
+    state.rrActive = true;
+    state.rrTeams = teams;
+    state.rrRounds = rounds;
+    state.rrRoundIdx = 0;
+    state.rrRoundQueue = rrRoundQueue;
+    state.rrDoneMatches = 0;
+    state.rrTotalMatches = rounds.reduce((s, r) => s + r.length, 0);
+    state.currentMatches = firstBatch.map((pair, idx) => makeRRMatchObj(idx + 1, pair, mode));
+    state.roundComplete = false;
+    save();
+    goPage('match');
+    return;
+  }
+
+  // =================== NORMAL PATH ===================
+  const activeIds = activePlayers.map(p => p.id);
+  const activeSet = new Set(activeIds);
+  state.benchQueue = state.benchQueue.filter(id => activeSet.has(id));
+  activeIds.forEach(id => {
+    if (!state.benchQueue.includes(id)) state.benchQueue.push(id);
+  });
+
+  const benchCount = activePlayers.length - needed;
+  const benchIds = new Set(state.benchQueue.splice(0, benchCount));
+  state.benchQueue.push(...benchIds);
+
+  const bench = activePlayers.filter(p => benchIds.has(p.id));
+  let playing = activePlayers.filter(p => !benchIds.has(p.id));
+
+  // Feature 2: apply random mode
+  if (randomMode === 'free') {
+    shuffle(playing);
+  } else {
+    playing.sort((a, b) => b.skill - a.skill);
+  }
+
+  // Feature 2: avoid repeat pairs — try 3 candidates, pick best
+  let bestMatches = null;
+  let bestRepeat = Infinity;
+  const CANDIDATES = 3;
+
+  for (let attempt = 0; attempt < CANDIDATES; attempt++) {
+    let candidate = [...playing];
+    if (randomMode === 'free') {
+      shuffle(candidate);
+    } else {
+      // balanced: shuffle within skill groups
+      candidate = balancedShuffle(candidate);
+    }
+    const matchesCfg = buildMatchesFromPlaying(candidate, courts, mode);
+    const repeats = countRepeatPairs(matchesCfg);
+    if (repeats < bestRepeat) {
+      bestRepeat = repeats;
+      bestMatches = matchesCfg;
+    }
+    if (bestRepeat === 0) break;
+  }
+
+  state.currentMatches = bestMatches.map((m, idx) => ({
+    court: m.court,
+    teams: m.teams,
+    done: false,
+    winner: null,
+    bench: bench.map(p => p.id),
+    mode: mode
+  }));
+  state.roundComplete = false;
+
+  save();
+  goPage('match');
+}
+
+function balancedShuffle(sorted) {
+  const groups = {};
+  sorted.forEach(p => {
+    if (!groups[p.skill]) groups[p.skill] = [];
+    groups[p.skill].push(p);
+  });
+  Object.values(groups).forEach(g => shuffle(g));
+  return Object.keys(groups).sort((a,b)=>b-a).flatMap(k => groups[k]);
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// =================== MATCH PAGE ===================
+function renderMatchPage() {
+  const el = document.getElementById('match-content');
+  if (!state.currentMatches.length) {
+    el.innerHTML = '<div class="empty-state" style="padding-top:60px;"><div class="icon">🏸</div><p>ยังไม่มีการแข่งขัน<br>ไปที่หน้าสุ่มคู่เพื่อเริ่ม</p></div>';
+    return;
+  }
+
+  const isRR = state.currentMatches[0].rrMatch;
+  const allCourtsDone = state.currentMatches.every(m => m.done);
+  const rrQueueEmpty = state.rrRoundQueue.length === 0;
+  const rrLastRound = state.rrRoundIdx >= state.rrRounds.length - 1;
+  const rrRoundComplete = isRR && allCourtsDone && rrQueueEmpty;
+  const rrAllComplete = rrRoundComplete && rrLastRound;
+  const rrCanAdvance = rrRoundComplete && !rrLastRound;
+  const allDone = !isRR && allCourtsDone;
+  const mode = state.currentMatches[0].mode || 'doubles';
+  const bench = state.currentMatches[0].bench || [];
+  let html = '';
+
+  if (rrAllComplete) {
+    html += `<div class="complete-banner">
+      <h2>🎉 ครบทุกคู่แล้ว!</h2>
+      <p>ทุกทีมได้เจอกันครบแล้ว · กดเพื่อสุ่มทีมใหม่</p>
+    </div>`;
+  }
+  if (rrCanAdvance) {
+    const nextRoundMatchCount = state.rrRounds[state.rrRoundIdx + 1]?.length || 0;
+    html += `<div style="background:var(--primary-light);border:1px solid rgba(99,102,241,0.3);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div>
+        <div style="font-weight:700;font-size:14px;color:var(--primary);">รอบย่อยที่ ${state.rrRoundIdx + 1} เสร็จแล้ว</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:2px;">รอบถัดไปมี ${nextRoundMatchCount} แมทช์</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="nextRRRound()">▶ รอบถัดไป</button>
+    </div>`;
+  }
+
+  if (allDone) {
+    html += `<div class="complete-banner">
+      <h2>🎉 ครบทุกสนามแล้ว!</h2>
+      <p>รอบที่ ${state.round - 1} เสร็จสิ้น · กดสุ่มคู่ใหม่ได้เลย</p>
+    </div>`;
+  }
+
+  if (isRR && state.rrTeams.length) {
+    const pct = state.rrTotalMatches ? Math.round((state.rrDoneMatches / state.rrTotalMatches) * 100) : 0;
+    const totalRounds = state.rrRounds.length;
+    html += `<div class="card" style="padding:12px 16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <span class="round-badge">🔄 Round Robin</span>
+        <span style="font-size:12px;color:var(--text2);">รอบย่อย ${state.rrRoundIdx + 1}/${totalRounds} · ${state.rrDoneMatches}/${state.rrTotalMatches} แมทช์</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;">
+        ${state.rrTeams.map((teamIds, ti) => {
+          const members = teamIds.map(id => state.players.find(p => p.id === id)).filter(Boolean);
+          return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;">
+            <span style="font-weight:700;color:var(--primary);">ทีม ${ti + 1}</span>
+            <span style="color:var(--text2);margin-left:4px;">${members.map(p => escHtml(p.name)).join(' & ')}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Feature 3: normal round header with re-randomize and end-match buttons
+  if (!isRR) {
+    html += `<div class="card" style="padding:12px 16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="round-badge">🏆 รอบที่ ${state.round}</span>
+        <span style="font-size:12px;color:var(--text2);">${mode === 'doubles' ? 'คู่' : 'เดี่ยว'} · ${state.currentMatches.length} สนาม</span>
+      </div>
+      ${!allDone ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+        <button class="btn btn-ghost btn-sm" onclick="reRandomizeRound()">🔀 สุ่มคู่ใหม่</button>
+        <button class="btn btn-warning btn-sm" onclick="endCurrentMatch()">⏹ จบแมทนี้</button>
+      </div>` : ''}
+    </div>`;
+  }
+
+  state.currentMatches.forEach((m, idx) => {
+    const teamA = m.teams[0].map(id => state.players.find(p => p.id === id)).filter(Boolean);
+    const teamB = m.teams[1].map(id => state.players.find(p => p.id === id)).filter(Boolean);
+
+    const renderTeam = (team, isWinner) => {
+      return team.map(p => `
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <div class="player-avatar" style="width:28px;height:28px;font-size:11px;${isWinner ? 'background:var(--success-light);color:var(--success);' : ''}">${getInitial(p.name)}</div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">${escHtml(p.name)}</div>
+            <span class="skill-badge ${skillClass(p.skill)}" style="font-size:10px;">ITF ${p.skill}.0</span>
+          </div>
+        </div>`).join('');
+    };
+
+    const isWinA = m.done && JSON.stringify(m.winner) === JSON.stringify(m.teams[0]);
+    const isWinB = m.done && JSON.stringify(m.winner) === JSON.stringify(m.teams[1]);
+
+    html += `<div class="match-card ${m.done ? 'match-done' : ''}">
+      <div class="match-court">สนาม ${m.court} ${m.done ? '· ✅ เสร็จแล้ว' : '· 🔴 กำลังแข่ง'}</div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-bottom:${m.done ? '0' : '12px'};">
+        <div style="${isWinA ? 'background:var(--success-light);border-radius:8px;padding:8px;' : 'padding:4px 0;'}">
+          ${renderTeam(teamA, isWinA)}
+          ${isWinA ? '<div style="text-align:center;margin-top:4px;"><span class="winner-chip">🏆 ชนะ</span></div>' : ''}
+        </div>
+        <div style="font-weight:800;font-size:18px;color:var(--text3);">VS</div>
+        <div style="${isWinB ? 'background:var(--success-light);border-radius:8px;padding:8px;' : 'padding:4px 0;'}">
+          ${renderTeam(teamB, isWinB)}
+          ${isWinB ? '<div style="text-align:center;margin-top:4px;"><span class="winner-chip">🏆 ชนะ</span></div>' : ''}
+        </div>
+      </div>`;
+
+    if (!m.done) {
+      const teamALabel = teamA.map(p => p.name).join(' & ');
+      const teamBLabel = teamB.map(p => p.name).join(' & ');
+      html += `<div class="match-btns">
+        <button class="btn win-btn btn-sm" onclick="recordWin(${idx}, 0)">${teamALabel} ชนะ</button>
+        <button class="btn win-btn btn-sm" onclick="recordWin(${idx}, 1)">${teamBLabel} ชนะ</button>
+      </div>`;
+    } else if (m.rrMatch && m.done) {
+      if (state.rrRoundQueue.length > 0) {
+        html += `<div style="margin-top:8px;">
+          <button class="btn btn-primary btn-full btn-sm" onclick="nextRRMatch(${idx})">
+            ➡ แมทช์ถัดไปในรอบนี้ (เหลือ ${state.rrRoundQueue.length})
+          </button>
+        </div>`;
+      } else if (!rrRoundComplete) {
+        html += `<div style="margin-top:8px;padding:8px;background:var(--surface2);border-radius:8px;font-size:12px;color:var(--text2);text-align:center;">
+          ⏳ รอสนามอื่นเสร็จก่อน เริ่มรอบย่อยถัดไป
+        </div>`;
+      }
+    }
+
+    html += `</div>`;
+  });
+
+  if (!isRR && bench.length) {
+    const benchPlayers = bench.map(id => state.players.find(p => p.id === id)).filter(Boolean);
+    html += `<div class="card">
+      <div class="card-title">🪑 พักรอ (${benchPlayers.length} คน)</div>
+      <div class="bench-list">
+        ${benchPlayers.map(p => `
+          <div class="bench-chip">
+            <div class="player-avatar" style="width:24px;height:24px;font-size:10px;">${getInitial(p.name)}</div>
+            <span>${escHtml(p.name)}</span>
+            <span class="skill-badge ${skillClass(p.skill)}" style="font-size:10px;">${p.skill}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  if (rrAllComplete) {
+    html += `<button class="btn btn-primary btn-full" onclick="goPage('random')" style="margin-top:8px;padding:14px;">
+      🔄 สุ่มทีมใหม่
+    </button>`;
+    html += `<div style="height:8px;"></div>`;
+  } else if (allDone) {
+    html += `<button class="btn btn-primary btn-full" onclick="goPage('random')" style="margin-top:8px;padding:14px;">
+      🎲 สุ่มคู่รอบใหม่
+    </button>`;
+    html += `<div style="height:8px;"></div>`;
+  }
+
+  el.innerHTML = html;
+}
+
+// Feature 3: re-randomize current round
+function reRandomizeRound() {
+  if (!confirm('สุ่มคู่ใหม่? ผลที่บันทึกไว้ในรอบนี้จะถูกยกเลิก')) return;
+  doRandomize();
+}
+
+// Feature 3: end current match (mark undone courts as done with no winner)
+function endCurrentMatch() {
+  if (!confirm('สิ้นสุดการแข่งขัน? สนามที่ยังเล่นอยู่จะถูกบันทึกว่าไม่มีผล')) return;
+  state.currentMatches.forEach(m => {
+    if (!m.done) {
+      m.done = true;
+      m.winner = null;
+    }
+  });
+  state.round++;
+  save();
+  renderMatchPage();
+}
+
+function recordWin(matchIdx, teamIdx) {
+  const m = state.currentMatches[matchIdx];
+  if (m.done) return;
+  m.done = true;
+  m.winner = m.teams[teamIdx];
+  const loser = m.teams[1 - teamIdx];
+
+  m.winner.forEach(id => updateStat(id, 'win'));
+  loser.forEach(id => updateStat(id, 'loss'));
+
+  // Log pair history
+  const allIds = [...m.teams[0], ...m.teams[1]];
+  for (let i = 0; i < allIds.length; i++) {
+    for (let j = i + 1; j < allIds.length; j++) {
+      state.pairHistory.push({ a: allIds[i], b: allIds[j] });
+    }
+  }
+
+  // Feature 1: push to match history
+  const histRecord = {
+    id: 'mh' + Date.now() + Math.random().toString(36).slice(2),
+    date: new Date().toISOString(),
+    mode: m.mode || state.mode,
+    teams: [m.teams[0], m.teams[1]],
+    winner: m.winner,
+    rrMatch: !!m.rrMatch,
+    roundNum: state.round
+  };
+  state.matchHistory.unshift(histRecord);
+  if (state.matchHistory.length > 50) state.matchHistory = state.matchHistory.slice(0, 50);
+
+  const allDoneNow = state.currentMatches.every(x => x.done);
+  if (m.rrMatch) {
+    state.rrDoneMatches++;
+    const queueEmpty = state.rrRoundQueue.length === 0;
+    const lastRound = state.rrRoundIdx >= state.rrRounds.length - 1;
+    if (allDoneNow && queueEmpty && lastRound) {
+      state.round++;
+      state.rrActive = false;
+    }
+  } else {
+    if (allDoneNow) state.round++;
+  }
+
+  save();
+  renderMatchPage();
+}
+
+function nextRRMatch(courtIdx) {
+  if (!state.rrRoundQueue.length) return;
+  const pair = state.rrRoundQueue.shift();
+  const mode = state.currentMatches[courtIdx] ? state.currentMatches[courtIdx].mode : state.mode;
+  state.currentMatches[courtIdx] = makeRRMatchObj(courtIdx + 1, pair, mode);
+  save();
+  renderMatchPage();
+}
+
+function nextRRRound() {
+  state.rrRoundIdx++;
+  if (state.rrRoundIdx >= state.rrRounds.length) return;
+  const nextRound = [...state.rrRounds[state.rrRoundIdx]];
+  shuffle(nextRound);
+  const mode = state.currentMatches[0] ? state.currentMatches[0].mode : state.mode;
+  state.currentMatches.forEach((_, i) => {
+    if (nextRound.length > 0) {
+      state.currentMatches[i] = makeRRMatchObj(i + 1, nextRound.shift(), mode);
+    }
+  });
+  state.rrRoundQueue = nextRound;
+  save();
+  renderMatchPage();
+}
+
+function updateStat(id, result) {
+  if (!state.stats[id]) state.stats[id] = { wins: 0, losses: 0, streak: 0, maxStreak: 0, streakType: null };
+  const s = state.stats[id];
+  if (result === 'win') {
+    s.wins++;
+    if (s.streakType === 'win') s.streak++;
+    else { s.streakType = 'win'; s.streak = 1; }
+    if (s.streak > s.maxStreak) s.maxStreak = s.streak;
+  } else {
+    s.losses++;
+    if (s.streakType === 'loss') s.streak++;
+    else { s.streakType = 'loss'; s.streak = 1; }
+  }
+}
+
+// =================== STATS PAGE ===================
+let currentStatsTab = 'stats';
+
+function switchStatsTab(tab) {
+  currentStatsTab = tab;
+  document.getElementById('stats-tab-stats').classList.toggle('active', tab === 'stats');
+  document.getElementById('stats-tab-history').classList.toggle('active', tab === 'history');
+  document.getElementById('stats-sub-stats').style.display = tab === 'stats' ? '' : 'none';
+  document.getElementById('stats-sub-history').style.display = tab === 'history' ? '' : 'none';
+  if (tab === 'history') renderMatchHistory();
+}
+
+function renderStats() {
+  switchStatsTab(currentStatsTab);
+  if (currentStatsTab === 'stats') renderStatsMain();
+}
+
+function renderStatsMain() {
+  const players = state.players;
+  if (!players.length) {
+    document.getElementById('stats-summary').innerHTML = '';
+    document.getElementById('stats-list').innerHTML = '<div class="empty-state"><div class="icon">📊</div><p>ยังไม่มีข้อมูล</p></div>';
+    return;
+  }
+
+  let totalGames = 0, totalWins = 0;
+  players.forEach(p => {
+    const s = state.stats[p.id] || {};
+    totalGames += (s.wins || 0) + (s.losses || 0);
+    totalWins += (s.wins || 0);
+  });
+
+  const champion = players.reduce((best, p) => {
+    const bs = state.stats[best?.id] || {};
+    const ps = state.stats[p.id] || {};
+    return (ps.wins || 0) > (bs.wins || 0) ? p : best;
+  }, players[0]);
+
+  document.getElementById('stats-summary').innerHTML = `
+    <div class="summary-card"><div class="summary-num">${players.length}</div><div class="summary-label">ผู้เล่น</div></div>
+    <div class="summary-card"><div class="summary-num">${Math.floor(totalGames / 2)}</div><div class="summary-label">เกม</div></div>
+    <div class="summary-card"><div class="summary-num">${state.round - 1}</div><div class="summary-label">รอบ</div></div>
+  `;
+
+  const sorted = [...players].sort((a, b) => {
+    const sa = state.stats[a.id] || {}, sb = state.stats[b.id] || {};
+    return (sb.wins || 0) - (sa.wins || 0);
+  });
+
+  const rows = sorted.map((p, i) => {
+    const s = state.stats[p.id] || { wins: 0, losses: 0, streak: 0, streakType: null };
+    const total = (s.wins || 0) + (s.losses || 0);
+    const wr = total ? Math.round((s.wins / total) * 100) : 0;
+    const isChamp = champion && p.id === champion.id && (s.wins || 0) > 0;
+    let badge = '';
+    if (isChamp) badge += `<span class="badge badge-champ">🏆</span>`;
+    if (s.streakType === 'win' && s.streak >= 3) badge += `<span class="badge badge-fire">🔥${s.streak}</span>`;
+    if (s.streakType === 'loss' && s.streak >= 3) badge += `<span class="badge badge-try">💪 สู้!</span>`;
+
+    const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}`;
+    return `<div class="stat-row">
+      <div class="stat-rank">${rankIcon}</div>
+      <div class="stat-info">
+        <div class="stat-name">${escHtml(p.name)}${badge}</div>
+        <div class="stat-detail">
+          <span class="skill-badge ${skillClass(p.skill)}" style="font-size:10px;">ITF ${p.skill}.0</span>
+          <span style="margin-left:6px;">${s.wins || 0}W / ${s.losses || 0}L</span>
+        </div>
+        <div class="progress-bar" style="margin-top:4px;"><div class="progress-fill" style="width:${wr}%;background:${wr >= 60 ? 'var(--success)' : wr >= 40 ? 'var(--warning)' : 'var(--danger)'}"></div></div>
+      </div>
+      <div class="stat-nums">
+        <div class="stat-wr">${wr}%</div>
+        <div class="stat-wl">Win Rate</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('stats-list').innerHTML = rows || '<div class="empty-state"><div class="icon">📊</div><p>ยังไม่มีผลการแข่งขัน</p></div>';
+}
+
+// Feature 1: Match History
+function formatHistoryDate(iso) {
+  const d = new Date(iso);
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const hh = String(d.getHours()).padStart(2, '0');
+  const min = String(d.getMinutes()).padStart(2, '0');
+  return `${dd}/${mm} ${hh}:${min}`;
+}
+
+function getPlayerName(id) {
+  const p = state.players.find(x => x.id === id);
+  return p ? p.name : id;
+}
+
+function renderMatchHistory() {
+  const el = document.getElementById('match-history-list');
+  if (!state.matchHistory.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>ยังไม่มีประวัติการแข่งขัน</p></div>';
+    return;
+  }
+  el.innerHTML = state.matchHistory.map(h => {
+    const teamANames = h.teams[0].map(getPlayerName).join(' & ');
+    const teamBNames = h.teams[1].map(getPlayerName).join(' & ');
+    const winnerIds = h.winner ? h.winner.join(',') : null;
+    const teamAWon = winnerIds && h.teams[0].join(',') === winnerIds;
+    const teamBWon = winnerIds && h.teams[1].join(',') === winnerIds;
+    const modeBadge = h.rrMatch
+      ? `<span style="background:var(--primary-light);color:var(--primary);padding:1px 7px;border-radius:99px;font-size:10px;font-weight:700;">RR</span>`
+      : `<span style="background:var(--surface);border:1px solid var(--border);padding:1px 7px;border-radius:99px;font-size:10px;font-weight:600;">${h.mode === 'doubles' ? 'คู่' : 'เดี่ยว'}</span>`;
+    return `<div class="history-item">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-size:12px;color:var(--text3);">${formatHistoryDate(h.date)}</span>
+        ${modeBadge}
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+        <span style="${teamAWon ? 'color:var(--success);font-weight:700;' : ''}">${escHtml(teamANames)}</span>
+        <span style="color:var(--text3);font-size:11px;">vs</span>
+        <span style="${teamBWon ? 'color:var(--success);font-weight:700;' : ''}">${escHtml(teamBNames)}</span>
+      </div>
+      ${!winnerIds ? '<div style="font-size:11px;color:var(--text3);margin-top:4px;">ไม่มีผล</div>' : ''}
+    </div>`;
+  }).join('');
+}
+
+function clearMatchHistory() {
+  if (!confirm('ล้างประวัติการแข่งขันทั้งหมด?')) return;
+  state.matchHistory = [];
+  save();
+  renderMatchHistory();
+}
+
+// =================== MODAL ===================
+function openModal(id) {
+  document.getElementById(id).classList.add('show');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => {
+    if (e.target === m) m.classList.remove('show');
+  });
+});
+
+function confirmReset() { openModal('modal-reset'); }
+function doReset() {
+  const keepStock = state.stockCount;
+  const keepPrice = state.stockPricePerBox;
+  const keepMatchHistory = state.matchHistory;
+  const keepStockHistory = state.stockHistory;
+  state.players = [];
+  state.stats = {};
+  state.currentMatches = [];
+  state.pairHistory = [];
+  state.round = 1;
+  state.activePlayers = new Set();
+  state.benchQueue = [];
+  state.rrActive = false;
+  state.rrTeams = [];
+  state.rrRounds = [];
+  state.rrRoundIdx = 0;
+  state.rrRoundQueue = [];
+  state.rrDoneMatches = 0;
+  state.rrTotalMatches = 0;
+  state.stockCount = keepStock;
+  state.stockPricePerBox = keepPrice;
+  state.matchHistory = keepMatchHistory;
+  state.stockHistory = keepStockHistory;
+  localStorage.clear();
+  save();
+  closeModal('modal-reset');
+  renderPlayers();
+  renderStatsMain();
+}
+
+// =================== STOCK PAGE ===================
+function appendStockHistory(type, amount, note) {
+  const record = {
+    id: 'sh' + Date.now() + Math.random().toString(36).slice(2),
+    date: new Date().toISOString(),
+    type,
+    amount,
+    note,
+    balanceAfter: state.stockCount
+  };
+  state.stockHistory.unshift(record);
+  if (state.stockHistory.length > 20) state.stockHistory = state.stockHistory.slice(0, 20);
+}
+
+function renderStock() {
+  const n = state.stockCount;
+  const boxes = Math.floor(n / 12);
+  const rem = n % 12;
+  const price = state.stockPricePerBox;
+
+  document.getElementById('stock-count-big').textContent = n;
+  document.getElementById('stock-box-count').textContent =
+    boxes > 0 ? `= ${boxes} กล่อง${rem > 0 ? ` + ${rem} ลูก` : ''}` : (n > 0 ? `${n} ลูก (ยังไม่ครบกล่อง)` : 'ไม่มีสต๊อก');
+
+  let icon = '🪶', badgeHtml = '';
+  if (n === 0) {
+    icon = '❌';
+    badgeHtml = `<span style="background:var(--danger-light);color:var(--danger);padding:4px 14px;border-radius:99px;font-size:13px;font-weight:700;">หมดแล้ว!</span>`;
+  } else if (n <= 12) {
+    icon = '⚠️';
+    badgeHtml = `<span style="background:var(--warning-light);color:var(--warning);padding:4px 14px;border-radius:99px;font-size:13px;font-weight:700;">ใกล้หมด เหลือแค่ ${n} ลูก</span>`;
+  } else if (n <= 24) {
+    icon = '🟡';
+    badgeHtml = `<span style="background:var(--warning-light);color:var(--warning);padding:4px 14px;border-radius:99px;font-size:13px;font-weight:700;">สต๊อกน้อย</span>`;
+  } else {
+    icon = '✅';
+    badgeHtml = `<span style="background:var(--success-light);color:var(--success);padding:4px 14px;border-radius:99px;font-size:13px;font-weight:700;">สต๊อกพอ</span>`;
+  }
+  document.getElementById('stock-status-icon').textContent = icon;
+  document.getElementById('stock-status-badge').innerHTML = badgeHtml;
+
+  const priceEl = document.getElementById('stock-price-input');
+  if (priceEl && !priceEl.matches(':focus')) priceEl.value = price || '';
+
+  const totalVal = price > 0 ? Math.ceil(n / 12) * price : 0;
+  document.getElementById('stock-value-display').innerHTML = price > 0
+    ? `<div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text2);margin-top:4px;">
+        <span>มูลค่าสต๊อกปัจจุบัน</span>
+        <span style="font-weight:700;color:var(--text);">~${totalVal.toLocaleString()} บาท</span>
+      </div>`
+    : '';
+}
+
+function adjustStock(delta) {
+  state.stockCount = Math.max(0, state.stockCount + delta);
+  let note = '';
+  if (delta === 1) note = 'เพิ่มทีละลูก';
+  else if (delta === -1) note = 'ลดทีละลูก';
+  else if (delta === 12) note = 'ซื้อ 1 กล่อง';
+  else if (delta === -12) note = 'ใช้ 1 กล่อง';
+  else note = delta > 0 ? `เพิ่ม ${delta}` : `ลด ${Math.abs(delta)}`;
+  const type = delta > 0 ? 'in' : 'out';
+  appendStockHistory(type, Math.abs(delta), note);
+  save();
+  renderStock();
+  renderStockHistory();
+}
+
+function useStock() {
+  const n = parseInt(document.getElementById('stock-use-input').value);
+  if (!n || n <= 0) return;
+  state.stockCount = Math.max(0, state.stockCount - n);
+  document.getElementById('stock-use-input').value = '';
+  appendStockHistory('out', n, 'ใช้วันนี้');
+  save();
+  renderStock();
+  renderStockHistory();
+}
+
+function addStock() {
+  const n = parseInt(document.getElementById('stock-add-input').value);
+  if (!n || n <= 0) return;
+  state.stockCount += n;
+  document.getElementById('stock-add-input').value = '';
+  appendStockHistory('in', n, 'รับเข้าสต๊อก');
+  save();
+  renderStock();
+  renderStockHistory();
+}
+
+function saveStockPrice() {
+  const v = parseInt(document.getElementById('stock-price-input').value);
+  if (!isNaN(v) && v >= 0) { state.stockPricePerBox = v; save(); renderStock(); }
+}
+
+// Feature 4: Stock History
+function renderStockHistory() {
+  const el = document.getElementById('stock-history-container');
+  if (!el) return;
+  if (!state.stockHistory.length) {
+    el.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:16px;">ยังไม่มีประวัติ</div>';
+    return;
+  }
+  const rows = state.stockHistory.map((r, i) => {
+    const d = new Date(r.date);
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const hh = String(d.getHours()).padStart(2, '0');
+    const min = String(d.getMinutes()).padStart(2, '0');
+    const dateStr = `${dd}/${mm} ${hh}:${min}`;
+    const inAmt = r.type === 'in' ? `<span class="stock-in">+${r.amount}</span>` : '';
+    const outAmt = r.type === 'out' ? `<span class="stock-out">-${r.amount}</span>` : '';
+    return `<tr>
+      <td>${dateStr}</td>
+      <td>${escHtml(r.note)}</td>
+      <td style="text-align:center;">${inAmt}</td>
+      <td style="text-align:center;">${outAmt}</td>
+      <td style="text-align:right;font-weight:600;">${r.balanceAfter}</td>
+    </tr>`;
+  }).join('');
+  el.innerHTML = `<table class="stock-history-table">
+    <thead><tr>
+      <th>วันที่</th><th>รายการ</th><th style="text-align:center;">เข้า</th><th style="text-align:center;">ออก</th><th style="text-align:right;">คงเหลือ</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function clearStockHistory() {
+  if (!confirm('ล้างประวัติสต๊อกทั้งหมด?')) return;
+  state.stockHistory = [];
+  save();
+  renderStockHistory();
+}
+
+// =================== COST CALCULATOR (page-cost) ===================
+let costPlayerShare = {};
+
+function renderCostPlayers() {
+  state.players.forEach(p => {
+    if (!costPlayerShare[p.id]) costPlayerShare[p.id] = 'full';
+  });
+  const list = document.getElementById('cost-players-list');
+  if (!state.players.length) {
+    list.innerHTML = '<div style="font-size:13px;color:var(--text3);">ยังไม่มีผู้เล่น · ไปเพิ่มที่หน้าผู้เล่นก่อน</div>';
+    return;
+  }
+  list.innerHTML = state.players.map(p => {
+    const share = costPlayerShare[p.id] || 'full';
+    return `<div class="player-item" style="margin-bottom:6px;">
+      <div class="player-avatar" style="width:30px;height:30px;font-size:12px;">${getInitial(p.name)}</div>
+      <div class="player-info"><div class="player-name" style="font-size:13px;">${escHtml(p.name)}</div></div>
+      <div style="display:flex;gap:4px;">
+        <button onclick="setCostShare('${p.id}','full')" class="btn btn-sm" style="padding:4px 10px;font-size:11px;${share==='full'?'background:var(--primary);color:white;':'background:var(--surface2);color:var(--text2);border:1px solid var(--border);'}">เต็ม</button>
+        <button onclick="setCostShare('${p.id}','half')" class="btn btn-sm" style="padding:4px 10px;font-size:11px;${share==='half'?'background:var(--warning);color:white;':'background:var(--surface2);color:var(--text2);border:1px solid var(--border);'}">✂️ ครึ่ง</button>
+        <button onclick="setCostShare('${p.id}','none')" class="btn btn-sm" style="padding:4px 10px;font-size:11px;${share==='none'?'background:var(--danger);color:white;':'background:var(--surface2);color:var(--text2);border:1px solid var(--border);'}">ไม่จ่าย</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setCostShare(id, share) {
+  costPlayerShare[id] = share;
+  renderCostPlayers();
+  calcCost();
+}
+
+// Feature 5: fill from active players
+function fillFromActivePlayers() {
+  state.players.forEach(p => {
+    costPlayerShare[p.id] = state.activePlayers.has(p.id) ? 'full' : 'none';
+  });
+  renderCostPlayers();
+  calcCost();
+}
+
+function fillShuttlesFromStock() {
+  document.getElementById('cost-shuttles').value = state.stockCount;
+  calcCost();
+}
+
+function calcCost() {
+  const rate = parseFloat(document.getElementById('cost-rate')?.value) || 0;
+  const hours = parseFloat(document.getElementById('cost-hours')?.value) || 0;
+  const courts = parseInt(document.getElementById('cost-courts')?.value) || 1;
+  const shuttles = parseInt(document.getElementById('cost-shuttles')?.value) || 0;
+  const shuttlePrice = parseInt(document.getElementById('cost-shuttle-price')?.value) || 0;
+
+  const courtTotal = rate * hours * courts;
+  const boxes = shuttles / 12;
+  const shuttleTotal = boxes * shuttlePrice;
+  const grandTotal = courtTotal + shuttleTotal;
+
+  const detailEl = document.getElementById('cost-shuttle-detail');
+  if (detailEl && shuttles > 0 && shuttlePrice > 0) {
+    detailEl.textContent = `${shuttles} ลูก = ${boxes.toFixed(1)} กล่อง × ${shuttlePrice} = ${Math.round(shuttleTotal).toLocaleString()} บาท`;
+  } else if (detailEl) { detailEl.textContent = ''; }
+
+  const sumEl = document.getElementById('cost-summary');
+  if (sumEl) {
+    sumEl.innerHTML = `
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
+        <span style="color:var(--text2);">ค่าสนาม (${courts} สนาม × ${hours} ชม. × ${rate} บ.)</span>
+        <span style="font-weight:600;">${courtTotal.toLocaleString()} บ.</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
+        <span style="color:var(--text2);">ค่าลูก (${shuttles} ลูก)</span>
+        <span style="font-weight:600;">${Math.round(shuttleTotal).toLocaleString()} บ.</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:16px;font-weight:800;">
+        <span>รวมทั้งหมด</span>
+        <span style="color:var(--primary);">${Math.round(grandTotal).toLocaleString()} บ.</span>
+      </div>`;
+  }
+
+  const paying = state.players.filter(p => (costPlayerShare[p.id] || 'full') !== 'none');
+  const shares = paying.reduce((s, p) => s + (costPlayerShare[p.id] === 'half' ? 0.5 : 1), 0);
+  const perShare = shares > 0 ? grandTotal / shares : 0;
+
+  const resultEl = document.getElementById('cost-result');
+  if (!resultEl) return;
+  if (!paying.length) { resultEl.innerHTML = '<div style="font-size:13px;color:var(--text3);">เลือกผู้เล่นที่ร่วมจ่ายด้านบน</div>'; return; }
+
+  const perFull = Math.ceil(perShare);
+
+  // Feature 5: Better นกขุนทอง format
+  const now = new Date();
+  const todayDD = String(now.getDate()).padStart(2, '0');
+  const todayMM = String(now.getMonth() + 1).padStart(2, '0');
+  const pricePerShuttle = shuttlePrice > 0 ? (shuttlePrice / 12).toFixed(2) : '0.00';
+  const khunThongText =
+`* ค่าสนามแบด (${todayDD}/${todayMM})
+   * ค่าสนาม ${Math.round(courtTotal)} บาท
+   * ค่าลูก (${shuttles} ลูก) x (${pricePerShuttle} บ./ลูก) รวม ${Math.round(shuttleTotal)} บาท
+* รวม ${Math.round(grandTotal)} บาท (${shares} คน) = คนละ ${perFull} บาท`;
+
+  resultEl.innerHTML = `
+    <div style="background:var(--primary-light);border-radius:10px;padding:12px;margin-bottom:12px;text-align:center;">
+      <div style="font-size:12px;color:var(--primary);font-weight:600;margin-bottom:2px;">คนที่จ่ายเต็ม จ่ายคนละ</div>
+      <div style="font-size:32px;font-weight:900;color:var(--primary);">${perFull.toLocaleString()}</div>
+      <div style="font-size:12px;color:var(--primary);">บาท</div>
+    </div>
+    <div style="font-size:13px;margin-bottom:12px;">
+      ${paying.map(p => {
+        const s = costPlayerShare[p.id] === 'half' ? 0.5 : 1;
+        const amt = Math.ceil(perShare * s);
+        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="player-avatar" style="width:24px;height:24px;font-size:10px;">${getInitial(p.name)}</div>
+            <span>${escHtml(p.name)}</span>
+            ${costPlayerShare[p.id] === 'half' ? '<span style="font-size:10px;background:var(--warning-light);color:var(--warning);padding:1px 6px;border-radius:99px;">✂️ ครึ่ง</span>' : ''}
+          </div>
+          <span style="font-weight:700;">${amt.toLocaleString()} บ.</span>
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;">
+      <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:0.5px;margin-bottom:6px;">คัดลอกสำหรับนกขุนทอง</div>
+      <pre style="font-family:monospace;font-size:13px;color:var(--text);background:var(--bg);padding:10px 12px;border-radius:8px;margin-bottom:8px;white-space:pre-wrap;word-break:break-all;">${escHtml(khunThongText)}</pre>
+      <button class="btn btn-primary btn-full" id="copy-khunthong-btn" onclick="copyKhunThong()">
+        📋 คัดลอก
+      </button>
+    </div>`;
+
+  // Store text for copy
+  window._khunThongText = khunThongText;
+}
+
+function copyKhunThong() {
+  const text = window._khunThongText || '';
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-khunthong-btn');
+    if (!btn) return;
+    btn.textContent = '✅ คัดลอกแล้ว!';
+    btn.style.background = 'var(--success)';
+    setTimeout(() => {
+      btn.textContent = '📋 คัดลอก';
+      btn.style.background = '';
+    }, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const btn = document.getElementById('copy-khunthong-btn');
+    if (btn) { btn.textContent = '✅ คัดลอกแล้ว!'; setTimeout(() => { btn.textContent = '📋 คัดลอก'; }, 2000); }
+  });
+}
+
+// =================== UTILS ===================
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// =================== INIT ===================
+load();
+renderPlayers();
+
+document.getElementById('input-name').addEventListener('keydown', e => {
+  if (e.key === 'Enter') savePlayer();
+});
+</script>
+</body>
+</html>
