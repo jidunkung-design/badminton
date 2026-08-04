@@ -56,7 +56,7 @@ export default async function MembersPage({
       </div>
 
       {archived.length > 0 && (
-        <div className="c">
+        <div className="c quiet">
           <h2 className="ch">อยู่ในกรุ {archived.length} คน</h2>
           <ul>
             {archived.map(p => (

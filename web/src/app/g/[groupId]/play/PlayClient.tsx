@@ -76,18 +76,44 @@ export default function PlayClient({
 
   // Two players rendered as a stacked mini-roster inside one half of the
   // VS split -- same shape the prototype uses for both a live court and a
-  // queued entry, just reused here instead of duplicated per caller.
-  const team = (ids: readonly [string, string]) => (
-    <div className="sd">
+  // queued entry, just reused here instead of duplicated per caller. `size`
+  // is purely presentational: it scales the avatar/name up for the one live
+  // match that matters and keeps the queue's rosters small and quiet.
+  const team = (ids: readonly [string, string], size: 'lg' | 'sm' = 'sm') => (
+    <div className={`sd${size === 'lg' ? ' sd-lg' : ''}`}>
       {ids.map(id => (
-        <div key={id} className="r" style={{ gap: 8 }}>
-          <div className="av" style={{ width: 26, height: 26, fontSize: 'var(--t1)' }}>{name(id).charAt(0)}</div>
+        <div key={id} className="r" style={{ gap: size === 'lg' ? 10 : 8 }}>
+          <div
+            className="av"
+            style={{
+              width: size === 'lg' ? 40 : 26,
+              height: size === 'lg' ? 40 : 26,
+              fontSize: size === 'lg' ? 'var(--t3)' : 'var(--t1)',
+            }}
+          >
+            {name(id).charAt(0)}
+          </div>
           <div className="gr">
-            <div className="nm" style={{ fontSize: 'var(--t2)' }}>{name(id)}</div>
+            <div className="nm" style={{ fontSize: size === 'lg' ? 'var(--t4)' : 'var(--t2)' }}>{name(id)}</div>
           </div>
         </div>
       ))}
     </div>
+  )
+
+  // A faint, real badminton court -- boundary, net, and the two short
+  // service lines -- drawn behind the live match only. Purely decorative
+  // (aria-hidden) and stroked with the existing --court token so it tracks
+  // the theme automatically; see the .m.live / .court-lines comment in
+  // globals.css for why it can sit behind the score without a z-index fight.
+  const courtLines = (
+    <svg className="court-lines" viewBox="0 0 240 110" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <rect x="6" y="6" width="228" height="98" fill="none" stroke="var(--court)" strokeWidth="1.5" />
+      <line x1="120" y1="6" x2="120" y2="104" stroke="var(--court)" strokeWidth="2.5" />
+      <line x1="45" y1="6" x2="45" y2="104" stroke="var(--court)" strokeWidth="1" />
+      <line x1="195" y1="6" x2="195" y2="104" stroke="var(--court)" strokeWidth="1" />
+      <line x1="6" y1="55" x2="234" y2="55" stroke="var(--court)" strokeWidth="1" />
+    </svg>
   )
 
   const freeCourt = state.courts.some(c => !c.match)
@@ -100,30 +126,31 @@ export default function PlayClient({
         <h2 className="ch" style={{ marginBottom: 0 }}>สนาม</h2>
         {state.courts.map((court, i) => (
           court.match ? (
-            <div key={court.no} className="m">
+            <div key={court.no} className="m live">
+              {courtLines}
               <div className="r">
                 <span className="tg court">สนาม {court.no}</span>
                 <span className="gr" />
                 <span className={`tg ${court.match.gap <= 60 ? 'good' : ''}`}>ห่างกัน {court.match.gap} แต้มเรต</span>
               </div>
               <div className="vs">
-                {team(court.match.teamA)}
+                {team(court.match.teamA, 'lg')}
                 <div className="vsx">VS</div>
-                {team(court.match.teamB)}
+                {team(court.match.teamB, 'lg')}
               </div>
               <div className="b2">
-                <button className="b" onClick={() => finish(i, 'A')}>ซ้ายชนะ</button>
-                <button className="b" onClick={() => finish(i, 'B')}>ขวาชนะ</button>
+                <button className="b b-win" onClick={() => finish(i, 'A')}>ซ้ายชนะ</button>
+                <button className="b b-win" onClick={() => finish(i, 'B')}>ขวาชนะ</button>
               </div>
             </div>
           ) : (
-            <div key={court.no} className="m" style={{ borderLeftColor: 'var(--line)' }}>
+            <div key={court.no} className="court-idle">
               <div className="r">
                 <span className="tg">สนาม {court.no}</span>
                 <span className="gr" />
                 <span className="tg">ว่าง</span>
               </div>
-              <div className="mt" style={{ marginTop: 8 }}>กดยืนยันจากคิวด้านล่างเพื่อส่งลงสนามนี้</div>
+              <div className="mt">กดยืนยันจากคิวด้านล่างเพื่อส่งลงสนามนี้</div>
             </div>
           )
         ))}
@@ -135,13 +162,13 @@ export default function PlayClient({
           <div className="c"><div className="mt">ยังไม่มีคิว ต้องมีคนว่างอย่างน้อย 4 คน</div></div>
         )}
         {state.queue.map((entry, i) => (
-          <div key={entry.id} className="m">
+          <div key={entry.id} className={`q${i === 0 ? ' q-next' : ''}`}>
             <div className="r">
               <span className={`tg ${i === 0 ? 'court' : ''}`}>{i === 0 ? 'คิวแรก' : `คิวที่ ${i + 1}`}</span>
               <span className="gr" />
               <span className={`tg ${entry.gap <= 60 ? 'good' : ''}`}>ห่าง {entry.gap}</span>
             </div>
-            <div className="vs">
+            <div className="vs tight">
               {team(entry.teamA)}
               <div className="vsx">VS</div>
               {team(entry.teamB)}

@@ -395,6 +395,7 @@ a.c {
   border: 0;
   border-radius: var(--r-c);
   padding: var(--space-3) var(--space-4);
+  min-height: 44px;
   font-size: var(--t2);
   font-weight: 700;
   background: var(--court);
@@ -539,6 +540,20 @@ a.c {
   line-height: 1.75;
 }
 
+/* .c.quiet: the members-page archive section. The product's rule is
+   that a player is never deleted, only set aside, so the archive
+   list has to read as "kept, just out of the way" rather than a
+   trash bin -- a plain .c card at full weight would say "deleted
+   list" instead. Same card shape (no new container vocabulary), just
+   one step down in ground: --surface-2 instead of --surface (already
+   the token used elsewhere for a receded/inset surface, e.g. .av's
+   default background), no border, so it sits back rather than
+   competing with the active roster above it. */
+.c.quiet {
+  background: var(--surface-2);
+  border: 0;
+}
+
 /* ── court mode atoms ─────────────────────────────────────────
    Not carried over in the first port because the login/group-list/
    group-home screens never needed a match card. Court mode does:
@@ -607,4 +622,101 @@ a.c {
 .tk.on {
   background: var(--court);
   border-color: var(--court);
+}
+
+/* ── court mode hierarchy ─────────────────────────────────────
+   Phase 1.3 composition pass. Before this, every court and queue
+   entry rendered through the same .m card, so a live match carried
+   no more visual weight than an empty court or a queued pair --
+   uniform-card-everywhere is one of the tells the brief rejects
+   outright, and it buries the one piece of information a courtside
+   glance needs first ("which court needs my thumb right now").
+   Nothing here is a new token block: every value below composes
+   existing custom properties from the :root tokens and the 4pt
+   spacing/type scale above. Three tiers:
+
+   .m.live -- the one thing on screen that matters. Bigger padding
+   (space-6 instead of the card default), a lifted shadow (--sh-lift,
+   already defined for exactly this purpose), a heavier accent
+   border, and its own stacking context so a faint court-line
+   drawing can sit behind the score without ever competing with it
+   (z-index: -1, painted before the card's static content -- see the
+   painting-order note below). .b-win scales the existing .b
+   button up to the largest control in the product; .sd-lg scales
+   the roster mini-rows PlayClient already builds via team().
+
+   .court-idle -- an empty court is not a card at all anymore. It
+   used to render through the same .m used for a live match (with a
+   dead borderLeftColor inline style left over from the old
+   side-stripe system); now it is a single quiet row, no border, no
+   shadow, so it recedes rather than competing.
+
+   .q / .q-next -- a queued match is "next", not "now": thinner
+   neutral border (var(--line), not --court), tighter padding
+   (space-3, not the card default), and .vs.tight closes up the
+   vertical rhythm between the two team rows. .q-next (queue
+   position 0) gets the accent border back at 1px, one step below
+   .m.live's 2px, so "this one's about to go" reads without
+   matching live-match weight. .sd (unscaled) stays the small size
+   already used for queue rosters.
+
+   Painting-order note on .m.live > .court-lines: CSS paints a
+   stacking context's negative-z-index children (bucket 2) before
+   its own static in-flow content (bucket 3), so an absolutely
+   positioned decoration with z-index: -1 sits behind ordinary text
+   and buttons without needing any change to their own stacking --
+   this is why .m.live declares position: relative; z-index: 0
+   (turns it into a real stacking context) rather than leaving
+   z-index at the card's default auto. */
+.m.live {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  border-width: 2px;
+  padding: var(--space-6);
+  box-shadow: var(--sh-lift);
+}
+
+.court-lines {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: .16;
+  pointer-events: none;
+}
+
+.b-win {
+  font-size: var(--t5);
+  padding: var(--space-5) var(--space-4);
+  min-height: 64px;
+}
+
+.sd-lg .r {
+  gap: var(--space-3);
+}
+
+.court-idle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-1);
+  color: var(--ink-3);
+}
+
+.q {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-c);
+  padding: var(--space-3);
+}
+
+.q-next {
+  border-color: var(--court);
+}
+
+.vs.tight {
+  margin: var(--space-2) 0;
 }
