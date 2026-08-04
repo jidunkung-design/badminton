@@ -184,7 +184,20 @@ button:active {
 /* ── layout shell ─────────────────────────────────────────────
    .bar = top app bar (ported from the phone-frame status bar in
    the prototype; it was already designed to carry an app/group name).
-   .wrap = the prototype's page container. .pane = its vertical rhythm.
+   Deliberate deviations from the prototype's .bar, both disclosed here
+   rather than silently: padding is 14px 22px (was 10px 16px), weight
+   is 800 and size is --t4 (was unweighted --t1), and the monospace
+   family plus the flex/justify-between/net-toggle arrangement are
+   dropped entirely. The prototype's version had to fit a live clock
+   and an online/offline toggle into a 376px phone status bar; this
+   bar only ever holds one static title, so it reads as a page title,
+   not a status line.
+   .wrap = the prototype's page container, unchanged.
+   .pane = its vertical rhythm, tightened on purpose: 24px 0 60px
+   instead of the prototype's 30px 0 80px. The prototype's spacing was
+   tuned for content scrolling inside a fixed 716px phone frame; this
+   is a full page with no such ceiling, so the tighter figure reads
+   better at real viewport heights.
    .screen = the prototype's per-screen content column, stripped of
    the phone-frame's fixed height/scroll (this is a full page, not a
    376x716 device mock).
@@ -354,6 +367,33 @@ a.c {
   pointer-events: none;
 }
 
+/* Primary-button text color is fixed, not var(--court-ink): that token
+   flips with the theme (it is the dark ink used as a light-mode
+   background and a light mint used as a dark-mode background, see the
+   token block above), so referencing it here would resolve to the
+   wrong, near-white value under dark mode. #0A3A32 is the literal
+   value --court-ink holds in light mode -- reused here as a fixed
+   color because white-on-#4CBBA2 in dark mode measures ~2.35:1,
+   failing WCAG AA (3:1 UI / 4.5:1 text). #0A3A32 on that same
+   background measures ~5.36:1. Excludes .gh: the ghost variant uses
+   var(--ink) on var(--surface), which is high-contrast in both themes
+   already. Layered the same way the token block itself is: a media
+   query for the OS-level preference, then attribute overrides so an
+   explicit data-theme choice always wins over the OS preference. */
+@media (prefers-color-scheme: dark) {
+  .b:not(.gh) {
+    color: #0A3A32;
+  }
+}
+
+:root[data-theme="light"] .b:not(.gh) {
+  color: #fff;
+}
+
+:root[data-theme="dark"] .b:not(.gh) {
+  color: #0A3A32;
+}
+
 /* หมายเหตุแทนไอคอนแม่กุญแจ: แถบเส้นซ้าย + ป้ายคำ อ่านออกโดยไม่ต้องเดาความหมายรูป */
 .note {
   border-left: 2px solid var(--line);
@@ -478,7 +518,6 @@ a.c {
   font-family: var(--fm);
   font-size: 10.5px;
   color: var(--ink-3);
-  text-align: center;
 }
 
 .tk {

@@ -110,7 +110,7 @@ export default async function PlayPage({
                     <div className="nm">{p.name}</div>
                   </div>
                   <span className={`tg ${present ? 'court' : ''}`}>
-                    {present ? 'เช็กชื่อแล้ว กดออก' : 'แตะเพื่อเช็กชื่อ'}
+                    {present ? `${p.name} · เช็กชื่อแล้ว (กดออก)` : `${p.name} · เช็กชื่อ`}
                   </span>
                 </button>
               </form>
