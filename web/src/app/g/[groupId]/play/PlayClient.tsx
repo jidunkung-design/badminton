@@ -174,7 +174,7 @@ export default function PlayClient({
               {team(entry.teamB)}
             </div>
             {i === 0 && freeCourt && (
-              <button className="b" onClick={() => setState(s => sendToCourt(s, 0, nextId))}>ยืนยันส่งลงสนาม</button>
+              <button className="b b-confirm" onClick={() => setState(s => sendToCourt(s, 0, nextId))}>ยืนยันส่งลงสนาม</button>
             )}
           </div>
         ))}

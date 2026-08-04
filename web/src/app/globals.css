@@ -94,6 +94,21 @@
   --space-page-x: var(--space-6);      /* page/bar horizontal margin */
   --space-page-top: var(--space-6);    /* page top padding */
   --space-page-end: var(--space-9);    /* page bottom padding: room to breathe */
+
+  /* motion: court-mode is used one-handed, courtside, in sunlight, with
+     people waiting -- every animation here has to earn its place by
+     confirming a tap or making a state change legible, never by
+     decorating. transform/opacity (plus color, for the check-in flip)
+     only; no bounce/elastic easing. Durations: press feedback is the
+     fast bucket (100-150ms), state changes (court arrival, check-in
+     flip, alert entrance) are the slower bucket (200-300ms). See
+     `@media (prefers-reduced-motion: reduce)` below, which zeroes both
+     transition and animation so these are genuinely off, not just
+     shortened. */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-press: 100ms;
+  --dur-state: 260ms;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -238,6 +253,7 @@ button:active {
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
+    animation: none !important;
   }
 }
 
@@ -359,6 +375,10 @@ a.c {
   font-weight: 750;
   font-size: var(--t2);
   flex: 0 0 auto;
+  /* Check-in's whole point is the state flip; the color change reads at
+     a glance without needing to read the label. */
+  transition: background-color var(--dur-state) var(--ease-out-quart),
+    color var(--dur-state) var(--ease-out-quart);
 }
 
 .av.on {
@@ -471,6 +491,25 @@ a.c {
   font-size: var(--t1);
   color: var(--ink-2);
   line-height: 1.6;
+}
+
+/* Errors arrive rather than appear: a fade + gentle settle so a failure
+   is noticed, not a shake/flash/bounce that would draw more attention to
+   the animation than the message. Scoped to the role, not a class, so
+   any alert -- current or future -- gets it for free. */
+@keyframes alert-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[role="alert"] {
+  animation: alert-arrive var(--dur-state) var(--ease-out-quart) both;
 }
 
 .note.gate {
@@ -617,6 +656,8 @@ a.c {
   display: grid;
   place-items: center;
   color: #fff;
+  transition: background-color var(--dur-state) var(--ease-out-quart),
+    border-color var(--dur-state) var(--ease-out-quart);
 }
 
 .tk.on {
@@ -668,6 +709,27 @@ a.c {
    this is why .m.live declares position: relative; z-index: 0
    (turns it into a real stacking context) rather than leaving
    z-index at the card's default auto. */
+/* Signature moment: a match ends, the court empties, and the confirmed
+   queue entry arrives on it. `.m.live` never renders on initial load
+   (a session always opens with every court empty), so this keyframe only
+   ever fires on the real transition -- a queue entry being sent to a
+   court -- never on page/route entrance. React reuses the same DOM node
+   across the .court-idle <-> .m.live swap (same key, same element type),
+   so the animation restarts correctly off the animation-name property
+   newly applying, with no key trick or JS orchestration needed. Kept to
+   a short rise + fade so it reads as "arrived" without ever feeling like
+   a wait -- this happens dozens of times a session. */
+@keyframes court-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .m.live {
   position: relative;
   z-index: 0;
@@ -675,6 +737,7 @@ a.c {
   border-width: 2px;
   padding: var(--space-6);
   box-shadow: var(--sh-lift);
+  animation: court-arrive var(--dur-state) var(--ease-out-quart) both;
 }
 
 .court-lines {
@@ -689,6 +752,23 @@ a.c {
   font-size: var(--t5);
   padding: var(--space-5) var(--space-4);
   min-height: 64px;
+}
+
+/* Press feedback for the two controls that matter courtside: recording a
+   winner and confirming a queue entry onto a court. The organiser is
+   often not looking closely when tapping, so :active needs an
+   unmistakable, instant-reading acknowledgement -- a small scale-down,
+   nothing more. Overrides the page-wide `button:active` translateY via
+   selector specificity (two classes beat one element+pseudo). No
+   hover-dependent behaviour: this is a touch device. */
+.b-win,
+.b-confirm {
+  transition: transform var(--dur-press) var(--ease-out-quart);
+}
+
+.b-win:active,
+.b-confirm:active {
+  transform: scale(0.96);
 }
 
 .sd-lg .r {
