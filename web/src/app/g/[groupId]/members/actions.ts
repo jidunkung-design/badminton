@@ -11,7 +11,7 @@ export async function addPlayer(formData: FormData) {
   const supabase = await createServerSupabase()
   // No client-side permission check: the RLS policy is the gate.
   const { error } = await supabase.from('players').insert({ group_id: groupId, name, skill })
-  if (error) return { error: 'เพิ่มไม่สำเร็จ อาจไม่มีสิทธิ์ในก๊วนนี้' }
+  if (error) return { error: 'เพิ่มสมาชิกไม่สำเร็จ คุณอาจไม่มีสิทธิ์จัดการก๊วนนี้' }
   revalidatePath(`/g/${groupId}/members`)
   return { error: null }
 }
@@ -25,7 +25,7 @@ export async function archivePlayer(formData: FormData) {
     .from('players')
     .update({ archived_at: new Date().toISOString() })
     .eq('id', playerId)
-  if (error) return { error: 'เก็บเข้ากรุไม่สำเร็จ' }
+  if (error) return { error: 'เก็บเข้ากรุไม่สำเร็จ คุณอาจไม่มีสิทธิ์จัดการก๊วนนี้' }
   revalidatePath(`/g/${groupId}/members`)
   return { error: null }
 }

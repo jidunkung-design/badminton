@@ -1,9 +1,17 @@
+import { redirect } from 'next/navigation'
 import { createServerSupabase } from '@/lib/supabase/server'
 import { canManage } from '@/lib/roles'
 import { addPlayer, archivePlayer } from './actions'
 
-export default async function MembersPage({ params }: { params: Promise<{ groupId: string }> }) {
+export default async function MembersPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ groupId: string }>
+  searchParams: Promise<{ error?: string }>
+}) {
   const { groupId } = await params
+  const { error } = await searchParams
   const supabase = await createServerSupabase()
   const manage = await canManage(groupId)
   const { data: players } = await supabase
@@ -19,6 +27,8 @@ export default async function MembersPage({ params }: { params: Promise<{ groupI
     <main>
       <h1>สมาชิกก๊วน</h1>
 
+      {error && <p role="alert">{error}</p>}
+
       <section>
         <h2>ยังเล่นอยู่ {active.length} คน</h2>
         <ul>
@@ -26,10 +36,14 @@ export default async function MembersPage({ params }: { params: Promise<{ groupI
             <li key={p.id}>
               {p.name} · มือ {p.skill} · {p.user_id ? 'ผูกบัญชีแล้ว' : 'ยังไม่มีบัญชี'}
               {manage && (
-                <form action={async (formData) => { 'use server'; await archivePlayer(formData) }}>
+                <form action={async (formData) => {
+                  'use server'
+                  const result = await archivePlayer(formData)
+                  if (result.error) redirect(`/g/${groupId}/members?error=${encodeURIComponent(result.error)}`)
+                }}>
                   <input type="hidden" name="groupId" value={groupId} />
                   <input type="hidden" name="playerId" value={p.id} />
-                  <button type="submit">เก็บเข้ากรุ</button>
+                  <button type="submit" aria-label={`เก็บ ${p.name} เข้ากรุ`}>เก็บเข้ากรุ</button>
                 </form>
               )}
             </li>
@@ -46,7 +60,11 @@ export default async function MembersPage({ params }: { params: Promise<{ groupI
       )}
 
       {manage ? (
-        <form action={async (formData) => { 'use server'; await addPlayer(formData) }}>
+        <form action={async (formData) => {
+          'use server'
+          const result = await addPlayer(formData)
+          if (result.error) redirect(`/g/${groupId}/members?error=${encodeURIComponent(result.error)}`)
+        }}>
           <input type="hidden" name="groupId" value={groupId} />
           <label htmlFor="name">ชื่อ</label>
           <input id="name" name="name" required />
