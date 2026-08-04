@@ -20,14 +20,25 @@ export default async function GroupHome({ params }: { params: Promise<{ groupId:
   const manage = role === 'owner' || role === 'admin' || role === 'super'
 
   return (
-    <main>
-      <h1>{group.name}</h1>
-      <p>คุณคือ {ROLE_LABEL[role ?? 'member']}</p>
-      <ul>
-        <li><Link href={`/g/${groupId}/members`}>สมาชิกก๊วน</Link></li>
-        {manage && <li><Link href={`/g/${groupId}/play`}>เข้าโหมดสนาม</Link></li>}
-      </ul>
-      {!manage && <p>โหมดสนามเปิดให้เฉพาะหัวก๊วนกับแอดมิน</p>}
+    <main className="screen">
+      <div className="r">
+        <div className="gr">
+          <h1>{group.name}</h1>
+        </div>
+        <span className="who">คุณคือ {ROLE_LABEL[role ?? 'member']}</span>
+      </div>
+
+      {manage && (
+        <Link href={`/g/${groupId}/play`} className="b">เข้าโหมดสนาม</Link>
+      )}
+      <Link href={`/g/${groupId}/members`} className="b gh">สมาชิกก๊วน</Link>
+
+      {!manage && (
+        <div className="note gate">
+          <em>สิทธิ์</em>
+          โหมดสนามเปิดให้เฉพาะหัวก๊วนกับแอดมิน
+        </div>
+      )}
     </main>
   )
 }

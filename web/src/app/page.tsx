@@ -9,17 +9,33 @@ export default async function GroupListPage() {
   const { data: groups } = await supabase.from('groups').select('id, name').order('name')
 
   return (
-    <main>
+    <main className="screen">
       <h1>ก๊วนของฉัน</h1>
       {user.isSuperAdmin && (
-        <p>เหลือโควตาสร้างก๊วนอีก {Math.max(0, 5 - (groups?.length ?? 0))} จาก 5</p>
+        <div className="c">
+          <div className="ch">สิทธิ์ระดับระบบ</div>
+          <div className="r">
+            <div className="gr">
+              <div className="nm">เหลือโควตาสร้างก๊วนอีก {Math.max(0, 5 - (groups?.length ?? 0))} จาก 5</div>
+            </div>
+          </div>
+        </div>
       )}
       {(groups ?? []).length === 0 ? (
-        <p>ยังไม่ได้อยู่ก๊วนไหน รอหัวก๊วนส่งลิงก์เชิญ</p>
+        <div className="void">ยังไม่ได้อยู่ก๊วนไหน รอหัวก๊วนส่งลิงก์เชิญ</div>
       ) : (
-        <ul>
+        <ul className="screen">
           {groups!.map(g => (
-            <li key={g.id}><Link href={`/g/${g.id}`}>{g.name}</Link></li>
+            <li key={g.id}>
+              <Link href={`/g/${g.id}`} className="c">
+                <div className="r">
+                  <div className="av">{g.name.charAt(0)}</div>
+                  <div className="gr">
+                    <div className="nm">{g.name}</div>
+                  </div>
+                </div>
+              </Link>
+            </li>
           ))}
         </ul>
       )}
