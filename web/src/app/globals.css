@@ -1,105 +1,164 @@
 /* ── design tokens ────────────────────────────────────────────
-   Ported from the badminton-proto.html prototype. Court-teal accent,
-   green-biased neutrals, amber/red reserved for status only.
+   Phase 1.3: re-laid foundation. Brief: "อบอุ่น เป็นกันเอง ไม่เครียด"
+   (warm, familiar, unhurried), anti-reference "must not look like AI
+   made it". The old system ported a cool blue-green (oklch hue ~177,
+   teal) with green-biased neutrals -- reads as a precision instrument.
+   This pass shifts the court accent to a warmer, yellower true green
+   (hue 142, the hue of pure sRGB green) and retints every neutral
+   warm instead of green-biased. It deliberately avoids the cream/
+   brass/oxblood palette that "warm" usually collapses into with AI
+   output: neutrals here are near-white/near-black with barely any
+   chroma (paper is oklch(.97 .0015 60), not the oklch(.95 ~.03 85)
+   territory a cream ground lives in), and there is no brass or
+   oxblood anywhere in the system. Gold is reserved for the champion
+   screen only and is out of scope for this pass -- not used here.
+   All colors are declared in oklch() so lightness steps are
+   perceptually even, with chroma pulled down near both extremes of
+   the scale (see paper/surface at the light end, ink at the dark
+   end). Fonts are self-hosted via next/font/google in layout.tsx
+   (Mitr for display, Anuphan for body/UI -- see the --font-* vars
+   below): the system font stack this replaced is itself one of the
+   generic-AI tells the brief calls out.
    radius locked to 3 values: control 8 / container 14 / pill 999.
-   No webfonts: system font stack (Thai needs this, no CDN allowed).
 ─────────────────────────────────────────────────────────────── */
 :root {
-  --court: #12695A;
-  --court-soft: #E4EFEB;
-  --court-ink: #0A3A32;
-  --ink: #0E1917;
-  --ink-2: #4E605A;
-  --ink-3: #849690;
-  --paper: #F2F4F1;
-  --surface: #FFF;
-  --surface-2: #E8EDE9;
-  --line: #D5DDD8;
-  --good: #1F7A55;
-  --warn: #9C6414;
-  --crit: #A63B27;
-  --good-bg: #E3F1EA;
-  --warn-bg: #F7ECD9;
-  --crit-bg: #F7E4DF;
+  /* accent: warm true green, rare, reserved for interactive/live state */
+  --court: oklch(0.44 0.14 142);
+  --court-soft: oklch(0.93 0.05 132);
+  --court-ink: oklch(0.28 0.08 142);
+
+  /* warm neutrals: low chroma throughout, reduced further at both
+     extremes so the palette stays a warm paper/wood tone rather than
+     tipping into cream (which needs both higher lightness AND higher
+     chroma than anything below). */
+  --ink: oklch(0.22 0.015 60);
+  --ink-2: oklch(0.44 0.018 60);
+  --ink-3: oklch(0.52 0.016 60);
+  --paper: oklch(0.97 0.0015 60);
+  --surface: oklch(0.995 0.001 60);
+  --surface-2: oklch(0.92 0.006 65);
+  --line: oklch(0.82 0.01 65);
+
+  /* state only, never decoration */
+  --good: oklch(0.48 0.13 150);
+  --warn: oklch(0.50 0.15 55);
+  --crit: oklch(0.50 0.19 25);
+  --good-bg: oklch(0.93 0.045 150);
+  --warn-bg: oklch(0.94 0.05 60);
+  --crit-bg: oklch(0.92 0.06 25);
+
   --r-c: 8px;
   --r-b: 14px;
   --r-p: 999px;
-  --sh: 0 1px 2px rgba(14, 25, 23, .05), 0 6px 18px rgba(14, 25, 23, .06);
-  --sh-lift: 0 2px 6px rgba(14, 25, 23, .07), 0 22px 50px rgba(14, 25, 23, .13);
-  --f: system-ui, -apple-system, "Noto Sans Thai", "Sarabun", Segoe UI, sans-serif;
+  --sh: 0 1px 2px rgba(30, 20, 10, .05), 0 6px 18px rgba(30, 20, 10, .06);
+  --sh-lift: 0 2px 6px rgba(30, 20, 10, .07), 0 22px 50px rgba(30, 20, 10, .13);
+
+  /* --font-mitr / --font-anuphan are set by next/font/google in
+     layout.tsx as CSS custom properties on <html>; the literal names
+     here are the loading-flash fallback only. */
+  --font-display: var(--font-mitr), "Noto Sans Thai", sans-serif;
+  --font-body: var(--font-anuphan), "Noto Sans Thai", sans-serif;
+  --f: var(--font-body);
   --fm: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
-  --t1: 11px;
-  --t2: 12.5px;
-  --t3: 14px;
-  --t4: 15.5px;
-  --t5: 18px;
-  --t6: 23px;
-  --t7: clamp(27px, 3.5vw, 36px);
+
+  /* type scale: rem, real ratio. t2 through t7 hold a >=1.25 ratio
+     step to step (t3/t2 = 1.25, t4/t3 = 1.267, t5/t4 = 1.263,
+     t6/t5 = 1.25). t1 is a disclosed exception: 11px is a legibility
+     floor for the smallest micro-labels (.ch/.who/.note em), a pure
+     1.25 ladder down from t2 would land at 9.6px, too small to read
+     "กลางแดด" at any comfortable distance. */
+  --t1: 0.6875rem;                      /* 11px */
+  --t2: 0.75rem;                        /* 12px */
+  --t3: 0.9375rem;                      /* 15px -- body base */
+  --t4: 1.1875rem;                      /* 19px */
+  --t5: 1.5rem;                         /* 24px */
+  --t6: 1.875rem;                       /* 30px -- h1 */
+  --t7: clamp(1.875rem, 4vw, 2.5rem);   /* 30-40px -- reserved display */
+
+  /* 4pt spacing scale + semantic aliases. Rhythm should say what
+     matters, not repeat one padding everywhere: card interior gets
+     more room than a row's internal gap, and the page's trailing
+     edge gets the most of all so a thumb has somewhere to rest. */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-7: 2rem;      /* 32px */
+  --space-8: 2.5rem;    /* 40px */
+  --space-9: 4rem;      /* 64px */
+
+  --space-row-gap: var(--space-3);     /* between rows inside a card */
+  --space-card-pad: var(--space-4);    /* card interior padding */
+  --space-page-x: var(--space-6);      /* page/bar horizontal margin */
+  --space-page-top: var(--space-6);    /* page top padding */
+  --space-page-end: var(--space-9);    /* page bottom padding: room to breathe */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --court: #4CBBA2;
-    --court-soft: #123029;
-    --court-ink: #8FD9C6;
-    --ink: #E6EDE9;
-    --ink-2: #93A69F;
-    --ink-3: #668078;
-    --paper: #0A1412;
-    --surface: #111E1B;
-    --surface-2: #182823;
-    --line: #25403A;
-    --good: #54C08D;
-    --warn: #D5A24A;
-    --crit: #DE7660;
-    --good-bg: #0F2E23;
-    --warn-bg: #2E2314;
-    --crit-bg: #301A15;
-    --sh: 0 1px 2px rgba(0, 0, 0, .42), 0 6px 18px rgba(0, 0, 0, .3);
-    --sh-lift: 0 2px 6px rgba(0, 0, 0, .45), 0 22px 50px rgba(0, 0, 0, .5);
+    --court: oklch(0.75 0.14 142);
+    --court-soft: oklch(0.26 0.05 142);
+    --court-ink: oklch(0.28 0.07 142);
+    --ink: oklch(0.92 0.01 60);
+    --ink-2: oklch(0.72 0.015 60);
+    --ink-3: oklch(0.60 0.014 60);
+    --paper: oklch(0.155 0.01 50);
+    --surface: oklch(0.205 0.01 50);
+    --surface-2: oklch(0.26 0.012 55);
+    --line: oklch(0.33 0.018 55);
+    --good: oklch(0.68 0.14 150);
+    --warn: oklch(0.72 0.13 65);
+    --crit: oklch(0.68 0.17 27);
+    --good-bg: oklch(0.24 0.05 150);
+    --warn-bg: oklch(0.26 0.06 65);
+    --crit-bg: oklch(0.24 0.07 27);
+    --sh: 0 1px 2px rgba(0, 0, 0, .45), 0 6px 18px rgba(0, 0, 0, .32);
+    --sh-lift: 0 2px 6px rgba(0, 0, 0, .48), 0 22px 50px rgba(0, 0, 0, .52);
   }
 }
 
 :root[data-theme="light"] {
-  --court: #12695A;
-  --court-soft: #E4EFEB;
-  --court-ink: #0A3A32;
-  --ink: #0E1917;
-  --ink-2: #4E605A;
-  --ink-3: #849690;
-  --paper: #F2F4F1;
-  --surface: #FFF;
-  --surface-2: #E8EDE9;
-  --line: #D5DDD8;
-  --good: #1F7A55;
-  --warn: #9C6414;
-  --crit: #A63B27;
-  --good-bg: #E3F1EA;
-  --warn-bg: #F7ECD9;
-  --crit-bg: #F7E4DF;
-  --sh: 0 1px 2px rgba(14, 25, 23, .05), 0 6px 18px rgba(14, 25, 23, .06);
-  --sh-lift: 0 2px 6px rgba(14, 25, 23, .07), 0 22px 50px rgba(14, 25, 23, .13);
+  --court: oklch(0.44 0.14 142);
+  --court-soft: oklch(0.93 0.05 132);
+  --court-ink: oklch(0.28 0.08 142);
+  --ink: oklch(0.22 0.015 60);
+  --ink-2: oklch(0.44 0.018 60);
+  --ink-3: oklch(0.52 0.016 60);
+  --paper: oklch(0.97 0.0015 60);
+  --surface: oklch(0.995 0.001 60);
+  --surface-2: oklch(0.92 0.006 65);
+  --line: oklch(0.82 0.01 65);
+  --good: oklch(0.48 0.13 150);
+  --warn: oklch(0.50 0.15 55);
+  --crit: oklch(0.50 0.19 25);
+  --good-bg: oklch(0.93 0.045 150);
+  --warn-bg: oklch(0.94 0.05 60);
+  --crit-bg: oklch(0.92 0.06 25);
+  --sh: 0 1px 2px rgba(30, 20, 10, .05), 0 6px 18px rgba(30, 20, 10, .06);
+  --sh-lift: 0 2px 6px rgba(30, 20, 10, .07), 0 22px 50px rgba(30, 20, 10, .13);
 }
 
 :root[data-theme="dark"] {
-  --court: #4CBBA2;
-  --court-soft: #123029;
-  --court-ink: #8FD9C6;
-  --ink: #E6EDE9;
-  --ink-2: #93A69F;
-  --ink-3: #668078;
-  --paper: #0A1412;
-  --surface: #111E1B;
-  --surface-2: #182823;
-  --line: #25403A;
-  --good: #54C08D;
-  --warn: #D5A24A;
-  --crit: #DE7660;
-  --good-bg: #0F2E23;
-  --warn-bg: #2E2314;
-  --crit-bg: #301A15;
-  --sh: 0 1px 2px rgba(0, 0, 0, .42), 0 6px 18px rgba(0, 0, 0, .3);
-  --sh-lift: 0 2px 6px rgba(0, 0, 0, .45), 0 22px 50px rgba(0, 0, 0, .5);
+  --court: oklch(0.75 0.14 142);
+  --court-soft: oklch(0.26 0.05 142);
+  --court-ink: oklch(0.28 0.07 142);
+  --ink: oklch(0.92 0.01 60);
+  --ink-2: oklch(0.72 0.015 60);
+  --ink-3: oklch(0.60 0.014 60);
+  --paper: oklch(0.155 0.01 50);
+  --surface: oklch(0.205 0.01 50);
+  --surface-2: oklch(0.26 0.012 55);
+  --line: oklch(0.33 0.018 55);
+  --good: oklch(0.68 0.14 150);
+  --warn: oklch(0.72 0.13 65);
+  --crit: oklch(0.68 0.17 27);
+  --good-bg: oklch(0.24 0.05 150);
+  --warn-bg: oklch(0.26 0.06 65);
+  --crit-bg: oklch(0.24 0.07 27);
+  --sh: 0 1px 2px rgba(0, 0, 0, .45), 0 6px 18px rgba(0, 0, 0, .32);
+  --sh-lift: 0 2px 6px rgba(0, 0, 0, .48), 0 22px 50px rgba(0, 0, 0, .52);
 }
 
 /* ── reset ─────────────────────────────────────────────────────
@@ -137,14 +196,15 @@ body {
 }
 
 h1, h2, h3 {
+  font-family: var(--font-display);
   line-height: 1.22;
   text-wrap: balance;
-  letter-spacing: -.015em;
+  letter-spacing: -.005em;
 }
 
 h1 {
   font-size: var(--t6);
-  font-weight: 800;
+  font-weight: 700;
 }
 
 ul {
@@ -182,22 +242,27 @@ button:active {
 }
 
 /* ── layout shell ─────────────────────────────────────────────
-   .bar = top app bar (ported from the phone-frame status bar in
-   the prototype; it was already designed to carry an app/group name).
-   Deliberate deviations from the prototype's .bar, both disclosed here
-   rather than silently: padding is 14px 22px (was 10px 16px), weight
-   is 800 and size is --t4 (was unweighted --t1), and the monospace
-   family plus the flex/justify-between/net-toggle arrangement are
-   dropped entirely. The prototype's version had to fit a live clock
-   and an online/offline toggle into a 376px phone status bar; this
-   bar only ever holds one static title, so it reads as a page title,
-   not a status line.
-   .wrap = the prototype's page container, unchanged.
-   .pane = its vertical rhythm, tightened on purpose: 24px 0 60px
-   instead of the prototype's 30px 0 80px. The prototype's spacing was
-   tuned for content scrolling inside a fixed 716px phone frame; this
-   is a full page with no such ceiling, so the tighter figure reads
-   better at real viewport heights.
+   .bar = top app bar. Deliberate deviations from the ported
+   prototype's .bar, disclosed here rather than silently: horizontal
+   padding now matches .wrap's (--space-page-x) so the bar title and
+   page content share a left edge; weight is 700 (Mitr tops out at
+   700, the prototype asked for 800) at --t4 (19px, up from 15.5);
+   background is --court-ink fixed dark in both themes rather than a
+   token that flips light in dark mode -- the ported version had
+   --court-ink invert to a near-white mint in dark mode, which put a
+   near-white bar title on a near-white bar background (measured
+   ~1.36:1). Font family is now the display face. The monospace
+   family plus the flex/justify-between/net-toggle arrangement the
+   prototype needed for a live clock and online/offline toggle in a
+   phone status bar are dropped entirely; this bar only ever holds
+   one static title.
+   .wrap = the prototype's page container, horizontal padding rounded
+   from 22px to the nearest 4pt step (--space-page-x, 24px).
+   .pane = its vertical rhythm: top padding is --space-page-top
+   (24px, was 24px, unchanged), bottom is --space-page-end (64px, was
+   60px) -- the trailing edge gets the most room of any spacing value
+   in the system, deliberately, so the last thing on a page never
+   sits flush against a thumb or a browser chrome bar.
    .screen = the prototype's per-screen content column, stripped of
    the phone-frame's fixed height/scroll (this is a full page, not a
    376x716 device mock).
@@ -205,29 +270,26 @@ button:active {
 .wrap {
   max-width: 1160px;
   margin: 0 auto;
-  padding: 0 22px;
+  padding: 0 var(--space-page-x);
 }
 
 .pane {
-  padding: 24px 0 60px;
+  padding: var(--space-page-top) 0 var(--space-page-end);
 }
 
 .bar {
   background: var(--court-ink);
   color: #E9F6F2;
-  padding: 14px 22px;
-  font-weight: 800;
+  padding: var(--space-4) var(--space-page-x);
+  font-family: var(--font-display);
+  font-weight: 700;
   font-size: var(--t4);
-}
-
-:root[data-theme="dark"] .bar {
-  color: #DCEFE9;
 }
 
 .screen {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .who {
@@ -242,34 +304,31 @@ button:active {
 
 /* ── atoms ─────────────────────────────────────────────────── */
 .c {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-row-gap);
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--r-b);
-  padding: 14px;
+  padding: var(--space-card-pad);
 }
 
 a.c {
-  display: block;
   width: 100%;
 }
 
 .ch {
-  font-size: 10.5px;
+  font-size: var(--t1);
   letter-spacing: .11em;
   text-transform: uppercase;
   color: var(--ink-3);
   font-weight: 750;
-  margin-bottom: 10px;
 }
 
 .r {
   display: flex;
   align-items: center;
-  gap: 11px;
-}
-
-.r + .r {
-  margin-top: 9px;
+  gap: var(--space-row-gap);
 }
 
 .gr {
@@ -335,7 +394,7 @@ a.c {
 .b {
   border: 0;
   border-radius: var(--r-c);
-  padding: 12px 15px;
+  padding: var(--space-3) var(--space-4);
   font-size: var(--t2);
   font-weight: 700;
   background: var(--court);
@@ -344,7 +403,7 @@ a.c {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 .b:hover {
@@ -368,21 +427,24 @@ a.c {
 }
 
 /* Primary-button text color is fixed, not var(--court-ink): that token
-   flips with the theme (it is the dark ink used as a light-mode
-   background and a light mint used as a dark-mode background, see the
-   token block above), so referencing it here would resolve to the
-   wrong, near-white value under dark mode. #0A3A32 is the literal
-   value --court-ink holds in light mode -- reused here as a fixed
-   color because white-on-#4CBBA2 in dark mode measures ~2.35:1,
-   failing WCAG AA (3:1 UI / 4.5:1 text). #0A3A32 on that same
-   background measures ~5.36:1. Excludes .gh: the ghost variant uses
-   var(--ink) on var(--surface), which is high-contrast in both themes
-   already. Layered the same way the token block itself is: a media
-   query for the OS-level preference, then attribute overrides so an
-   explicit data-theme choice always wins over the OS preference. */
+   flips with the theme, so referencing it here would resolve to the
+   wrong value under dark mode. Measured against the new warm-green
+   court accent (oklch hue 142, replacing the old teal at hue 177):
+   white on the light-mode court (oklch(.44 .14 142), #13640b) is
+   7.35:1; white on the dark-mode court (oklch(.75 .14 142), #77c46f)
+   is only 2.12:1, well under AA, so dark mode swaps in a fixed near-
+   black-green (oklch(.24 .09 142), #002900) which measures 7.52:1.
+   Both clear WCAG AA (4.5:1 text / 3:1 UI) with comfortable margin,
+   which matters here specifically: win buttons and the queue-confirm
+   control reuse this class and are read in direct sunlight. Excludes
+   .gh: the ghost variant uses var(--ink) on var(--surface), which is
+   high-contrast in both themes already (17.09:1 light, 14.13:1 dark).
+   Layered the same way the token block itself is: a media query for
+   the OS-level preference, then attribute overrides so an explicit
+   data-theme choice always wins over the OS preference. */
 @media (prefers-color-scheme: dark) {
   .b:not(.gh) {
-    color: #0A3A32;
+    color: #002900;
   }
 }
 
@@ -391,31 +453,38 @@ a.c {
 }
 
 :root[data-theme="dark"] .b:not(.gh) {
-  color: #0A3A32;
+  color: #002900;
 }
 
-/* หมายเหตุแทนไอคอนแม่กุญแจ: แถบเส้นซ้าย + ป้ายคำ อ่านออกโดยไม่ต้องเดาความหมายรูป */
+/* .note: a status callout (login's "next steps", the login error, the
+   court-mode permission gate). Previously a colored left border plus
+   a leading label -- a side stripe is the single most overused AI
+   layout tell, so it is gone. The leading label (.note em) already
+   carries the "what kind of note is this" job on its own; a soft
+   background tint per variant now carries the "how urgent" job, so
+   nothing is lost by dropping the stripe. */
 .note {
-  border-left: 2px solid var(--line);
-  padding: 2px 0 2px 12px;
+  background: var(--surface-2);
+  border-radius: var(--r-c);
+  padding: var(--space-3) var(--space-4);
   font-size: var(--t1);
   color: var(--ink-2);
   line-height: 1.6;
 }
 
 .note.gate {
-  border-left-color: var(--warn);
+  background: var(--warn-bg);
 }
 
 .note.info {
-  border-left-color: var(--court);
+  background: var(--court-soft);
 }
 
-/* .note.err extends the prototype's .note.gate / .note.info pattern
-   using the crit token that already exists in the palette; the
-   prototype has no login/error screen of its own to copy from. */
+/* .note.err extends the .note.gate / .note.info pattern using the
+   crit token that already exists in the palette; there is no
+   login/error screen in the ported prototype to copy from. */
 .note.err {
-  border-left-color: var(--crit);
+  background: var(--crit-bg);
 }
 
 .note em {
@@ -436,7 +505,7 @@ a.c {
 
 .in {
   width: 100%;
-  padding: 10px 12px;
+  padding: var(--space-3);
   border-radius: var(--r-c);
   border: 1px solid var(--line);
   background: var(--surface);
@@ -453,7 +522,7 @@ a.c {
 .fg {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2);
 }
 
 .fg > span {
@@ -466,7 +535,7 @@ a.c {
   text-align: center;
   color: var(--ink-3);
   font-size: var(--t2);
-  padding: 30px 14px;
+  padding: var(--space-8) var(--space-4);
   line-height: 1.75;
 }
 
@@ -475,11 +544,16 @@ a.c {
    group-home screens never needed a match card. Court mode does:
    the two-team split with a VS divider, the small ghost button
    used on dense list rows, and a 2-up grid for the win buttons.
-   Values copied straight from the prototype's .m/.vs/.sd/.vsx/.b.s/
-   .b2/.tk rules -- no new tokens, no parallel scale.
+   Values are otherwise unchanged from the earlier port -- court
+   mode itself is a later pass -- except .m, which loses its side
+   stripe as part of this foundation pass (the brief calls it out by
+   name). A live match now reads as more important than a queued one
+   through a full accent border instead of a colored edge, which
+   also keeps it distinct from a plain list card's neutral 1px
+   border rather than just adding a stripe on top of it.
 ─────────────────────────────────────────────────────────── */
 .b.s {
-  padding: 8px 12px;
+  padding: var(--space-2) var(--space-3);
   font-size: var(--t1);
   width: auto;
 }
@@ -487,30 +561,29 @@ a.c {
 .b2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 9px;
+  gap: var(--space-2);
 }
 
 .m {
   background: var(--surface);
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--court);
+  border: 1.5px solid var(--court);
   border-radius: var(--r-b);
-  padding: 13px;
+  padding: var(--space-card-pad);
 }
 
 .vs {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  gap: 9px;
+  gap: var(--space-2);
   align-items: center;
-  margin: 10px 0;
+  margin: var(--space-3) 0;
 }
 
 .sd {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 7px;
+  gap: var(--space-2);
+  padding: var(--space-2);
   border-radius: var(--r-c);
 }
 

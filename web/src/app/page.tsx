@@ -12,13 +12,9 @@ export default async function GroupListPage() {
     <main className="screen">
       <h1>ก๊วนของฉัน</h1>
       {user.isSuperAdmin && (
-        <div className="c">
-          <div className="ch">สิทธิ์ระดับระบบ</div>
-          <div className="r">
-            <div className="gr">
-              <div className="nm">เหลือโควตาสร้างก๊วนอีก {Math.max(0, 5 - (groups?.length ?? 0))} จาก 5</div>
-            </div>
-          </div>
+        <div className="note">
+          <em>สิทธิ์ระดับระบบ</em>
+          เหลือโควตาสร้างก๊วนอีก {Math.max(0, 5 - (groups?.length ?? 0))} จาก 5
         </div>
       )}
       {(groups ?? []).length === 0 ? (
