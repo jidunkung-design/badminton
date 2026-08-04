@@ -88,8 +88,7 @@ git checkout -b feat/club-platform
 - [ ] **Step 2: Scaffold Next.js into `web/`**
 
 ```bash
-npx create-next-app@latest web --typescript --app --eslint --no-tailwind --no-src-dir=false --import-alias "@/*" --use-npm --skip-install
-cd web && npm install
+npx create-next-app@latest web --typescript --app --eslint --no-tailwind --src-dir --import-alias "@/*" --use-npm
 ```
 
 If the interactive prompt appears anyway, answer: TypeScript yes, ESLint yes, Tailwind no, `src/` yes, App Router yes, Turbopack yes, import alias `@/*`.
@@ -1607,7 +1606,7 @@ cd web && npm install @supabase/ssr
 Add to `web/package.json` scripts:
 
 ```json
-"db:types": "supabase gen types typescript --local > src/lib/db-types.ts"
+"db:types": "npx supabase gen types typescript --local > src/lib/db-types.ts"
 ```
 
 Run: `cd web && npm run db:types`
@@ -2270,11 +2269,14 @@ export default function PlayClient({
   groupId,
   sessionId,
   players,
+  names,
   courtCount,
 }: {
   groupId: string
   sessionId: string
   players: SessionPlayer[]
+  /** player id -> display name. Kept out of SessionPlayer so the domain layer stays about numbers. */
+  names: Record<string, string>
   courtCount: number
 }) {
   const [state, setState] = useState<SessionState>(() =>
@@ -2314,7 +2316,7 @@ export default function PlayClient({
     setError(result.error)
   }
 
-  const name = (id: string) => players.find(p => p.id === id)?.id ?? id
+  const name = (id: string) => names[id] ?? id
 
   return (
     <div>
@@ -2354,7 +2356,7 @@ export default function PlayClient({
         <h2>คนว่าง {freePlayers(state).length} คน</h2>
         <ol>
           {freePlayers(state).map(p => (
-            <li key={p.id}>{p.id} · เล่นไป {p.gamesToday} เกม</li>
+            <li key={p.id}>{name(p.id)} · เล่นไป {p.gamesToday} เกม</li>
           ))}
         </ol>
       </section>
@@ -2395,16 +2397,26 @@ export default async function PlayPage({ params }: { params: Promise<{ groupId: 
     .select('player_id, players(id, name, skill)')
     .eq('session_id', sessionId)
 
-  // Phase 3 seeds every attendee at the base rating. Task set for phase 5
-  // replaces this with season_standings computed from the match log.
-  const players: SessionPlayer[] = (rows ?? []).map(r => ({
-    id: r.player_id,
-    skill: (r.players as unknown as { skill: number }).skill,
-    elo: ELO_BASE,
-    seasonGames: 0,
-    gamesToday: 0,
-    freeAtMin: 0,
-  }))
+  type AttendanceRow = { player_id: string; players: { id: string; name: string; skill: number } | null }
+  const attendees = (rows ?? []) as unknown as AttendanceRow[]
+
+  // Phase 3 seeds every attendee at the base rating. Phase 5 replaces this
+  // read with season_standings computed from the match log.
+  const players: SessionPlayer[] = attendees
+    .filter(r => r.players !== null)
+    .map(r => ({
+      id: r.player_id,
+      skill: r.players!.skill,
+      elo: ELO_BASE,
+      seasonGames: 0,
+      gamesToday: 0,
+      freeAtMin: 0,
+    }))
+
+  // Names live here, not in SessionPlayer: the domain layer is about numbers.
+  const names: Record<string, string> = Object.fromEntries(
+    attendees.filter(r => r.players !== null).map(r => [r.player_id, r.players!.name]),
+  )
 
   if (players.length < 4) {
     return (
@@ -2418,48 +2430,74 @@ export default async function PlayPage({ params }: { params: Promise<{ groupId: 
   return (
     <main>
       <h1>โหมดสนาม</h1>
-      <PlayClient groupId={groupId} sessionId={sessionId} players={players} courtCount={2} />
+      <PlayClient
+        groupId={groupId}
+        sessionId={sessionId}
+        players={players}
+        names={names}
+        courtCount={2}
+      />
     </main>
   )
 }
 ```
 
-- [ ] **Step 4: Verify by hand**
+- [ ] **Step 4: Seed today's attendance so the screen has data**
 
-Run `npm run dev` and sign in as the owner. Insert attendance for the seeded players with the CLI so the screen has data:
+Append to `web/supabase/seed.sql`:
 
-```bash
-cd web
-npx supabase db reset
-psql "$(npx supabase status -o env | grep DB_URL | cut -d= -f2- | tr -d '"')" -c "
-insert into sessions (id, group_id, season_id) values
-  ('55555555-5555-5555-5555-555555555555','33333333-3333-3333-3333-333333333333','44444444-4444-4444-4444-444444444444');
+```sql
+-- Everyone in the seeded group is checked in for today, so the play screen
+-- has enough people to build a queue on a fresh database.
+insert into sessions (id, group_id, season_id, played_on) values
+  ('55555555-5555-5555-5555-555555555555',
+   '33333333-3333-3333-3333-333333333333',
+   '44444444-4444-4444-4444-444444444444',
+   current_date);
+
 insert into attendance (session_id, player_id)
-  select '55555555-5555-5555-5555-555555555555', id from players
-  where group_id = '33333333-3333-3333-3333-333333333333';
-"
+  select '55555555-5555-5555-5555-555555555555', id
+  from players where group_id = '33333333-3333-3333-3333-333333333333';
 ```
 
-Open `/g/33333333-3333-3333-3333-333333333333/play`.
-Expect: 3 queued matches, confirm sends one to a court, recording a winner frees the court and refills the queue.
+Run: `cd web && npx supabase db reset`
+Expected: reset completes with no error.
 
-- [ ] **Step 5: Confirm the write landed**
+- [ ] **Step 5: Verify by hand**
 
-```bash
-psql "$(npx supabase status -o env | grep DB_URL | cut -d= -f2- | tr -d '"')" -c \
-  "select court_no, winner_team from matches order by started_at desc limit 3;"
+Run `npm run dev`, sign in as `owner@example.com`, open
+`/g/33333333-3333-3333-3333-333333333333/play`.
+
+Expect: 3 queued matches showing Thai names (not UUIDs), "ยืนยันส่งลงสนาม" moves one onto a court,
+recording a winner frees that court and refills the queue.
+
+- [ ] **Step 6: Confirm the write landed**
+
+Add a temporary check to `web/tests/db/schema.test.ts`, run it, then remove it:
+
+```ts
+it('records a match with its players', async () => {
+  const { data } = await admin
+    .from('matches')
+    .select('court_no, winner_team, match_players(player_id, team)')
+    .order('started_at', { ascending: false })
+    .limit(1)
+  expect(data?.[0]?.match_players).toHaveLength(4)
+})
 ```
-Expected: one row per recorded result.
 
-- [ ] **Step 6: Run the whole suite**
+Run: `cd web && npm test -- tests/db/schema.test.ts`
+Expected: PASS. Then delete the temporary test before committing.
+
+- [ ] **Step 7: Run the whole suite**
 
 Run: `cd web && npm test`
 Expected: PASS, every domain and database test green.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 8: Commit**
 
 ```bash
-git add web/src/app/g
+git add web/src/app/g web/supabase/seed.sql
 git commit -m "feat: add court mode wired to the queue engine"
 ```
 
