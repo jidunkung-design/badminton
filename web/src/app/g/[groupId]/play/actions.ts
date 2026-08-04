@@ -13,7 +13,7 @@ export async function openSession(groupId: string) {
 
   const { data: season } = await supabase
     .from('seasons').select('id').eq('group_id', groupId).is('ended_at', null).maybeSingle()
-  if (!season) return { sessionId: null, error: 'ก๊วนนี้ยังไม่มีซีซั่นที่เปิดอยู่' }
+  if (!season) return { sessionId: null, error: 'ก๊วนนี้ยังไม่ได้เปิดซีซั่น' }
 
   const { data, error } = await supabase
     .from('sessions')

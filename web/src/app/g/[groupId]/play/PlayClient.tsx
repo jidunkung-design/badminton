@@ -120,7 +120,7 @@ export default function PlayClient({
 
   return (
     <div className="screen">
-      {error && <div className="note err" role="alert"><em>ผิดพลาด</em>{error}</div>}
+      {error && <div className="note err" role="alert">{error}</div>}
 
       <section className="screen">
         <h2 className="ch" style={{ marginBottom: 0 }}>สนาม</h2>

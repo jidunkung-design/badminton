@@ -7,7 +7,7 @@ export async function addPlayer(formData: FormData) {
   const groupId = String(formData.get('groupId'))
   const name = String(formData.get('name') ?? '').trim()
   const skill = Number(formData.get('skill') ?? 3)
-  if (!name) return { error: 'กรุณากรอกชื่อ' }
+  if (!name) return { error: 'ยังไม่ได้ใส่ชื่อ' }
   const supabase = await createServerSupabase()
   // No client-side permission check: the RLS policy is the gate.
   const { error } = await supabase.from('players').insert({ group_id: groupId, name, skill })

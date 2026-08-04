@@ -25,7 +25,7 @@ export default async function GroupHome({ params }: { params: Promise<{ groupId:
         <div className="gr">
           <h1>{group.name}</h1>
         </div>
-        <span className="who">คุณคือ {ROLE_LABEL[role ?? 'member']}</span>
+        <span className="who">คุณเป็น {ROLE_LABEL[role ?? 'member']}</span>
       </div>
 
       {manage && (

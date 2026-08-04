@@ -27,7 +27,7 @@ export default async function MembersPage({
     <main className="screen">
       <h1>สมาชิกก๊วน</h1>
 
-      {error && <div className="note err" role="alert"><em>ผิดพลาด</em>{error}</div>}
+      {error && <div className="note err" role="alert">{error}</div>}
 
       <div className="c">
         <h2 className="ch">ยังเล่นอยู่ {active.length} คน</h2>

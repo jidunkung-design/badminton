@@ -24,7 +24,7 @@ const anuphan = Anuphan({
 
 export const metadata: Metadata = {
   title: "ก๊วนแบด",
-  description: "ระบบจัดการสโมสรแบดมินตัน",
+  description: "จัดก๊วนแบด เช็กชื่อ จัดคิว หารค่าสนาม",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

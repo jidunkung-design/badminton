@@ -13,7 +13,7 @@ export default async function GroupListPage() {
       <h1>ก๊วนของฉัน</h1>
       {user.isSuperAdmin && (
         <div className="note">
-          <em>สิทธิ์ระดับระบบ</em>
+          <em>โควตาสร้างก๊วน</em>
           เหลือโควตาสร้างก๊วนอีก {Math.max(0, 5 - (groups?.length ?? 0))} จาก 5
         </div>
       )}

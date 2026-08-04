@@ -25,7 +25,7 @@ export default function LoginPage() {
       <main className="screen">
         <h1>ส่งลิงก์เข้าอีเมลแล้ว</h1>
         <div className="note info">
-          <em>ขั้นตอนถัดไป</em>
+          
           เปิดอีเมลแล้วกดลิงก์เพื่อเข้าใช้งาน
         </div>
       </main>
@@ -49,7 +49,7 @@ export default function LoginPage() {
         </label>
         <button type="submit" className="b">ส่งลิงก์เข้าอีเมล</button>
       </form>
-      {error && <div className="note err" role="alert"><em>ผิดพลาด</em>{error}</div>}
+      {error && <div className="note err" role="alert">{error}</div>}
     </main>
   )
 }

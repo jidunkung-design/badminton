@@ -33,7 +33,7 @@ export default async function PlayPage({
     return (
       <main className="screen">
         <h1>โหมดสนาม</h1>
-        <div className="note err" role="alert"><em>ผิดพลาด</em>{error}</div>
+        <div className="note err" role="alert">{error}</div>
       </main>
     )
   }
@@ -125,7 +125,7 @@ export default async function PlayPage({
     <main className="screen">
       <h1>โหมดสนาม</h1>
 
-      {actionError && <div className="note err" role="alert"><em>ผิดพลาด</em>{actionError}</div>}
+      {actionError && <div className="note err" role="alert">{actionError}</div>}
 
       {players.length < 4 ? (
         <div className="note gate">
