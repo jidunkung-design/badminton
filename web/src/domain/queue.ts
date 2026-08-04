@@ -57,12 +57,16 @@ function pairingOptions(state: SessionState): PairingOptions {
 
 export function refillQueue(state: SessionState, nextId: () => string): SessionState {
   if (state.mode === 'manual') return state
+  // Capture the narrowed mode once: state.mode is provably not 'manual' past
+  // the guard above, but that narrowing does not survive being read back off
+  // `next` (a reassigned SessionState) inside the loop, so pass this instead.
+  const mode = state.mode
   // Drop unlocked entries: they were built from older fairness data.
   let next: SessionState = { ...state, queue: state.queue.filter(e => e.locked) }
   const depth = state.courts.length + 1
   for (let guard = 0; next.queue.length < depth && guard < 8; guard++) {
     const pool = orderByPriority(freePlayers(next), next.clockMin)
-    const built = buildEntry(pool, next.mode, pairingOptions(next))
+    const built = buildEntry(pool, mode, pairingOptions(next))
     if (!built) break
     next = {
       ...next,
