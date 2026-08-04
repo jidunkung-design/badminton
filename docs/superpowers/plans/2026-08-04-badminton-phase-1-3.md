@@ -914,36 +914,42 @@ describe('finishMatch', () => {
     for (const id of teamB) expect(after[id]).toBeLessThan(before[id])
   })
 
-  it('keeps everyone within two games of each other over a long session', () => {
-    let s = refillQueue({ ...makeState(12, 2), mode: 'fair' }, nextId)
-    for (let step = 0; step < 400 && s.playedCount < 30; step++) {
-      const free = s.courts.findIndex(c => !c.match)
-      if (free >= 0 && s.queue.length > 0) {
+  // The finish counter advances only when a match actually finishes.
+  // Indexing by the loop step instead looks like it alternates but does not:
+  // the steps that reach the finish branch are all even, so court 0 would
+  // finish every time and court 1 would never free up.
+  function simulate(state: SessionState, targetMatches: number): SessionState {
+    let s = state
+    let finishTurn = 0
+    for (let step = 0; step < 400 && s.playedCount < targetMatches; step++) {
+      if (s.courts.some(c => !c.match) && s.queue.length > 0) {
         s = sendToCourt(s, 0, nextId)
         continue
       }
       const busy = s.courts.map((c, i) => (c.match ? i : -1)).filter(i => i >= 0)
       if (busy.length === 0) break
-      // Alternate which court finishes so the simulation is not degenerate.
-      s = finishMatch(s, busy[step % busy.length], step % 2 ? 'A' : 'B', nextId)
+      s = finishMatch(s, busy[finishTurn % busy.length], finishTurn % 2 ? 'A' : 'B', nextId)
+      finishTurn++
     }
+    return s
+  }
+
+  it('alternates courts so both actually finish', () => {
+    const s = simulate(refillQueue(makeState(12, 2), nextId), 6)
+    // A degenerate harness that only ever finishes court 0 cannot reach 6 matches
+    // with 12 players, because court 1 would hold four of them forever.
+    expect(s.playedCount).toBe(6)
+  })
+
+  it('keeps everyone within two games of each other over a long session', () => {
+    const s = simulate(refillQueue({ ...makeState(12, 2), mode: 'fair' }, nextId), 30)
     const games = s.players.map(p => p.gamesToday)
     expect(s.playedCount).toBeGreaterThanOrEqual(25)
     expect(Math.max(...games) - Math.min(...games)).toBeLessThanOrEqual(2)
   })
 
   it('leaves nobody on zero games', () => {
-    let s = refillQueue({ ...makeState(10, 2), mode: 'balance' }, nextId)
-    for (let step = 0; step < 400 && s.playedCount < 30; step++) {
-      const free = s.courts.findIndex(c => !c.match)
-      if (free >= 0 && s.queue.length > 0) {
-        s = sendToCourt(s, 0, nextId)
-        continue
-      }
-      const busy = s.courts.map((c, i) => (c.match ? i : -1)).filter(i => i >= 0)
-      if (busy.length === 0) break
-      s = finishMatch(s, busy[step % busy.length], 'A', nextId)
-    }
+    const s = simulate(refillQueue({ ...makeState(10, 2), mode: 'balance' }, nextId), 30)
     expect(Math.min(...s.players.map(p => p.gamesToday))).toBeGreaterThan(0)
   })
 })
@@ -1126,7 +1132,7 @@ export function rejectEntry(state: SessionState, entryIndex: number, nextId: () 
 - [ ] **Step 4: Run test to verify it passes**
 
 Run: `cd web && npm test -- tests/domain/queue.test.ts`
-Expected: PASS, 9 tests. The fairness simulation must report a spread of 2 games or fewer.
+Expected: PASS, 10 tests. The fairness simulation must report a spread of 2 games or fewer.
 
 - [ ] **Step 5: Run the whole suite**
 
