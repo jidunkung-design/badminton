@@ -68,3 +68,15 @@ insert into players (group_id, name, skill) values
   ('33333333-3333-3333-3333-333333333333', 'ฟิล์ม', 3),
   ('33333333-3333-3333-3333-333333333333', 'กิ๊ก', 3),
   ('33333333-3333-3333-3333-333333333333', 'อาร์ม', 2);
+
+-- Everyone in the seeded group is checked in for today, so the play screen
+-- has enough people to build a queue on a fresh database.
+insert into sessions (id, group_id, season_id, played_on) values
+  ('77777777-7777-7777-7777-777777777777',
+   '33333333-3333-3333-3333-333333333333',
+   '44444444-4444-4444-4444-444444444444',
+   current_date);
+
+insert into attendance (session_id, player_id)
+  select '77777777-7777-7777-7777-777777777777', id
+  from players where group_id = '33333333-3333-3333-3333-333333333333';
