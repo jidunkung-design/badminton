@@ -363,7 +363,22 @@ export type Database = {
     Functions: {
       can_manage_group: { Args: { gid: string }; Returns: boolean }
       is_group_member: { Args: { gid: string }; Returns: boolean }
+      is_group_owner: { Args: { gid: string }; Returns: boolean }
       is_super_admin: { Args: never; Returns: boolean }
+      record_match: {
+        Args: {
+          p_balance_weight: number
+          p_client_id: string
+          p_court_no: number
+          p_group_id: string
+          p_mode: Database["public"]["Enums"]["queue_mode"]
+          p_session_id: string
+          p_team_a: string[]
+          p_team_b: string[]
+          p_winner_team: number
+        }
+        Returns: string
+      }
     }
     Enums: {
       member_role: "owner" | "admin" | "member"

@@ -27,16 +27,28 @@ export async function openSession(groupId: string) {
   return { sessionId: data.id, error: null }
 }
 
-export async function toggleAttendance(sessionId: string, playerId: string, present: boolean) {
+export async function toggleAttendance(
+  groupId: string,
+  sessionId: string,
+  playerId: string,
+  present: boolean,
+) {
   const supabase = await createServerSupabase()
   if (present) {
     const today = new Date().toISOString().slice(0, 10)
-    await supabase.from('attendance').upsert({ session_id: sessionId, player_id: playerId })
+    const { error } = await supabase.from('attendance').upsert({ session_id: sessionId, player_id: playerId })
+    if (error) return { error: 'เช็กชื่อไม่สำเร็จ คุณอาจไม่มีสิทธิ์จัดการก๊วนนี้' }
     // last_seen_on drives the 90 day dormancy rule.
     await supabase.from('players').update({ last_seen_on: today, archived_at: null }).eq('id', playerId)
   } else {
-    await supabase.from('attendance').delete().eq('session_id', sessionId).eq('player_id', playerId)
+    const { error } = await supabase
+      .from('attendance')
+      .delete()
+      .eq('session_id', sessionId)
+      .eq('player_id', playerId)
+    if (error) return { error: 'ยกเลิกเช็กชื่อไม่สำเร็จ คุณอาจไม่มีสิทธิ์จัดการก๊วนนี้' }
   }
+  revalidatePath(`/g/${groupId}/play`)
   return { error: null }
 }
 
@@ -54,33 +66,24 @@ export interface RecordMatchInput {
 
 export async function recordMatch(input: RecordMatchInput) {
   const supabase = await createServerSupabase()
-  // client_id is unique, so replaying a queued offline write is a no-op.
-  const { data, error } = await supabase
-    .from('matches')
-    .insert({
-      client_id: input.clientId,
-      session_id: input.sessionId,
-      group_id: input.groupId,
-      court_no: input.courtNo,
-      mode: input.mode,
-      balance_weight: input.balanceWeight,
-      winner_team: input.winnerTeam,
-      ended_at: new Date().toISOString(),
-    })
-    .select('id')
-    .single()
+  // record_match (0006_record_match_rpc.sql) inserts the match row and its
+  // four match_players rows in one transaction, so a failure partway through
+  // can never leave the append-only matches table holding a match with no
+  // roster. client_id stays unique, and the function upserts around it, so
+  // this call is idempotent: replaying the same clientId is a no-op.
+  const { error } = await supabase.rpc('record_match', {
+    p_client_id: input.clientId,
+    p_session_id: input.sessionId,
+    p_group_id: input.groupId,
+    p_court_no: input.courtNo,
+    p_mode: input.mode,
+    p_balance_weight: input.balanceWeight,
+    p_winner_team: input.winnerTeam,
+    p_team_a: input.teamA,
+    p_team_b: input.teamB,
+  })
 
-  if (error) {
-    if (error.code === '23505') return { error: null } // already recorded
-    return { error: 'บันทึกผลไม่สำเร็จ' }
-  }
-
-  const rows = [
-    ...input.teamA.map(id => ({ match_id: data.id, player_id: id, team: 1 })),
-    ...input.teamB.map(id => ({ match_id: data.id, player_id: id, team: 2 })),
-  ]
-  const { error: linkError } = await supabase.from('match_players').insert(rows)
-  if (linkError) return { error: 'บันทึกรายชื่อผู้เล่นไม่สำเร็จ' }
+  if (error) return { error: 'บันทึกผลไม่สำเร็จ' }
   revalidatePath(`/g/${input.groupId}/play`)
   return { error: null }
 }

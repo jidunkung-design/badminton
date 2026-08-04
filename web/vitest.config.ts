@@ -1,5 +1,4 @@
 import { defineConfig } from 'vitest/config'
-import { BaseSequencer } from 'vitest/node'
 import path from 'node:path'
 import { config as loadEnv } from 'dotenv'
 
@@ -8,24 +7,13 @@ import { config as loadEnv } from 'dotenv'
 // Supabase local keys live in `.env.local` per the project convention.
 loadEnv({ path: path.resolve(__dirname, '.env.local') })
 
-// tests/db/schema.test.ts's "group cap" test intentionally fills the
-// system-wide 5-group cap to prove the cap is enforced, then leaves the
-// database at that cap. Every other tests/db/*.test.ts file also needs to
-// insert its own group(s) in beforeAll. If schema.test.ts happens to run
-// first, later files get blocked by the very cap schema.test.ts just proved
-// works, and their setup fails with an unrelated null-data error. This is a
-// pre-existing race (reproduced against an unmodified commit, independent of
-// any single file's assertions) that fileParallelism alone does not fix,
-// because file execution order is not otherwise guaranteed. Force
-// schema.test.ts to sort last so every other db test file gets first pick of
-// the shared 5-group budget.
-class DbCapLastSequencer extends BaseSequencer {
-  async sort(files: Parameters<BaseSequencer['sort']>[0]) {
-    const sorted = await super.sort(files)
-    const isSchemaTest = (f: (typeof sorted)[number]) => /tests[\\/]db[\\/]schema\.test\.ts$/.test(f.moduleId)
-    return [...sorted].sort((a, b) => Number(isSchemaTest(a)) - Number(isSchemaTest(b)))
-  }
-}
+// A final-whole-branch-review finding removed the DbCapLastSequencer that
+// used to live here. It existed only to work around tests/db/schema.test.ts
+// permanently filling the system-wide 5-group cap and never releasing it;
+// every tests/db/*.test.ts file now creates and tears down its own group(s),
+// so no file execution order is required for the shared 5-group budget
+// anymore. Do not reintroduce order-dependent global state as a fix for a
+// new test in this directory -- give the new file its own teardown instead.
 
 export default defineConfig({
   test: {
@@ -38,7 +26,6 @@ export default defineConfig({
     // suite against an unmodified commit. Serialize file execution so the
     // db-backed suite is deterministic.
     fileParallelism: false,
-    sequence: { sequencer: DbCapLastSequencer },
   },
   resolve: { alias: { '@': path.resolve(__dirname, 'src') } },
 })

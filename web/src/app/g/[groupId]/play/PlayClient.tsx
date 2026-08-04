@@ -49,9 +49,17 @@ export default function PlayClient({
     const court = state.courts[courtIndex]
     if (!court.match) return
     const { teamA, teamB } = court.match
+    // The queue entry's own id is stable for this match's whole lifetime
+    // (assigned once in refillQueue, unchanged by sendToCourt/finishMatch),
+    // unlike a fresh nextId() call here which would mint a new value on
+    // every invocation -- including retries -- and defeat the
+    // matches.client_id unique constraint this call relies on for
+    // idempotency. This is the exact key phase 4's offline outbox will
+    // replay against, so it has to be stable now.
+    const clientId = court.match.id
     setState(s => finishMatch(s, courtIndex, winner, nextId))
     const result = await recordMatch({
-      clientId: nextId(),
+      clientId,
       sessionId,
       groupId,
       courtNo: court.no,

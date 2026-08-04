@@ -20,6 +20,7 @@
 - A match recorded in one group must never affect ratings in another group. Every rating query filters by `group_id`.
 - Every offline-capable write carries a client-generated `client_id UUID` with a UNIQUE constraint.
 - Node 20+. Package manager: `npm`.
+- Every task must run `npx tsc --noEmit` and `npm run build` green before committing, not just `npm test`.
 - Commit after every task. Conventional Commits (`feat:`, `test:`, `chore:`). No `Co-Authored-By` trailer. No emoji in commit messages.
 
 ## File Structure

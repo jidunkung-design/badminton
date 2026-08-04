@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import 'dotenv/config'
 
@@ -25,6 +25,17 @@ beforeAll(async () => {
   groupId = data!.id
   await admin.from('group_members').insert({ group_id: groupId, user_id: SUPER, role: 'owner' })
   await admin.from('players').insert({ group_id: groupId, name: 'บอส', skill: 6 })
+})
+
+// Regression coverage for a final-whole-branch-review finding (test suite
+// idempotency): this file used to create its group here and never remove
+// it, so SUPER (already the owner of the seeded group) permanently used up
+// its one-owned-group slot and the system-wide 5-group cap a little more on
+// every run. Deleting the group cascades to its group_members and players
+// rows, so a second `npm test` with no db reset in between finds the same
+// starting state as the first.
+afterAll(async () => {
+  await admin.from('groups').delete().eq('id', groupId)
 })
 
 describe('group visibility', () => {
