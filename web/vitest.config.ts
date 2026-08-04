@@ -19,11 +19,23 @@ loadEnv({ path: path.resolve(__dirname, '.env.local') })
 // because file execution order is not otherwise guaranteed. Force
 // schema.test.ts to sort last so every other db test file gets first pick of
 // the shared 5-group budget.
+//
+// tests/db/group-list.test.ts asserts that member@example.com (OUTSIDER)
+// belongs to zero groups system-wide. tests/db/rls-security-fix.test.ts adds
+// OUTSIDER as an 'admin' member of a group in its beforeAll and never removes
+// it, so group-list.test.ts must run before rls-security-fix.test.ts or that
+// assertion sees leftover membership from an unrelated file. Force
+// group-list.test.ts to sort first for the same reason schema.test.ts sorts
+// last: shared global state, no reset between files.
 class DbCapLastSequencer extends BaseSequencer {
   async sort(files: Parameters<BaseSequencer['sort']>[0]) {
     const sorted = await super.sort(files)
     const isSchemaTest = (f: (typeof sorted)[number]) => /tests[\\/]db[\\/]schema\.test\.ts$/.test(f.moduleId)
-    return [...sorted].sort((a, b) => Number(isSchemaTest(a)) - Number(isSchemaTest(b)))
+    const isGroupListTest = (f: (typeof sorted)[number]) => /tests[\\/]db[\\/]group-list\.test\.ts$/.test(f.moduleId)
+    return [...sorted].sort((a, b) => {
+      if (isGroupListTest(a) !== isGroupListTest(b)) return Number(isGroupListTest(b)) - Number(isGroupListTest(a))
+      return Number(isSchemaTest(a)) - Number(isSchemaTest(b))
+    })
   }
 }
 
