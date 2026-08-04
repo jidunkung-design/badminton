@@ -18,15 +18,25 @@ export default async function PlayPage({
   const manage = await canManage(groupId)
   if (!manage) {
     return (
-      <main>
+      <main className="screen">
         <h1>โหมดสนาม</h1>
-        <p>เปิดให้เฉพาะหัวก๊วนกับแอดมิน สมาชิกดูผลได้แต่กดจัดคิวหรือแก้ผลไม่ได้</p>
+        <div className="note gate">
+          <em>สิทธิ์</em>
+          เปิดให้เฉพาะหัวก๊วนกับแอดมิน สมาชิกดูผลได้แต่กดจัดคิวหรือแก้ผลไม่ได้
+        </div>
       </main>
     )
   }
 
   const { sessionId, error } = await openSession(groupId)
-  if (!sessionId) return <main><h1>โหมดสนาม</h1><p role="alert">{error}</p></main>
+  if (!sessionId) {
+    return (
+      <main className="screen">
+        <h1>โหมดสนาม</h1>
+        <div className="note err" role="alert"><em>ผิดพลาด</em>{error}</div>
+      </main>
+    )
+  }
 
   const supabase = await createServerSupabase()
   const { data: rows } = await supabase
@@ -67,40 +77,61 @@ export default async function PlayPage({
     .order('name')
   const roster = rosterRows ?? []
 
+  // Reading order matches the prototype's court-mode screen: courts, then
+  // the queue with its confirm control, then free players (all inside
+  // PlayClient), then check-in last -- so check-in renders after it here,
+  // even though its data is fetched first above.
+  const checkIn = (
+    <div className="c">
+      <h2 className="ch">เช็กชื่อวันนี้ ({presentIds.size} คน)</h2>
+      <ul>
+        {roster.map(p => {
+          const present = presentIds.has(p.id)
+          return (
+            <li key={p.id}>
+              <form
+                action={async () => {
+                  'use server'
+                  const result = await toggleAttendance(groupId, sessionId, p.id, !present)
+                  if (result.error) {
+                    redirect(`/g/${groupId}/play?error=${encodeURIComponent(result.error)}`)
+                  }
+                }}
+              >
+                <button
+                  type="submit"
+                  className="r"
+                  aria-pressed={present}
+                  style={{ width: '100%', textAlign: 'left', background: 'none', border: 0, padding: 0 }}
+                >
+                  <div className={`tk ${present ? 'on' : ''}`} aria-hidden="true" />
+                  <div className={`av ${present ? 'on' : ''}`}>{p.name.charAt(0)}</div>
+                  <div className="gr">
+                    <div className="nm">{p.name}</div>
+                  </div>
+                  <span className={`tg ${present ? 'court' : ''}`}>
+                    {present ? 'เช็กชื่อแล้ว กดออก' : 'แตะเพื่อเช็กชื่อ'}
+                  </span>
+                </button>
+              </form>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+
   return (
-    <main>
+    <main className="screen">
       <h1>โหมดสนาม</h1>
 
-      {actionError && <p role="alert">{actionError}</p>}
-
-      <section>
-        <h2>เช็กชื่อวันนี้ ({presentIds.size} คน)</h2>
-        <ul>
-          {roster.map(p => {
-            const present = presentIds.has(p.id)
-            return (
-              <li key={p.id}>
-                <form
-                  action={async () => {
-                    'use server'
-                    const result = await toggleAttendance(groupId, sessionId, p.id, !present)
-                    if (result.error) {
-                      redirect(`/g/${groupId}/play?error=${encodeURIComponent(result.error)}`)
-                    }
-                  }}
-                >
-                  <button type="submit" aria-pressed={present}>
-                    {present ? `${p.name} · เช็กชื่อแล้ว (กดออก)` : `${p.name} · เช็กชื่อ`}
-                  </button>
-                </form>
-              </li>
-            )
-          })}
-        </ul>
-      </section>
+      {actionError && <div className="note err" role="alert"><em>ผิดพลาด</em>{actionError}</div>}
 
       {players.length < 4 ? (
-        <p>เช็กชื่อแล้ว {players.length} คน ต้องมีอย่างน้อย 4 คนถึงจะจัดคิวได้</p>
+        <div className="note gate">
+          <em>ยังไม่พร้อม</em>
+          เช็กชื่อแล้ว {players.length} คน ต้องมีอย่างน้อย 4 คนถึงจะจัดคิวได้
+        </div>
       ) : (
         <PlayClient
           groupId={groupId}
@@ -110,6 +141,8 @@ export default async function PlayPage({
           courtCount={2}
         />
       )}
+
+      {checkIn}
     </main>
   )
 }

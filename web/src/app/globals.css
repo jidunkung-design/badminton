@@ -429,3 +429,70 @@ a.c {
   padding: 30px 14px;
   line-height: 1.75;
 }
+
+/* ── court mode atoms ─────────────────────────────────────────
+   Not carried over in the first port because the login/group-list/
+   group-home screens never needed a match card. Court mode does:
+   the two-team split with a VS divider, the small ghost button
+   used on dense list rows, and a 2-up grid for the win buttons.
+   Values copied straight from the prototype's .m/.vs/.sd/.vsx/.b.s/
+   .b2/.tk rules -- no new tokens, no parallel scale.
+─────────────────────────────────────────────────────────── */
+.b.s {
+  padding: 8px 12px;
+  font-size: var(--t1);
+  width: auto;
+}
+
+.b2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.m {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--court);
+  border-radius: var(--r-b);
+  padding: 13px;
+}
+
+.vs {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 9px;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.sd {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 7px;
+  border-radius: var(--r-c);
+}
+
+.vsx {
+  font-family: var(--fm);
+  font-size: 10.5px;
+  color: var(--ink-3);
+  text-align: center;
+}
+
+.tk {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+
+.tk.on {
+  background: var(--court);
+  border-color: var(--court);
+}

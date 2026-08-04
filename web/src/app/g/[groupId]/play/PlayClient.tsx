@@ -74,45 +74,96 @@ export default function PlayClient({
 
   const name = (id: string) => names[id] ?? id
 
+  // Two players rendered as a stacked mini-roster inside one half of the
+  // VS split -- same shape the prototype uses for both a live court and a
+  // queued entry, just reused here instead of duplicated per caller.
+  const team = (ids: readonly [string, string]) => (
+    <div className="sd">
+      {ids.map(id => (
+        <div key={id} className="r" style={{ gap: 8 }}>
+          <div className="av" style={{ width: 26, height: 26, fontSize: 'var(--t1)' }}>{name(id).charAt(0)}</div>
+          <div className="gr">
+            <div className="nm" style={{ fontSize: 'var(--t2)' }}>{name(id)}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  const freeCourt = state.courts.some(c => !c.match)
+
   return (
-    <div>
-      {error && <p role="alert">{error}</p>}
+    <div className="screen">
+      {error && <div className="note err" role="alert"><em>ผิดพลาด</em>{error}</div>}
 
-      <section>
-        <h2>สนาม</h2>
+      <section className="screen">
+        <h2 className="ch" style={{ marginBottom: 0 }}>สนาม</h2>
         {state.courts.map((court, i) => (
-          <div key={court.no}>
-            <h3>สนาม {court.no}</h3>
-            {court.match ? (
-              <>
-                <p>{court.match.teamA.map(name).join(' กับ ')} พบ {court.match.teamB.map(name).join(' กับ ')}</p>
-                <button onClick={() => finish(i, 'A')}>ซ้ายชนะ</button>
-                <button onClick={() => finish(i, 'B')}>ขวาชนะ</button>
-              </>
-            ) : (
-              <p>ว่าง กดยืนยันจากคิวเพื่อส่งลงสนามนี้</p>
-            )}
-          </div>
+          court.match ? (
+            <div key={court.no} className="m">
+              <div className="r">
+                <span className="tg court">สนาม {court.no}</span>
+                <span className="gr" />
+                <span className={`tg ${court.match.gap <= 60 ? 'good' : ''}`}>ห่างกัน {court.match.gap} แต้มเรต</span>
+              </div>
+              <div className="vs">
+                {team(court.match.teamA)}
+                <div className="vsx">VS</div>
+                {team(court.match.teamB)}
+              </div>
+              <div className="b2">
+                <button className="b" onClick={() => finish(i, 'A')}>ซ้ายชนะ</button>
+                <button className="b" onClick={() => finish(i, 'B')}>ขวาชนะ</button>
+              </div>
+            </div>
+          ) : (
+            <div key={court.no} className="m" style={{ borderLeftColor: 'var(--line)' }}>
+              <div className="r">
+                <span className="tg">สนาม {court.no}</span>
+                <span className="gr" />
+                <span className="tg">ว่าง</span>
+              </div>
+              <div className="mt" style={{ marginTop: 8 }}>กดยืนยันจากคิวด้านล่างเพื่อส่งลงสนามนี้</div>
+            </div>
+          )
         ))}
       </section>
 
-      <section>
-        <h2>คิวถัดไป {state.queue.length} แมตช์</h2>
+      <section className="screen">
+        <h2 className="ch" style={{ marginBottom: 0 }}>คิวถัดไป {state.queue.length} แมตช์</h2>
+        {state.queue.length === 0 && (
+          <div className="c"><div className="mt">ยังไม่มีคิว ต้องมีคนว่างอย่างน้อย 4 คน</div></div>
+        )}
         {state.queue.map((entry, i) => (
-          <div key={entry.id}>
-            <p>{entry.teamA.map(name).join(' กับ ')} พบ {entry.teamB.map(name).join(' กับ ')} · ห่าง {entry.gap}</p>
-            {i === 0 && state.courts.some(c => !c.match) && (
-              <button onClick={() => setState(s => sendToCourt(s, 0, nextId))}>ยืนยันส่งลงสนาม</button>
+          <div key={entry.id} className="m">
+            <div className="r">
+              <span className={`tg ${i === 0 ? 'court' : ''}`}>{i === 0 ? 'คิวแรก' : `คิวที่ ${i + 1}`}</span>
+              <span className="gr" />
+              <span className={`tg ${entry.gap <= 60 ? 'good' : ''}`}>ห่าง {entry.gap}</span>
+            </div>
+            <div className="vs">
+              {team(entry.teamA)}
+              <div className="vsx">VS</div>
+              {team(entry.teamB)}
+            </div>
+            {i === 0 && freeCourt && (
+              <button className="b" onClick={() => setState(s => sendToCourt(s, 0, nextId))}>ยืนยันส่งลงสนาม</button>
             )}
           </div>
         ))}
       </section>
 
-      <section>
-        <h2>คนว่าง {freePlayers(state).length} คน</h2>
+      <section className="c">
+        <h2 className="ch">คนว่าง {freePlayers(state).length} คน</h2>
         <ol>
           {freePlayers(state).map(p => (
-            <li key={p.id}>{name(p.id)} · เล่นไป {p.gamesToday} เกม</li>
+            <li key={p.id} className="r">
+              <div className="av">{name(p.id).charAt(0)}</div>
+              <div className="gr">
+                <div className="nm">{name(p.id)}</div>
+                <div className="mt">เล่นไป {p.gamesToday} เกม</div>
+              </div>
+            </li>
           ))}
         </ol>
       </section>
