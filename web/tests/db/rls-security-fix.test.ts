@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import 'dotenv/config'
 
@@ -58,6 +58,15 @@ beforeAll(async () => {
   seasonB = se!.id
   const { data: ss } = await admin.from('sessions').insert({ group_id: groupB, season_id: seasonB }).select('id').single()
   sessionB = ss!.id
+})
+
+afterAll(async () => {
+  // Deleting the two groups cascades (on delete cascade) to every
+  // group_members, seasons, sessions, and matches row this file created, so
+  // no leftover state (in particular OUTSIDER's group_members row) survives
+  // for other test files that assume a clean slate.
+  await admin.from('groups').delete().eq('id', groupA)
+  await admin.from('groups').delete().eq('id', groupB)
 })
 
 describe('privilege escalation via profiles', () => {
