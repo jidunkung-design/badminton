@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "แพลตฟอร์มสโมสรแบดมินตัน",
+  title: "ก๊วนแบด",
   description: "ระบบจัดการสโมสรแบดมินตัน",
 };
 
