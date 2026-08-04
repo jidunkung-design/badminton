@@ -155,3 +155,115 @@ describe('a real non-super group manager cannot destroy history', () => {
     expect(matchStillThere).not.toBeNull()
   })
 })
+
+// Required new coverage for a Medium finding from the re-review of
+// 0006_record_match_rpc.sql: the replay path (`on conflict (client_id)`)
+// trusted client_id alone and never checked that a replay's arguments
+// actually matched what was already recorded. 0007_record_match_replay_safety.sql
+// fixes this by comparing the existing match's identity and roster against
+// the replayed call's arguments, raising instead of silently reconciling on
+// a mismatch. Both assertions below fail against 0006 alone (a mismatched
+// replay silently appends extra match_players rows and returns success) and
+// pass once 0007 is applied.
+describe('record_match replay safety', () => {
+  const playerIds: string[] = []
+
+  async function makePlayer(name: string): Promise<string> {
+    const { data, error } = await admin
+      .from('players')
+      .insert({ group_id: GROUP, name, skill: 3 })
+      .select('id')
+      .single()
+    expect(error).toBeNull()
+    playerIds.push(data!.id)
+    return data!.id
+  }
+
+  afterAll(async () => {
+    // Delete any matches this describe block created before deleting the
+    // players they reference (match_players.player_id is `on delete
+    // restrict`; deleting the match cascades to match_players first).
+    await admin.from('matches').delete().eq('session_id', sessionId).neq('id', matchId)
+    for (const id of playerIds) await admin.from('players').delete().eq('id', id)
+  })
+
+  it('a replay with the same client_id and the same players succeeds and creates no duplicate rows', async () => {
+    const [p1, p2, p3, p4] = await Promise.all([
+      makePlayer('รีเพลย์ผู้เล่น 1'),
+      makePlayer('รีเพลย์ผู้เล่น 2'),
+      makePlayer('รีเพลย์ผู้เล่น 3'),
+      makePlayer('รีเพลย์ผู้เล่น 4'),
+    ])
+    const c = await signIn('realowner@example.com')
+    const args = {
+      p_client_id: crypto.randomUUID(),
+      p_session_id: sessionId,
+      p_group_id: GROUP,
+      p_court_no: 1,
+      p_mode: 'manual' as const,
+      p_balance_weight: 0.5,
+      p_winner_team: 1,
+      p_team_a: [p1, p2],
+      p_team_b: [p3, p4],
+    }
+
+    const first = await c.rpc('record_match', args)
+    expect(first.error).toBeNull()
+    const firstMatchId = first.data as string
+
+    const replay = await c.rpc('record_match', args)
+    expect(replay.error).toBeNull()
+    expect(replay.data).toBe(firstMatchId)
+
+    const { data: rows } = await admin.from('match_players').select('player_id').eq('match_id', firstMatchId)
+    expect(rows?.length).toBe(4)
+  })
+
+  it('a replay with the same client_id but different players is refused and the original roster is unchanged', async () => {
+    const [p1, p2, p3, p4, p5] = await Promise.all([
+      makePlayer('รีเพลย์ต่างคน 1'),
+      makePlayer('รีเพลย์ต่างคน 2'),
+      makePlayer('รีเพลย์ต่างคน 3'),
+      makePlayer('รีเพลย์ต่างคน 4'),
+      makePlayer('รีเพลย์ต่างคน 5'),
+    ])
+    const c = await signIn('realowner@example.com')
+    const clientId = crypto.randomUUID()
+
+    const first = await c.rpc('record_match', {
+      p_client_id: clientId,
+      p_session_id: sessionId,
+      p_group_id: GROUP,
+      p_court_no: 1,
+      p_mode: 'manual',
+      p_balance_weight: 0.5,
+      p_winner_team: 1,
+      p_team_a: [p1, p2],
+      p_team_b: [p3, p4],
+    })
+    expect(first.error).toBeNull()
+    const firstMatchId = first.data as string
+
+    // Same client_id, but p5 stands in for p2: a different roster.
+    const mismatch = await c.rpc('record_match', {
+      p_client_id: clientId,
+      p_session_id: sessionId,
+      p_group_id: GROUP,
+      p_court_no: 1,
+      p_mode: 'manual',
+      p_balance_weight: 0.5,
+      p_winner_team: 1,
+      p_team_a: [p1, p5],
+      p_team_b: [p3, p4],
+    })
+    expect(mismatch.error).not.toBeNull()
+
+    const { data: rows } = await admin
+      .from('match_players')
+      .select('player_id, team')
+      .eq('match_id', firstMatchId)
+    expect(rows?.length).toBe(4)
+    const rosterIds = new Set(rows?.map(r => r.player_id))
+    expect(rosterIds).toEqual(new Set([p1, p2, p3, p4]))
+  })
+})
