@@ -174,6 +174,69 @@
     .skill-6 { background: #3b0764; color: #d8b4fe; }
     .skill-7 { background: #f1f5f9; color: #0f172a; }
   }
+  /* Character-card style player grid (User page) — full-bleed vertical trading card */
+  .player-card-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .player-card {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: var(--surface2);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.2s ease;
+  }
+  .player-card:active { transform: scale(0.96); }
+  .player-card-bg-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .player-card-bg-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .player-card-gradient {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 58%;
+    background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%);
+  }
+  .player-card-checkbox {
+    position: absolute; top: 3px; left: 3px; z-index: 3; width: 16px; height: 16px;
+    border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.65); background: rgba(0,0,0,0.35);
+    display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+  }
+  .player-card-checkbox.checked { background: var(--success); border-color: var(--success); }
+  .player-card-pill-topleft {
+    position: absolute; top: 3px; left: 3px; z-index: 3;
+    padding: 1px 5px; border-radius: 99px; background: rgba(0,0,0,0.45);
+    color: #fff; font-size: 8px; font-weight: 800; text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+  .player-card-rank-badge {
+    position: absolute; top: 3px; right: 3px; z-index: 3;
+    width: 16px; height: 16px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; box-shadow: 0 1px 4px rgba(0,0,0,0.45);
+  }
+  .player-card-content {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+    padding: 5px; display: flex; align-items: flex-end; justify-content: space-between; gap: 2px;
+  }
+  .player-card-info { min-width: 0; }
+  .player-card-name {
+    font-weight: 800; font-size: 10px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .player-card-tier {
+    display: inline-flex; align-items: center; gap: 2px; margin-top: 2px;
+    padding: 1px 5px; border-radius: 99px; font-size: 7.5px; font-weight: 700;
+    color: #fff; border: 1px solid rgba(255,255,255,0.35);
+  }
+  .player-card-btns { display: flex; gap: 2px; flex-shrink: 0; }
+  .player-card-action-btn {
+    width: 15px; height: 15px; border-radius: 50%; border: none;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 7px; cursor: pointer; background: rgba(255,255,255,0.18); color: #fff;
+  }
+  .photo-picker-wrap {
+    width: 88px; height: 88px; border-radius: 50%; margin: 0 auto 10px;
+    overflow: hidden; background: var(--primary-light); color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 32px; border: 3px solid var(--border);
+  }
+  .photo-picker-wrap img { width: 100%; height: 100%; object-fit: cover; }
   .match-card {
     background: var(--surface);
     border-radius: var(--radius);
@@ -315,31 +378,50 @@
     background: var(--success-light); color: var(--success);
     padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 700;
   }
-  /* Stock history table */
-  .stock-history-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  .stock-history-table th { text-align: left; padding: 6px 8px; color: var(--text3); font-weight: 600; border-bottom: 1px solid var(--border); font-size: 11px; }
-  .stock-history-table td { padding: 5px 8px; border-bottom: 1px solid var(--border); }
-  .stock-history-table tr:last-child td { border-bottom: none; }
-  .stock-history-table tr:nth-child(even) td { background: var(--surface2); }
   .stock-in { color: var(--success); font-weight: 700; }
   .stock-out { color: var(--danger); font-weight: 700; }
-  /* Stock page tabs */
+  /* Stock page tabs (mobile pill selector) */
   .stock-tabs { display:flex; gap:4px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:4px; margin-bottom:14px; }
   .stock-tab { flex:1; padding:8px 4px; border:none; background:none; border-radius:8px; font-size:11px; font-weight:600; color:var(--text2); cursor:pointer; transition:all 0.2s; }
   .stock-tab.active { background:var(--primary); color:white; }
   .stock-tab-content { display:none; }
   .stock-tab-content.active { display:block; }
+  /* Stock page desktop sidebar (hidden on mobile — see breakpoint below) */
+  .stock-layout { display: block; }
+  .stock-sidebar { display: none; }
+  .stock-sidebar-brand {
+    font-weight: 800; font-size: 15px; padding: 4px 10px 14px;
+    border-bottom: 1px solid var(--border); margin-bottom: 10px;
+  }
+  .stock-sidebar-item {
+    display: flex; align-items: center; gap: 8px; width: 100%; text-align: left;
+    padding: 10px 12px; border-radius: 8px; border: none; background: none;
+    font-size: 14px; font-weight: 600; color: var(--text2); cursor: pointer; margin-bottom: 4px;
+  }
+  .stock-sidebar-item.active { background: var(--primary); color: white; }
+  .stock-sidebar-item:hover:not(.active) { background: var(--surface2); }
+  @media (min-width: 900px) {
+    #page-tools { max-width: 1000px; }
+    .stock-tabs { display: none; }
+    .stock-layout { display: flex; gap: 20px; align-items: flex-start; }
+    .stock-sidebar {
+      display: flex; flex-direction: column; width: 210px; flex-shrink: 0;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 16px 12px; position: sticky; top: 84px;
+    }
+    .stock-main { flex: 1; min-width: 0; }
+  }
+  /* Expense category badges */
+  .expense-cat-badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; }
+  .expense-cat-court { background: var(--primary-light); color: var(--primary); }
+  .expense-cat-shuttle { background: var(--warning-light); color: var(--warning); }
+  .expense-cat-other { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
   /* Usage chart */
   .chart-cols { display:flex; align-items:flex-end; gap:3px; height:80px; padding-bottom:20px; position:relative; }
   .chart-col { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; position:relative; }
   .chart-bar-in { width:48%; background:var(--success); border-radius:2px 2px 0 0; min-height:2px; }
   .chart-bar-out { width:48%; background:var(--danger); border-radius:2px 2px 0 0; min-height:2px; opacity:0.85; }
   .chart-lbl { position:absolute; bottom:-18px; font-size:9px; color:var(--text3); white-space:nowrap; left:50%; transform:translateX(-50%); }
-  /* Monthly cost table */
-  .monthly-table { width:100%; border-collapse:collapse; font-size:13px; }
-  .monthly-table th { text-align:left; padding:6px 8px; color:var(--text3); font-weight:600; border-bottom:1px solid var(--border); font-size:11px; }
-  .monthly-table td { padding:6px 8px; border-bottom:1px solid var(--border); }
-  .monthly-table tr:last-child td { border-bottom:none; }
   /* History list */
   .history-item {
     padding: 10px 12px; border-radius: 8px;
@@ -574,39 +656,91 @@
 
 <!-- PAGE: Stock (3 tabs) -->
 <div class="page" id="page-tools">
-  <div class="section-title">📦 สต๊อก & ค่าใช้จ่าย</div>
-  <div class="section-sub">จัดการสต๊อกลูกและค่าใช้จ่าย</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+    <div>
+      <div class="section-title">📦 สต๊อก & ค่าใช้จ่าย</div>
+      <div class="section-sub">จัดการสต๊อกลูกและค่าใช้จ่าย</div>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="openStockSettingsModal()" title="ตั้งค่า">⚙️</button>
+  </div>
 
   <!-- Tab nav -->
   <div class="stock-tabs">
-    <button class="stock-tab active" id="stab-dashboard" onclick="switchStockTab('dashboard')">📊 Dashboard</button>
-    <button class="stock-tab" id="stab-movement" onclick="switchStockTab('movement')">📦 Movement</button>
-    <button class="stock-tab" id="stab-cost" onclick="switchStockTab('cost')">💰 Cost</button>
+    <button class="stock-tab active" id="stab-dashboard" onclick="switchStockTab('dashboard')">📊 ภาพรวม</button>
+    <button class="stock-tab" id="stab-movement" onclick="switchStockTab('movement')">📦 สต๊อก</button>
+    <button class="stock-tab" id="stab-expenses" onclick="switchStockTab('expenses')">💰 ค่าใช้จ่าย</button>
+    <button class="stock-tab" id="stab-sessioncalc" onclick="switchStockTab('sessioncalc')">🧮 คำนวณรอบเล่น</button>
   </div>
+
+  <div class="stock-layout">
+    <!-- Desktop-only sidebar nav (mirrors the pill tabs above, for wide screens) -->
+    <div class="stock-sidebar">
+      <div class="stock-sidebar-brand">🏸 Badminton Match</div>
+      <button class="stock-sidebar-item active" id="sidebar-dashboard" onclick="switchStockTab('dashboard')">📊 ภาพรวม</button>
+      <button class="stock-sidebar-item" id="sidebar-movement" onclick="switchStockTab('movement')">📦 สต๊อก</button>
+      <button class="stock-sidebar-item" id="sidebar-expenses" onclick="switchStockTab('expenses')">💰 ค่าใช้จ่าย</button>
+      <button class="stock-sidebar-item" id="sidebar-sessioncalc" onclick="switchStockTab('sessioncalc')">🧮 คำนวณรอบเล่น</button>
+      <div style="border-top:1px solid var(--border);margin:8px 0;"></div>
+      <button class="stock-sidebar-item" onclick="openStockSettingsModal()">⚙️ ตั้งค่า</button>
+    </div>
+
+    <div class="stock-main">
 
   <!-- ===== TAB 1: Dashboard ===== -->
   <div class="stock-tab-content active" id="stock-tab-dashboard">
 
-    <!-- Status hero -->
-    <div class="card" style="text-align:center;padding:24px 16px;">
-      <div id="stock-status-icon" style="font-size:36px;margin-bottom:4px;">🪶</div>
-      <div id="stock-count-big" style="font-size:64px;font-weight:900;line-height:1;color:var(--primary);">0</div>
-      <div style="font-size:15px;color:var(--text2);margin-top:4px;">ลูก คงเหลือ</div>
-      <div id="stock-box-count" style="font-size:13px;color:var(--text3);margin-top:2px;"></div>
-      <div id="stock-status-badge" style="margin-top:10px;"></div>
+    <!-- Overview: brand + remaining + totals, all in one glance -->
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+        <div id="stock-brand-photo-wrap" style="width:48px;height:48px;border-radius:10px;overflow:hidden;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🏸</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">ยี่ห้อที่ใช้อยู่</div>
+          <div id="stock-brand-name" style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">ยังไม่ได้ตั้งชื่อยี่ห้อ</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="openBrandModal()">แก้ไข</button>
+      </div>
+
+      <div style="text-align:center;padding:4px 0;">
+        <div id="stock-status-icon" style="font-size:32px;">🪶</div>
+        <div id="stock-count-big" style="font-size:56px;font-weight:900;line-height:1;color:var(--primary);">0</div>
+        <div style="font-size:14px;color:var(--text2);">ลูก คงเหลือ</div>
+        <div id="stock-box-count" style="font-size:12px;color:var(--text3);margin-top:2px;"></div>
+        <div id="stock-status-badge" style="margin-top:8px;"></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+        <div style="text-align:center;">
+          <div id="stock-total-in" style="font-size:18px;font-weight:800;color:var(--success);">0</div>
+          <div style="font-size:11px;color:var(--text3);">รับเข้าทั้งหมด</div>
+        </div>
+        <div style="text-align:center;">
+          <div id="stock-total-used" style="font-size:18px;font-weight:800;color:var(--danger);">0</div>
+          <div style="font-size:11px;color:var(--text3);">ใช้ไปแล้ว</div>
+        </div>
+      </div>
+
       <div id="stock-value-display" style="margin-top:8px;"></div>
     </div>
 
     <!-- Quick entry -->
     <div class="card">
-      <div class="card-title">บันทึกเร็ว</div>
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-        <div style="flex:1;"><input class="input" id="dash-add-input" type="number" min="1" max="9999" placeholder="รับเข้า (ลูก)..." inputmode="numeric"></div>
-        <button class="btn btn-success" onclick="dashAddStock()">รับเข้า</button>
+      <div class="card-title">⚡ บันทึกเร็ว</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="btn btn-success" style="padding:14px;" onclick="adjustStock(12)">+1 กล่อง</button>
+        <button class="btn btn-success" style="padding:14px;" onclick="adjustStock(24)">+2 กล่อง</button>
+        <button class="btn btn-danger" style="padding:14px;" onclick="adjustStock(-12)">−1 กล่อง</button>
+        <button class="btn btn-danger" style="padding:14px;" onclick="adjustStock(-1)">−1 ลูก</button>
       </div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <div style="flex:1;"><input class="input" id="dash-use-input" type="number" min="1" max="999" placeholder="เบิกออก (ลูก)..." inputmode="numeric"></div>
-        <button class="btn btn-danger" onclick="dashUseStock()">เบิกออก</button>
+      <button class="btn btn-ghost btn-full btn-sm" style="margin-top:8px;" onclick="toggleCustomStockEntry()">กำหนดจำนวนเอง</button>
+      <div id="custom-stock-entry" style="display:none;margin-top:10px;">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+          <div style="flex:1;"><input class="input" id="dash-add-input" type="number" min="1" max="9999" placeholder="รับเข้า (ลูก)..." inputmode="numeric"></div>
+          <button class="btn btn-success" onclick="dashAddStock()">รับเข้า</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div style="flex:1;"><input class="input" id="dash-use-input" type="number" min="1" max="999" placeholder="เบิกออก (ลูก)..." inputmode="numeric"></div>
+          <button class="btn btn-danger" onclick="dashUseStock()">เบิกออก</button>
+        </div>
       </div>
     </div>
 
@@ -624,18 +758,18 @@
     <div class="card">
       <div class="card-title">🔔 แจ้งเตือน</div>
       <div id="stock-alert-messages"></div>
-      <div class="form-group" style="margin-top:12px;">
-        <label class="form-label">ตั้งระดับแจ้งเตือนสต๊อกน้อย (ลูก)</label>
-        <div style="display:flex;gap:8px;">
-          <input class="input" id="stock-alert-threshold" type="number" min="1" max="999" placeholder="เช่น 24..." inputmode="numeric">
-          <button class="btn btn-ghost" onclick="saveAlertThreshold()">บันทึก</button>
-        </div>
-      </div>
     </div>
   </div>
 
   <!-- ===== TAB 2: Stock Movement ===== -->
   <div class="stock-tab-content" id="stock-tab-movement">
+
+    <!-- สถานะปัจจุบัน -->
+    <div class="card" style="text-align:center;padding:18px 16px;">
+      <div style="font-size:11px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">สถานะปัจจุบัน</div>
+      <div id="movement-stock-count" style="font-size:40px;font-weight:900;line-height:1.3;color:var(--primary);">0</div>
+      <div style="font-size:13px;color:var(--text2);">ลูก คงเหลือ</div>
+    </div>
 
     <!-- รับเข้า -->
     <div class="card">
@@ -663,20 +797,11 @@
       </div>
     </div>
 
-    <!-- ปรับสต๊อก / ราคา -->
-    <div class="card">
-      <div class="card-title">⚖️ ปรับสต๊อก & ราคา</div>
-      <div class="form-group">
-        <label class="form-label">ราคาต่อกล่อง (12 ลูก / บาท)</label>
-        <div style="display:flex;gap:8px;">
-          <input class="input" id="stock-price-input" type="number" min="0" placeholder="ราคา..." inputmode="numeric">
-          <button class="btn btn-ghost" onclick="saveStockPrice()">บันทึก</button>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">
-        <button class="btn btn-ghost" style="font-size:13px;" onclick="adjustStock(1)">+1 ลูก</button>
-        <button class="btn btn-ghost" style="font-size:13px;" onclick="adjustStock(-1)">−1 ลูก</button>
-      </div>
+    <!-- ปรับสต๊อก (นับใหม่) — แก้จำนวนกรณีของจริงไม่ตรงกับระบบ, แยกจาก "เบิกออก" ที่แปลว่าใช้จริง -->
+    <div class="card" style="border-style:dashed;">
+      <div class="card-title" style="color:var(--text2);">🔧 ปรับสต๊อก (นับไม่ตรง)</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:10px;">ใช้เมื่อนับของจริงแล้วไม่ตรงกับระบบเท่านั้น ไม่ใช่การเบิกใช้จริง</div>
+      <button class="btn btn-ghost btn-full" onclick="openStockCorrectionModal()">แก้ไขจำนวนให้ตรงของจริง</button>
     </div>
 
     <!-- Movement history -->
@@ -691,76 +816,101 @@
     </div>
   </div>
 
-  <!-- ===== TAB 3: Cost Report ===== -->
-  <div class="stock-tab-content" id="stock-tab-cost">
+  <!-- ===== TAB 3: Expenses — persistent monthly ledger ===== -->
+  <div class="stock-tab-content" id="stock-tab-expenses">
 
-    <!-- ต้นทุนลูกแบด -->
+    <div class="card" style="text-align:center;">
+      <div style="font-size:11px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">สรุปค่าใช้จ่าย</div>
+      <div id="expense-total" style="font-size:32px;font-weight:900;color:var(--primary);margin-top:2px;">0 บาท</div>
+      <div id="expense-month-label" style="font-size:12px;color:var(--text3);margin-top:2px;"></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
+      <div class="card" style="text-align:center;padding:12px 6px;margin-bottom:0;">
+        <div style="font-size:20px;">🏟️</div>
+        <div id="expense-cat-court" style="font-size:15px;font-weight:800;margin-top:2px;">0</div>
+        <div style="font-size:10px;color:var(--text3);">ค่าสนาม</div>
+      </div>
+      <div class="card" style="text-align:center;padding:12px 6px;margin-bottom:0;">
+        <div style="font-size:20px;">🏸</div>
+        <div id="expense-cat-shuttle" style="font-size:15px;font-weight:800;margin-top:2px;">0</div>
+        <div style="font-size:10px;color:var(--text3);">ค่าลูก</div>
+      </div>
+      <div class="card" style="text-align:center;padding:12px 6px;margin-bottom:0;">
+        <div style="font-size:20px;">🧾</div>
+        <div id="expense-cat-other" style="font-size:15px;font-weight:800;margin-top:2px;">0</div>
+        <div style="font-size:10px;color:var(--text3);">อื่นๆ</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-full" onclick="openExpenseModal()" style="margin-bottom:14px;">+ เพิ่มค่าใช้จ่าย</button>
+
     <div class="card">
-      <div class="card-title">🪶 ต้นทุนลูกแบด</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;">
+        <div class="card-title" style="margin-bottom:0;">รายการค่าใช้จ่าย</div>
+        <select class="select" id="expense-month-select" style="width:auto;flex-shrink:0;padding:6px 26px 6px 10px;font-size:12px;" onchange="renderExpensesTab()"></select>
+      </div>
+      <div id="expense-list"></div>
+    </div>
+  </div>
+
+  <!-- ===== TAB 4: Session Calculator ===== -->
+  <div class="stock-tab-content" id="stock-tab-sessioncalc">
+
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+      <div class="card-title" style="margin-bottom:0;">🧮 คำนวณรอบเล่น</div>
+      <input class="input" id="cost-session-date" type="date" style="width:auto;">
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏟️ ข้อมูลการเล่น</div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">ราคา/กล่อง (12 ลูก)</label>
-          <input class="input" id="cost-shuttle-price" type="number" value="170" inputmode="numeric" oninput="calcCost(); syncStockPriceFromCost()">
+          <label class="form-label">ราคา/ชม. (บาท)</label>
+          <input class="input" id="cost-rate" type="number" value="0" inputmode="numeric" oninput="calcCost()">
         </div>
         <div class="form-group">
-          <label class="form-label">ราคา/ลูก</label>
-          <div id="cost-per-shuttle" style="padding:10px 0;font-size:20px;font-weight:800;color:var(--primary);">-</div>
+          <label class="form-label">จำนวนชั่วโมง</label>
+          <input class="input" id="cost-hours" type="number" value="0" inputmode="decimal" oninput="calcCost()">
         </div>
       </div>
-      <div id="cost-stock-value" style="font-size:13px;color:var(--text2);padding:8px 10px;background:var(--surface2);border-radius:8px;"></div>
+      <div class="form-group">
+        <label class="form-label">จำนวนสนาม</label>
+        <input class="input" id="cost-courts" type="number" value="0" inputmode="numeric" oninput="calcCost()">
+      </div>
     </div>
 
-    <!-- ค่าใช้จ่ายรายเดือน -->
     <div class="card">
-      <div class="card-title">📅 ค่าใช้จ่ายรายเดือน</div>
-      <div id="monthly-cost-container"></div>
+      <div class="card-title">🏸 ลูกที่ใช้</div>
+      <div class="form-group">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input class="input" id="cost-shuttles" type="number" value="0" inputmode="numeric" oninput="calcCost()">
+          <button class="btn btn-ghost btn-sm" onclick="fillShuttlesFromStock()" style="white-space:nowrap;">ดึงจากสต๊อก</button>
+        </div>
+        <div id="cost-shuttle-detail" style="font-size:12px;color:var(--text2);margin-top:4px;"></div>
+      </div>
     </div>
 
-    <!-- หารค่าใช้จ่าย -->
-    <div style="margin-top:4px;">
-      <div style="font-size:15px;font-weight:700;margin-bottom:12px;">💸 หารค่าใช้จ่าย</div>
+    <div class="card" id="cost-summary-card">
+      <div class="card-title">สรุปรายการ</div>
+      <div id="cost-summary"></div>
+    </div>
 
-      <div class="card">
-        <div class="card-title">ค่าสนาม</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">ราคา/ชม. (บาท)</label>
-            <input class="input" id="cost-rate" type="number" value="0" inputmode="numeric" oninput="calcCost()">
-          </div>
-          <div class="form-group">
-            <label class="form-label">จำนวนชั่วโมง</label>
-            <input class="input" id="cost-hours" type="number" value="0" inputmode="decimal" oninput="calcCost()">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">จำนวนสนาม</label>
-          <input class="input" id="cost-courts" type="number" value="0" inputmode="numeric" oninput="calcCost()">
-        </div>
-      </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+      <button class="btn btn-ghost" onclick="resetSessionCalc()">ยกเลิก</button>
+      <button class="btn btn-primary" onclick="saveSessionToExpenses()">💾 บันทึกรอบเล่น</button>
+    </div>
 
-      <div class="card">
-        <div class="card-title">ลูกที่ใช้</div>
-        <div class="form-group">
-          <div style="display:flex;gap:8px;align-items:center;">
-            <input class="input" id="cost-shuttles" type="number" value="0" inputmode="numeric" oninput="calcCost()">
-            <button class="btn btn-ghost btn-sm" onclick="fillShuttlesFromStock()" style="white-space:nowrap;">ดึงจากสต๊อก</button>
-          </div>
-          <div id="cost-shuttle-detail" style="font-size:12px;color:var(--text2);margin-top:4px;"></div>
-        </div>
-      </div>
+    <!-- หารค่าใช้จ่ายรายคน -->
+    <div class="card">
+      <div class="card-title">💸 หารค่าใช้จ่ายรายคน</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">เลือกคนที่ร่วมจ่าย · ✂️ = มาครึ่งเวลา (จ่ายครึ่ง)</div>
+      <button class="btn btn-ghost btn-sm" onclick="fillFromActivePlayers()" style="margin-bottom:10px;">ดึงจากผู้เล่นที่เลือก</button>
+      <div id="cost-players-list"></div>
+      <div id="cost-result" style="margin-top:12px;"></div>
+    </div>
+  </div>
 
-      <div class="card" id="cost-summary-card">
-        <div class="card-title">สรุปค่าใช้จ่าย</div>
-        <div id="cost-summary"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">หารค่าใช้จ่าย</div>
-        <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">เลือกคนที่ร่วมจ่าย · ✂️ = มาครึ่งเวลา (จ่ายครึ่ง)</div>
-        <button class="btn btn-ghost btn-sm" onclick="fillFromActivePlayers()" style="margin-bottom:10px;">ดึงจากผู้เล่นที่เลือก</button>
-        <div id="cost-players-list"></div>
-        <div id="cost-result" style="margin-top:12px;"></div>
-      </div>
     </div>
   </div>
 </div>
@@ -793,9 +943,20 @@
 <div class="modal-overlay" id="modal-player">
   <div class="modal">
     <div class="modal-title" id="modal-player-title">เพิ่มผู้เล่น</div>
+    <div class="form-group" style="text-align:center;">
+      <div class="photo-picker-wrap" id="photo-preview-wrap">
+        <span id="photo-preview-initial">?</span>
+        <img id="photo-preview-img" style="display:none;">
+      </div>
+      <input type="file" id="input-photo-file" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)">
+      <div style="display:flex;gap:8px;justify-content:center;">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('input-photo-file').click()">📷 เลือกรูป</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="photo-remove-btn" style="display:none;" onclick="clearPhoto()">ลบรูป</button>
+      </div>
+    </div>
     <div class="form-group">
       <label class="form-label">ชื่อผู้เล่น</label>
-      <input class="input" id="input-name" placeholder="กรอกชื่อ..." maxlength="30">
+      <input class="input" id="input-name" placeholder="กรอกชื่อ..." maxlength="30" oninput="updatePhotoPreview()">
     </div>
     <div class="form-group">
       <label class="form-label">ระดับฝีมือ (ITF 1.0–7.0)</label>
@@ -813,6 +974,131 @@
     <div class="modal-btns">
       <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-player')">ยกเลิก</button>
       <button class="btn btn-primary" style="flex:2" onclick="savePlayer()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Substitute Player -->
+<div class="modal-overlay" id="modal-sub">
+  <div class="modal">
+    <div class="modal-title">🔁 เปลี่ยนตัวผู้เล่น</div>
+    <div class="form-group">
+      <label class="form-label">คนที่จะออก</label>
+      <select class="select" id="sub-out-select" onchange="refreshSubInOptions()"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">คนที่จะเข้ามาแทน</label>
+      <select class="select" id="sub-in-select"></select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-sub')">ยกเลิก</button>
+      <button class="btn btn-primary" style="flex:2" onclick="confirmSub()">ยืนยันเปลี่ยนตัว</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Shuttlecock Brand -->
+<div class="modal-overlay" id="modal-brand">
+  <div class="modal">
+    <div class="modal-title">🏸 ยี่ห้อลูกแบดที่ใช้อยู่</div>
+    <div class="form-group" style="text-align:center;">
+      <div class="photo-picker-wrap" id="brand-photo-preview-wrap" style="border-radius:12px;">
+        <span id="brand-photo-preview-initial">🏸</span>
+        <img id="brand-photo-preview-img" style="display:none;">
+      </div>
+      <input type="file" id="input-brand-photo-file" accept="image/*" style="display:none;" onchange="handleBrandPhotoSelect(event)">
+      <div style="display:flex;gap:8px;justify-content:center;">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('input-brand-photo-file').click()">📷 เลือกรูป</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="brand-photo-remove-btn" style="display:none;" onclick="clearBrandPhoto()">ลบรูป</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">ชื่อยี่ห้อ / รุ่น</label>
+      <input class="input" id="input-brand-name" placeholder="เช่น Yonex Mavis 350..." maxlength="40">
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-brand')">ยกเลิก</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveBrand()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Stock Settings -->
+<div class="modal-overlay" id="modal-stock-settings">
+  <div class="modal">
+    <div class="modal-title">⚙️ ตั้งค่า</div>
+    <div class="form-group">
+      <label class="form-label">ตั้งระดับแจ้งเตือนสต๊อกน้อย (ลูก)</label>
+      <input class="input" id="input-stock-alert-threshold" type="number" min="1" max="999" placeholder="เช่น 24..." inputmode="numeric">
+    </div>
+
+    <hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">
+
+    <div class="card-title" style="margin-bottom:10px;">💰 ตั้งค่าราคา</div>
+    <div class="form-group">
+      <label class="form-label">ราคาต่อกล่อง (12 ลูก / บาท)</label>
+      <input class="input" id="input-stock-price" type="number" min="0" placeholder="ราคา..." inputmode="numeric" oninput="updateSettingsPricePreview()">
+    </div>
+    <div id="settings-price-per-shuttle" style="font-size:13px;color:var(--text2);padding:8px 10px;background:var(--surface2);border-radius:8px;"></div>
+
+    <div class="modal-btns">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-stock-settings')">ยกเลิก</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveStockSettings()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Stock Correction (reconcile a real-world recount, distinct from เบิกออก) -->
+<div class="modal-overlay" id="modal-stock-correction">
+  <div class="modal">
+    <div class="modal-title">🔧 ปรับสต๊อกให้ตรงของจริง</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">กรอกจำนวนลูกแบดที่นับได้จริงตอนนี้ ระบบจะปรับยอดให้ตรง — ใช้เมื่อของจริงไม่ตรงกับระบบเท่านั้น ไม่ใช่การเบิกใช้จริง</div>
+    <div class="form-group">
+      <label class="form-label">ระบบบอกว่ามี</label>
+      <div id="correction-current-count" style="font-size:20px;font-weight:800;color:var(--text2);">0 ลูก</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">นับได้จริง (ลูก)</label>
+      <input class="input" id="input-correction-count" type="number" min="0" inputmode="numeric" oninput="updateCorrectionPreview()">
+    </div>
+    <div id="correction-preview" style="font-size:13px;min-height:18px;"></div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-stock-correction')">ยกเลิก</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveStockCorrection()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add Expense -->
+<div class="modal-overlay" id="modal-expense">
+  <div class="modal">
+    <div class="modal-title">💰 เพิ่มค่าใช้จ่าย</div>
+    <div class="form-group">
+      <label class="form-label">ประเภท</label>
+      <select class="select" id="input-expense-category">
+        <option value="court">🏟️ ค่าสนาม</option>
+        <option value="shuttle">🏸 ค่าลูก</option>
+        <option value="other">🧾 อื่นๆ</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">รายละเอียด</label>
+      <input class="input" id="input-expense-label" placeholder="เช่น ค่าสนามวันเสาร์..." maxlength="60">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">จำนวนเงิน (บาท)</label>
+        <input class="input" id="input-expense-amount" type="number" min="0" inputmode="numeric" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">วันที่</label>
+        <input class="input" id="input-expense-date" type="date">
+      </div>
+    </div>
+    <input type="hidden" id="edit-expense-id">
+    <div class="modal-btns">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-expense')">ยกเลิก</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveExpense()">บันทึก</button>
     </div>
   </div>
 </div>
@@ -853,6 +1139,8 @@ let state = {
   stockCount: 0,
   stockPricePerBox: 170,
   stockAlertThreshold: 24,
+  stockBrand: { name: '', photo: null },
+  expenses: [], // persistent monthly expense ledger: {id, date, category, label, amount}
   rrTotalMatches: 0,
   matchHistory: [],   // Feature 1
   stockHistory: [],   // Feature 4
@@ -862,6 +1150,48 @@ const SKILL_LABELS = {
   1: 'มือใหม่', 2: 'เริ่มเล่นได้', 3: 'ระดับกลาง',
   4: 'ค่อนข้างเก่ง', 5: 'ระดับสูง', 6: 'ระดับแข่งขัน', 7: 'ระดับโลก'
 };
+
+// Tier frame color + icon per skill level, used for the character-card player grid
+const TIER_STYLES = {
+  1: { color: '#3b82f6', icon: '🥉' },
+  2: { color: '#22c55e', icon: '🥈' },
+  3: { color: '#eab308', icon: '🥇' },
+  4: { color: '#f97316', icon: '💠' },
+  5: { color: '#f43f5e', icon: '💎' },
+  6: { color: '#a855f7', icon: '🔥' },
+  7: { color: '#facc15', icon: '👑' },
+};
+function getTier(skill) {
+  return TIER_STYLES[Math.min(7, Math.max(1, Math.round(skill)))];
+}
+function shadeColor(hex, amount) {
+  const num = parseInt(hex.slice(1), 16);
+  const clamp = v => Math.max(0, Math.min(255, v));
+  const r = clamp(((num >> 16) & 0xff) + amount);
+  const g = clamp(((num >> 8) & 0xff) + amount);
+  const b = clamp((num & 0xff) + amount);
+  return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
+}
+// Small circular tier-ringed avatar (photo, or tier-gradient + initial fallback)
+// used everywhere a player is referenced outside the main card grid —
+// rankings, profile header, chip selector, hall of fame, top-player banner.
+function renderTierAvatar(p, size) {
+  if (!p) return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:var(--surface2);flex-shrink:0;"></div>`;
+  const tier = getTier(p.skill);
+  const inner = p.photo
+    ? `<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;">`
+    : `<div style="width:100%;height:100%;background:linear-gradient(150deg, ${tier.color}, ${shadeColor(tier.color, -90)});display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.92);font-weight:800;font-size:${Math.round(size * 0.42)}px;">${getInitial(p.name)}</div>`;
+  return `<div style="width:${size}px;height:${size}px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid ${tier.color};box-shadow:0 2px 6px ${tier.color}55;">${inner}</div>`;
+}
+// Full-bleed card art: the player's photo if set, otherwise a tier-colored
+// gradient with a large initial — so every card still reads as "art" even
+// without an uploaded photo.
+function renderCardBackground(p, tier) {
+  if (p.photo) return `<img class="player-card-bg-img" src="${p.photo}">`;
+  return `<div class="player-card-bg-fallback" style="background:linear-gradient(150deg, ${tier.color}, ${shadeColor(tier.color, -90)});">
+    <span style="font-size:26px;font-weight:900;color:rgba(255,255,255,0.92);">${getInitial(p.name)}</span>
+  </div>`;
+}
 
 // Feature 2: random mode
 let randomMode = 'balanced';
@@ -889,6 +1219,8 @@ function save() {
     localStorage.setItem('bmt_stockCount', state.stockCount);
     localStorage.setItem('bmt_stockPricePerBox', state.stockPricePerBox);
     localStorage.setItem('bmt_stockAlertThreshold', state.stockAlertThreshold);
+    localStorage.setItem('bmt_stockBrand', JSON.stringify(state.stockBrand));
+    localStorage.setItem('bmt_expenses', JSON.stringify(state.expenses));
     localStorage.setItem('bmt_matchHistory', JSON.stringify(state.matchHistory));
     localStorage.setItem('bmt_stockHistory', JSON.stringify(state.stockHistory));
   } catch(e) {}
@@ -917,6 +1249,8 @@ function load() {
     state.stockCount = parseInt(localStorage.getItem('bmt_stockCount') || '0');
     state.stockPricePerBox = parseInt(localStorage.getItem('bmt_stockPricePerBox') || '170');
     state.stockAlertThreshold = parseInt(localStorage.getItem('bmt_stockAlertThreshold') || '24');
+    state.stockBrand = JSON.parse(localStorage.getItem('bmt_stockBrand') || 'null') || { name: '', photo: null };
+    state.expenses = JSON.parse(localStorage.getItem('bmt_expenses') || '[]');
     state.matchHistory = JSON.parse(localStorage.getItem('bmt_matchHistory') || '[]');
     state.stockHistory = JSON.parse(localStorage.getItem('bmt_stockHistory') || '[]');
   } catch(e) {}
@@ -985,23 +1319,28 @@ function renderCheckinList() {
     list.innerHTML = '<div class="empty-state"><div class="icon">👥</div><p>ยังไม่มีสมาชิก<br>กดปุ่มด้านล่างเพื่อเพิ่ม</p></div>';
     return;
   }
-  list.innerHTML = sorted.map(p => {
+  list.innerHTML = `<div class="player-card-grid">${sorted.map(p => {
     const isPresent = state.activePlayers.has(p.id);
-    return `<div class="player-item" style="cursor:pointer;" onclick="togglePresent('${p.id}')">
-      <div style="width:26px;height:26px;border-radius:50%;border:2.5px solid ${isPresent ? 'var(--success)' : 'var(--border)'};
-        background:${isPresent ? 'var(--success)' : 'transparent'};
-        display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">
-        ${isPresent ? '<svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ''}
+    const tier = getTier(p.skill);
+    return `<div class="player-card" style="border-color:${tier.color};${isPresent ? '' : 'filter:grayscale(0.65) brightness(0.7);'}" onclick="togglePresent('${p.id}')">
+      ${renderCardBackground(p, tier)}
+      <div class="player-card-gradient"></div>
+      <div class="player-card-checkbox ${isPresent ? 'checked' : ''}">
+        ${isPresent ? '<svg width="9" height="9" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ''}
       </div>
-      <div class="player-avatar" style="width:34px;height:34px;">${getInitial(p.name)}</div>
-      <div class="player-info">
-        <div class="player-name">${escHtml(p.name)}</div>
-        <div><span class="skill-badge ${skillClass(p.skill)}" style="font-size:10px;">ITF ${p.skill}.0 · ${SKILL_LABELS[p.skill]}</span></div>
+      <div class="player-card-rank-badge" style="background:${tier.color};">${tier.icon}</div>
+      <div class="player-card-content">
+        <div class="player-card-info">
+          <div class="player-card-name">${escHtml(p.name)}</div>
+          <div class="player-card-tier" style="background:${tier.color}55;">${p.skill}.0</div>
+        </div>
+        <div class="player-card-btns">
+          <button class="player-card-action-btn" onclick="event.stopPropagation();openEditPlayer('${p.id}')" title="แก้ไข">✏️</button>
+          <button class="player-card-action-btn" onclick="event.stopPropagation();removePlayer('${p.id}')" title="ลบ">🗑</button>
+        </div>
       </div>
-      <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openEditPlayer('${p.id}')" style="margin-right:4px;font-size:11px;">แก้ไข</button>
-      <button class="btn btn-sm" style="background:var(--danger-light);color:var(--danger);font-size:11px;" onclick="event.stopPropagation();removePlayer('${p.id}')">ลบ</button>
     </div>`;
-  }).join('');
+  }).join('')}</div>`;
 }
 
 // วันนี้ tab — active players only
@@ -1015,27 +1354,28 @@ function renderTodayList() {
   }
   list.innerHTML = `
     <div style="font-size:13px;color:var(--text2);margin-bottom:10px;">
-      กำลังแอ็คทีว <strong style="color:var(--success);">${active.length}</strong> คน
+      กำลังแอ็คทีฟ <strong style="color:var(--success);">${active.length}</strong> คน
     </div>
-    ${active.map((p, i) => {
-      const st = state.stats[p.id] || {};
-      const w = st.wins || 0, l = st.losses || 0;
-      const wr = (w + l) > 0 ? Math.round(w / (w + l) * 100) : 0;
-      return `<div class="player-item">
-        <div style="width:24px;text-align:center;font-size:13px;font-weight:700;color:var(--text3);">${i + 1}</div>
-        <div class="player-avatar" style="background:var(--success-light);color:var(--success);">${getInitial(p.name)}</div>
-        <div class="player-info">
-          <div style="display:flex;align-items:center;gap:6px;">
-            <span class="player-name">${escHtml(p.name)}</span>
-            <span style="background:var(--success-light);color:var(--success);font-size:10px;padding:1px 7px;border-radius:99px;font-weight:700;">มาแล้ว ✓</span>
+    <div class="player-card-grid">
+      ${active.map((p, i) => {
+        const st = state.stats[p.id] || {};
+        const w = st.wins || 0, l = st.losses || 0;
+        const wr = (w + l) > 0 ? Math.round(w / (w + l) * 100) : 0;
+        const tier = getTier(p.skill);
+        return `<div class="player-card" style="border-color:${tier.color};">
+          ${renderCardBackground(p, tier)}
+          <div class="player-card-gradient"></div>
+          <div class="player-card-pill-topleft">#${i + 1}</div>
+          <div class="player-card-rank-badge" style="background:${tier.color};">${tier.icon}</div>
+          <div class="player-card-content">
+            <div class="player-card-info">
+              <div class="player-card-name">${escHtml(p.name)}</div>
+              <div class="player-card-tier" style="background:${tier.color}55;">${p.skill}.0 · ${wr}%</div>
+            </div>
           </div>
-          <div style="margin-top:3px;display:flex;gap:6px;align-items:center;">
-            <span class="skill-badge ${skillClass(p.skill)}" style="font-size:10px;">ITF ${p.skill}.0</span>
-            <span style="font-size:11px;color:var(--text3);">${w}W ${l}L · ${wr}%</span>
-          </div>
-        </div>
-      </div>`;
-    }).join('')}`;
+        </div>`;
+      }).join('')}
+    </div>`;
 }
 
 function togglePresent(id) {
@@ -1048,11 +1388,64 @@ function togglePresent(id) {
 // Legacy — keep for removePlayer/savePlayer callbacks
 function renderPlayers() { renderUserPage(); }
 
+// Profile photo picker state — null means "no photo"; reset/populated per modal open
+let pendingPhoto = null;
+
+function updatePhotoPreview() {
+  const imgEl = document.getElementById('photo-preview-img');
+  const initialEl = document.getElementById('photo-preview-initial');
+  const removeBtn = document.getElementById('photo-remove-btn');
+  if (pendingPhoto) {
+    imgEl.src = pendingPhoto;
+    imgEl.style.display = 'block';
+    initialEl.style.display = 'none';
+    removeBtn.style.display = '';
+  } else {
+    imgEl.style.display = 'none';
+    initialEl.style.display = '';
+    initialEl.textContent = getInitial(document.getElementById('input-name').value);
+    removeBtn.style.display = 'none';
+  }
+}
+
+function handlePhotoSelect(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { alert('กรุณาเลือกไฟล์รูปภาพ'); return; }
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const size = 200;
+      const canvas = document.createElement('canvas');
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const scale = Math.max(size / img.width, size / img.height);
+      const sw = size / scale, sh = size / scale;
+      const sx = (img.width - sw) / 2, sy = (img.height - sh) / 2;
+      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, size, size);
+      pendingPhoto = canvas.toDataURL('image/jpeg', 0.85);
+      updatePhotoPreview();
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearPhoto() {
+  pendingPhoto = null;
+  document.getElementById('input-photo-file').value = '';
+  updatePhotoPreview();
+}
+
 function openAddPlayer() {
   document.getElementById('modal-player-title').textContent = 'เพิ่มผู้เล่น';
   document.getElementById('input-name').value = '';
   document.getElementById('input-skill').value = '3';
   document.getElementById('edit-player-id').value = '';
+  document.getElementById('input-photo-file').value = '';
+  pendingPhoto = null;
+  updatePhotoPreview();
   openModal('modal-player');
   setTimeout(() => document.getElementById('input-name').focus(), 300);
 }
@@ -1064,6 +1457,9 @@ function openEditPlayer(id) {
   document.getElementById('input-name').value = p.name;
   document.getElementById('input-skill').value = p.skill;
   document.getElementById('edit-player-id').value = id;
+  document.getElementById('input-photo-file').value = '';
+  pendingPhoto = p.photo || null;
+  updatePhotoPreview();
   openModal('modal-player');
 }
 
@@ -1074,10 +1470,10 @@ function savePlayer() {
   if (!name) { alert('กรุณากรอกชื่อ'); return; }
   if (editId) {
     const p = state.players.find(x => x.id === editId);
-    if (p) { p.name = name; p.skill = skill; }
+    if (p) { p.name = name; p.skill = skill; p.photo = pendingPhoto; }
   } else {
     const id = 'p' + Date.now() + Math.random().toString(36).slice(2);
-    state.players.push({ id, name, skill });
+    state.players.push({ id, name, skill, photo: pendingPhoto });
     state.activePlayers.add(id);
   }
   save();
@@ -1216,6 +1612,7 @@ function generateRRSchedule(nTeams) {
 
 function makeRRMatchObj(courtNum, pair, mode) {
   return {
+    id: genId('m'),
     court: courtNum,
     teams: [state.rrTeams[pair[0]], state.rrTeams[pair[1]]],
     teamIdxA: pair[0],
@@ -1225,6 +1622,7 @@ function makeRRMatchObj(courtNum, pair, mode) {
     bench: [],
     mode,
     rrMatch: true,
+    substitutions: [],
   };
 }
 
@@ -1430,12 +1828,14 @@ function doRandomize() {
   }
 
   state.currentMatches = bestMatches.map((m, idx) => ({
+    id: genId('m'),
     court: m.court,
     teams: m.teams,
     done: false,
     winner: null,
     bench: bench.map(p => p.id),
-    mode: mode
+    mode: mode,
+    substitutions: []
   }));
   state.roundComplete = false;
 
@@ -1461,6 +1861,10 @@ function shuffle(arr) {
   return arr;
 }
 
+function genId(prefix) {
+  return prefix + Date.now() + Math.random().toString(36).slice(2);
+}
+
 // =================== MATCH PAGE ===================
 function renderMatchPage() {
   const el = document.getElementById('match-content');
@@ -1472,13 +1876,17 @@ function renderMatchPage() {
   const isRR = state.currentMatches[0].rrMatch;
   const allCourtsDone = state.currentMatches.every(m => m.done);
   const rrQueueEmpty = state.rrRoundQueue.length === 0;
-  const rrLastRound = state.rrRoundIdx >= state.rrRounds.length - 1;
   const rrRoundComplete = isRR && allCourtsDone && rrQueueEmpty;
-  const rrAllComplete = rrRoundComplete && rrLastRound;
-  const rrCanAdvance = rrRoundComplete && !rrLastRound;
+  // "All complete" must be judged by the played-match counter, not round
+  // position — swapping can finish every pair before rrRoundIdx catches up.
+  const rrAllComplete = isRR && state.rrDoneMatches >= state.rrTotalMatches;
+  const rrCanAdvance = rrRoundComplete && !rrAllComplete;
   const allDone = !isRR && allCourtsDone;
   const mode = state.currentMatches[0].mode || 'doubles';
-  const bench = state.currentMatches[0].bench || [];
+  // Computed live (not the static snapshot) so it stays correct after mid-match substitutions
+  const playingNow = new Set();
+  state.currentMatches.forEach(x => [...x.teams[0], ...x.teams[1]].forEach(id => playingNow.add(id)));
+  const bench = [...state.activePlayers].filter(id => !playingNow.has(id));
   let html = '';
 
   if (rrAllComplete) {
@@ -1572,19 +1980,59 @@ function renderMatchPage() {
         </div>
       </div>`;
 
+    if (m.substitutions && m.substitutions.length) {
+      html += `<div style="font-size:11px;color:var(--warning);font-weight:600;margin-bottom:10px;">
+        🔁 เปลี่ยนตัว: ${m.substitutions.map(s => `${escHtml(s.outName)} ➜ ${escHtml(s.inName)}`).join(' · ')}
+      </div>`;
+    }
+
     if (!m.done) {
       const teamALabel = teamA.map(p => p.name).join(' & ');
       const teamBLabel = teamB.map(p => p.name).join(' & ');
       html += `<div class="match-btns">
         <button class="btn win-btn btn-sm" onclick="recordWin(${idx}, 0)">${teamALabel} ชนะ</button>
         <button class="btn win-btn btn-sm" onclick="recordWin(${idx}, 1)">${teamBLabel} ชนะ</button>
-      </div>`;
+      </div>
+      <button class="btn btn-ghost btn-sm btn-full" style="margin-top:8px;" onclick="openSubModal(${idx})">🔁 เปลี่ยนตัวผู้เล่น</button>`;
+
+      if (m.rrMatch) {
+        const swappable = getSwappableRRMatches(idx);
+        if (swappable.length) {
+          const isOpen = expandedSwapCourts.has(idx);
+          html += `<button class="btn btn-ghost btn-sm btn-full" style="margin-top:8px;" onclick="toggleSwapPicker(${idx})">
+            🔀 คู่นี้ยังไม่พร้อม? เอาแมทช์อื่นมาเล่นก่อน ${isOpen ? '▲' : '▼'}
+          </button>`;
+          if (isOpen) {
+            html += `<div style="margin-top:8px;">
+              <div style="font-size:11px;color:var(--text2);margin-bottom:6px;">เลือกคู่ที่พร้อมกว่า มาเล่นสนามนี้ก่อน (คู่เดิมจะไปต่อคิวเล่นทีหลัง):</div>
+              ${swappable.map((opt, oi) => {
+                const oA = (state.rrTeams[opt.pair[0]] || []).map(id => getPlayerName(id)).join(' & ');
+                const oB = (state.rrTeams[opt.pair[1]] || []).map(id => getPlayerName(id)).join(' & ');
+                return `<button class="btn btn-ghost btn-sm btn-full" style="margin-bottom:6px;" onclick="swapRRMatch(${idx}, ${oi})">
+                  ${escHtml(oA)} <span style="color:var(--text3);">vs</span> ${escHtml(oB)}
+                </button>`;
+              }).join('')}
+            </div>`;
+          }
+        }
+      }
     } else if (m.rrMatch && m.done) {
       if (state.rrRoundQueue.length > 0) {
         html += `<div style="margin-top:8px;">
-          <button class="btn btn-primary btn-full btn-sm" onclick="nextRRMatch(${idx})">
-            ➡ แมทช์ถัดไปในรอบนี้ (เหลือ ${state.rrRoundQueue.length})
+          <button class="btn btn-primary btn-full btn-sm" onclick="pickRRMatch(${idx}, 0)">
+            ➡ แมทช์ถัดไปในคิว (เหลือ ${state.rrRoundQueue.length})
           </button>
+          ${state.rrRoundQueue.length > 1 ? `
+            <div style="font-size:11px;color:var(--text2);margin:8px 0 4px;">หรือเลือกแมทช์อื่นมาเล่นก่อน (เช่น คู่ที่ยังไม่พร้อม):</div>
+            ${state.rrRoundQueue.map((pair, qi) => {
+              if (qi === 0) return '';
+              const qA = (state.rrTeams[pair[0]] || []).map(id => getPlayerName(id)).join(' & ');
+              const qB = (state.rrTeams[pair[1]] || []).map(id => getPlayerName(id)).join(' & ');
+              return `<button class="btn btn-ghost btn-sm btn-full" style="margin-bottom:6px;" onclick="pickRRMatch(${idx}, ${qi})">
+                ${escHtml(qA)} <span style="color:var(--text3);">vs</span> ${escHtml(qB)}
+              </button>`;
+            }).join('')}
+          ` : ''}
         </div>`;
       } else if (!rrRoundComplete) {
         html += `<div style="margin-top:8px;padding:8px;background:var(--surface2);border-radius:8px;font-size:12px;color:var(--text2);text-align:center;">
@@ -1593,8 +2041,30 @@ function renderMatchPage() {
       }
     }
 
+    if (m.done && m._undo) {
+      html += `<div style="margin-top:8px;">
+        <button class="btn btn-ghost btn-sm btn-full" onclick="undoMatchResult(${idx})">↩️ กดผิด? แก้ไขผลใหม่</button>
+      </div>`;
+    }
+
     html += `</div>`;
   });
+
+  if (isRR && state.rrRoundQueue.length) {
+    html += `<div class="card">
+      <div class="card-title">🕐 คิวถัดไป (รอบย่อยที่ ${state.rrRoundIdx + 1}) — ${state.rrRoundQueue.length} แมทช์</div>
+      ${state.rrRoundQueue.map((pair, qi) => {
+        const qTeamA = (state.rrTeams[pair[0]] || []).map(id => state.players.find(p => p.id === id)).filter(Boolean);
+        const qTeamB = (state.rrTeams[pair[1]] || []).map(id => state.players.find(p => p.id === id)).filter(Boolean);
+        return `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;${qi < state.rrRoundQueue.length - 1 ? 'border-bottom:1px solid var(--border);' : ''}">
+          <span style="font-size:12px;color:var(--text3);font-weight:700;width:18px;flex-shrink:0;">${qi + 1}</span>
+          <span style="flex:1;font-size:13px;font-weight:600;">${escHtml(qTeamA.map(p => p.name).join(' & '))}</span>
+          <span style="color:var(--text3);font-size:11px;flex-shrink:0;">vs</span>
+          <span style="flex:1;font-size:13px;font-weight:600;text-align:right;">${escHtml(qTeamB.map(p => p.name).join(' & '))}</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
 
   if (!isRR && bench.length) {
     const benchPlayers = bench.map(id => state.players.find(p => p.id === id)).filter(Boolean);
@@ -1649,6 +2119,17 @@ function endCurrentMatch() {
 function recordWin(matchIdx, teamIdx) {
   const m = state.currentMatches[matchIdx];
   if (m.done) return;
+  if (!m.id) m.id = genId('m');
+
+  // Snapshot everything needed to undo this result (Feature 4)
+  const statsBefore = {};
+  [...m.teams[0], ...m.teams[1]].forEach(id => {
+    statsBefore[id] = state.stats[id] ? JSON.parse(JSON.stringify(state.stats[id])) : null;
+  });
+  const roundBefore = state.round;
+  const rrDoneMatchesBefore = state.rrDoneMatches;
+  const rrActiveBefore = state.rrActive;
+
   m.done = true;
   m.winner = m.teams[teamIdx];
   const loser = m.teams[1 - teamIdx];
@@ -1662,7 +2143,7 @@ function recordWin(matchIdx, teamIdx) {
     for (let j = i + 1; j < allIds.length; j++) {
       const pa = allIds[i] < allIds[j] ? allIds[i] : allIds[j];
       const pb = allIds[i] < allIds[j] ? allIds[j] : allIds[i];
-      state.pairHistory.push({ a: pa, b: pb });
+      state.pairHistory.push({ a: pa, b: pb, matchId: m.id });
     }
   }
   // Log teammate pairs separately — used for heavy penalty in next draw
@@ -1672,7 +2153,7 @@ function recordWin(matchIdx, teamIdx) {
       for (let j = i + 1; j < team.length; j++) {
         const pa = team[i] < team[j] ? team[i] : team[j];
         const pb = team[i] < team[j] ? team[j] : team[i];
-        state.teammateHistory.push({ a: pa, b: pb });
+        state.teammateHistory.push({ a: pa, b: pb, matchId: m.id });
       }
     }
   });
@@ -1680,12 +2161,14 @@ function recordWin(matchIdx, teamIdx) {
   // Feature 1: push to match history
   const histRecord = {
     id: 'mh' + Date.now() + Math.random().toString(36).slice(2),
+    matchId: m.id,
     date: new Date().toISOString(),
     mode: m.mode || state.mode,
     teams: [m.teams[0], m.teams[1]],
     winner: m.winner,
     rrMatch: !!m.rrMatch,
-    roundNum: state.round
+    roundNum: state.round,
+    substitutions: m.substitutions || []
   };
   state.matchHistory.unshift(histRecord);
   if (state.matchHistory.length > 50) state.matchHistory = state.matchHistory.slice(0, 50);
@@ -1693,9 +2176,11 @@ function recordWin(matchIdx, teamIdx) {
   const allDoneNow = state.currentMatches.every(x => x.done);
   if (m.rrMatch) {
     state.rrDoneMatches++;
-    const queueEmpty = state.rrRoundQueue.length === 0;
-    const lastRound = state.rrRoundIdx >= state.rrRounds.length - 1;
-    if (allDoneNow && queueEmpty && lastRound) {
+    // Completion must be judged by "has every pair been played" (the counter),
+    // not by round *position* — swapping in matches from later rounds can
+    // finish the whole schedule before rrRoundIdx ever reaches the last round,
+    // which would otherwise leave the tournament stuck "in progress" forever.
+    if (state.rrDoneMatches >= state.rrTotalMatches) {
       state.round++;
       state.rrActive = false;
     }
@@ -1703,22 +2188,195 @@ function recordWin(matchIdx, teamIdx) {
     if (allDoneNow) state.round++;
   }
 
+  m._undo = { statsBefore, roundBefore, rrDoneMatchesBefore, rrActiveBefore, histId: histRecord.id, matchId: m.id };
+
   save();
   renderMatchPage();
 }
 
-function nextRRMatch(courtIdx) {
-  if (!state.rrRoundQueue.length) return;
-  const pair = state.rrRoundQueue.shift();
+// Feature 4: undo a mis-clicked result and let them pick the winner again
+function undoMatchResult(matchIdx) {
+  const m = state.currentMatches[matchIdx];
+  if (!m || !m.done || !m._undo) return;
+  if (!confirm('ยกเลิกผลแมทช์นี้ เพื่อเลือกผู้ชนะใหม่?')) return;
+  const u = m._undo;
+
+  Object.keys(u.statsBefore).forEach(id => {
+    if (u.statsBefore[id] === null) delete state.stats[id];
+    else state.stats[id] = u.statsBefore[id];
+  });
+
+  state.pairHistory = state.pairHistory.filter(h => h.matchId !== u.matchId);
+  state.teammateHistory = state.teammateHistory.filter(h => h.matchId !== u.matchId);
+  state.matchHistory = state.matchHistory.filter(h => h.id !== u.histId);
+
+  state.round = u.roundBefore;
+  state.rrDoneMatches = u.rrDoneMatchesBefore;
+  state.rrActive = u.rrActiveBefore;
+
+  m.done = false;
+  m.winner = null;
+  delete m._undo;
+
+  save();
+  renderMatchPage();
+}
+
+// Feature 2: mid-match player substitution ("ยืมผู้เล่น")
+let subContext = { matchIdx: null };
+let expandedSwapCourts = new Set();
+
+function openSubModal(matchIdx) {
+  const m = state.currentMatches[matchIdx];
+  if (!m || m.done) return;
+  subContext.matchIdx = matchIdx;
+
+  const outSel = document.getElementById('sub-out-select');
+  const inMatch = [
+    ...m.teams[0].map(id => ({ id, teamIdx: 0 })),
+    ...m.teams[1].map(id => ({ id, teamIdx: 1 }))
+  ];
+  outSel.innerHTML = inMatch.map(x => {
+    const p = state.players.find(pl => pl.id === x.id);
+    return `<option value="${x.teamIdx}|${x.id}">${escHtml(p ? p.name : x.id)}</option>`;
+  }).join('');
+
+  refreshSubInOptions();
+  openModal('modal-sub');
+}
+
+function refreshSubInOptions() {
+  const inSel = document.getElementById('sub-in-select');
+  const busy = new Set();
+  state.currentMatches.forEach(x => {
+    if (!x.done) [...x.teams[0], ...x.teams[1]].forEach(id => busy.add(id));
+  });
+  // RR mode: also exclude players already queued for a match later this sub-round
+  if (state.rrActive && state.rrRoundQueue && state.rrRoundQueue.length) {
+    state.rrRoundQueue.forEach(pair => {
+      [...(state.rrTeams[pair[0]] || []), ...(state.rrTeams[pair[1]] || [])].forEach(id => busy.add(id));
+    });
+  }
+  const available = state.players.filter(p => state.activePlayers.has(p.id) && !busy.has(p.id));
+  if (!available.length) {
+    inSel.innerHTML = `<option value="">— ไม่มีคนว่าง —</option>`;
+    return;
+  }
+  inSel.innerHTML = available.map(p =>
+    `<option value="${p.id}">${escHtml(p.name)} · ITF ${p.skill}.0</option>`
+  ).join('');
+}
+
+function confirmSub() {
+  const m = state.currentMatches[subContext.matchIdx];
+  if (!m) return;
+  const outSel = document.getElementById('sub-out-select');
+  const inSel = document.getElementById('sub-in-select');
+  if (!outSel.value) return;
+  const [teamIdxStr, outId] = outSel.value.split('|');
+  const teamIdx = parseInt(teamIdxStr);
+  const inId = inSel.value;
+  if (!inId) { alert('ไม่มีคนว่างให้เปลี่ยนตัวตอนนี้'); return; }
+  if (inId === outId) { closeModal('modal-sub'); return; }
+
+  const slot = m.teams[teamIdx].indexOf(outId);
+  if (slot === -1) return;
+  // Clone before mutating — in RR mode m.teams[x] is the SAME array object as
+  // state.rrTeams[teamIdx], so writing in place would permanently swap the team
+  // roster for the rest of the tournament instead of just this one match.
+  m.teams[teamIdx] = [...m.teams[teamIdx]];
+  m.teams[teamIdx][slot] = inId;
+
+  if (!m.substitutions) m.substitutions = [];
+  m.substitutions.push({
+    outId, inId,
+    outName: getPlayerName(outId),
+    inName: getPlayerName(inId),
+    court: m.court
+  });
+
+  save();
+  closeModal('modal-sub');
+  renderMatchPage();
+}
+
+// Feature: let the organizer bring any queued RR matchup to a free court,
+// not just whichever one happens to be first in the queue (e.g. when that
+// pair isn't ready/present yet).
+function pickRRMatch(courtIdx, queueIdx) {
+  if (queueIdx < 0 || queueIdx >= state.rrRoundQueue.length) return;
+  const pair = state.rrRoundQueue.splice(queueIdx, 1)[0];
   const mode = state.currentMatches[courtIdx] ? state.currentMatches[courtIdx].mode : state.mode;
   state.currentMatches[courtIdx] = makeRRMatchObj(courtIdx + 1, pair, mode);
   save();
   renderMatchPage();
 }
 
+// Feature: let the organizer swap out a match that HASN'T started yet
+// (e.g. the assigned pair isn't at the court / not warmed up) for any other
+// not-yet-played pairing from later in the RR schedule, not just this
+// sub-round's queue. The bumped pair goes to the back of the current
+// sub-round's queue so it still gets played later, just not right now.
+function getSwappableRRMatches(courtIdx) {
+  const m = state.currentMatches[courtIdx];
+  if (!m || !m.rrMatch) return [];
+  const busyTeamIdx = new Set();
+  state.currentMatches.forEach((x, i) => {
+    if (i === courtIdx || !x.rrMatch || x.done) return;
+    busyTeamIdx.add(x.teamIdxA);
+    busyTeamIdx.add(x.teamIdxB);
+  });
+
+  const results = [];
+  state.rrRoundQueue.forEach((pair, qi) => {
+    if (busyTeamIdx.has(pair[0]) || busyTeamIdx.has(pair[1])) return;
+    if (pair[0] === m.teamIdxA && pair[1] === m.teamIdxB) return;
+    results.push({ source: 'queue', queueIdx: qi, pair });
+  });
+  for (let ri = state.rrRoundIdx + 1; ri < state.rrRounds.length; ri++) {
+    state.rrRounds[ri].forEach((pair, pairIdx) => {
+      if (busyTeamIdx.has(pair[0]) || busyTeamIdx.has(pair[1])) return;
+      results.push({ source: 'round', roundIdx: ri, pairIdx, pair });
+    });
+  }
+  return results;
+}
+
+function toggleSwapPicker(courtIdx) {
+  if (expandedSwapCourts.has(courtIdx)) expandedSwapCourts.delete(courtIdx);
+  else expandedSwapCourts.add(courtIdx);
+  renderMatchPage();
+}
+
+function swapRRMatch(courtIdx, choiceIdx) {
+  const m = state.currentMatches[courtIdx];
+  if (!m || m.done || !m.rrMatch) return;
+  const options = getSwappableRRMatches(courtIdx);
+  const choice = options[choiceIdx];
+  if (!choice) return;
+
+  if (choice.source === 'queue') {
+    state.rrRoundQueue.splice(choice.queueIdx, 1);
+  } else {
+    state.rrRounds[choice.roundIdx].splice(choice.pairIdx, 1);
+  }
+
+  // Bump the not-yet-played original match to the back of this round's queue
+  state.rrRoundQueue.push([m.teamIdxA, m.teamIdxB]);
+
+  state.currentMatches[courtIdx] = makeRRMatchObj(courtIdx + 1, choice.pair, m.mode);
+  expandedSwapCourts.delete(courtIdx);
+  save();
+  renderMatchPage();
+}
+
 function nextRRRound() {
-  state.rrRoundIdx++;
-  if (state.rrRoundIdx >= state.rrRounds.length) return;
+  // Skip any round left fully empty by an earlier swap that already pulled
+  // all of its pairs forward into an earlier round.
+  do {
+    state.rrRoundIdx++;
+    if (state.rrRoundIdx >= state.rrRounds.length) { save(); renderMatchPage(); return; }
+  } while (state.rrRounds[state.rrRoundIdx].length === 0);
   const nextRound = [...state.rrRounds[state.rrRoundIdx]];
   shuffle(nextRound);
   const mode = state.currentMatches[0] ? state.currentMatches[0].mode : state.mode;
@@ -1903,7 +2561,7 @@ function renderStatsDashboard() {
     const total = (s.wins || 0) + (s.losses || 0);
     const wr = total ? Math.round(s.wins / total * 100) : 0;
     topEl.innerHTML = `<div class="top-player-card">
-      <div class="top-player-avatar">${getInitial(topPlayer.name)}</div>
+      ${renderTierAvatar(topPlayer, 52)}
       <div>
         <div style="font-size:11px;font-weight:700;opacity:0.8;letter-spacing:0.5px;text-transform:uppercase;">🌟 Top Player Session</div>
         <div style="font-size:20px;font-weight:900;margin:2px 0;">${escHtml(topPlayer.name)}</div>
@@ -1978,6 +2636,7 @@ function renderStatsRanking() {
       const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}`;
       return `<div class="stat-row">
         <div class="stat-rank">${rankIcon}</div>
+        ${renderTierAvatar(p, 36)}
         <div class="stat-info">
           <div class="stat-name">${escHtml(p.name)}</div>
           <div class="stat-detail"><span class="skill-badge ${skillClass(p.skill)}" style="font-size:10px;">ITF ${p.skill}.0</span> <span style="margin-left:6px;">${s.wins||0}W / ${s.losses||0}L</span></div>
@@ -1999,6 +2658,7 @@ function renderStatsRanking() {
       const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}`;
       return `<div class="stat-row">
         <div class="stat-rank">${rankIcon}</div>
+        ${renderTierAvatar(p, 36)}
         <div class="stat-info">
           <div class="stat-name">${escHtml(p.name)}</div>
           <div class="stat-detail"><span class="skill-badge ${skillClass(p.skill)}" style="font-size:10px;">ITF ${p.skill}.0</span> <span style="margin-left:6px;">delta: ${deltaHtml}</span></div>
@@ -2023,7 +2683,7 @@ function renderStatsPlayers() {
 
   // Chips
   document.getElementById('stats-player-chips').innerHTML = players.map(p =>
-    `<button class="player-chip ${p.id === selectedPlayerForProfile ? 'active' : ''}" onclick="selectPlayerProfile('${p.id}')">${escHtml(p.name)}</button>`
+    `<button class="player-chip ${p.id === selectedPlayerForProfile ? 'active' : ''}" style="display:inline-flex;align-items:center;gap:6px;" onclick="selectPlayerProfile('${p.id}')">${renderTierAvatar(p, 20)}<span>${escHtml(p.name)}</span></button>`
   ).join('');
 
   // Profile
@@ -2075,7 +2735,7 @@ function renderPlayerProfile(id) {
         const pp = state.players.find(x => x.id === pid);
         return `<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);">
           <div style="display:flex;align-items:center;gap:8px;">
-            <div class="player-avatar" style="width:28px;height:28px;font-size:11px;">${pp ? getInitial(pp.name) : '?'}</div>
+            ${pp ? renderTierAvatar(pp, 28) : `<div class="player-avatar" style="width:28px;height:28px;font-size:11px;">?</div>`}
             <span style="font-weight:600;font-size:13px;">${pp ? escHtml(pp.name) : escHtml(pid)}</span>
           </div>
           <span style="font-size:12px;color:var(--success);font-weight:700;">+${wins} ชนะด้วยกัน</span>
@@ -2086,7 +2746,7 @@ function renderPlayerProfile(id) {
   el.innerHTML = `
     <div class="card">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
-        <div class="profile-big-avatar">${getInitial(p.name)}</div>
+        ${renderTierAvatar(p, 64)}
         <div>
           <div style="font-size:20px;font-weight:800;">${escHtml(p.name)}</div>
           <span class="skill-badge ${skillClass(p.skill)}" style="font-size:12px;margin-top:4px;">ITF ${p.skill}.0 · ${SKILL_LABELS[p.skill]}</span>
@@ -2151,11 +2811,12 @@ function renderStatsFame() {
     if (w > goldenPairWins) { goldenPairWins = w; goldenPairKey = key; }
   });
   let goldenPairNames = 'ยังไม่มี';
+  let goldenPairA = null, goldenPairB = null;
   if (goldenPairKey) {
     const [idA, idB] = goldenPairKey.split('|');
-    const pA = state.players.find(p => p.id === idA);
-    const pB = state.players.find(p => p.id === idB);
-    if (pA && pB) goldenPairNames = `${escHtml(pA.name)} & ${escHtml(pB.name)}`;
+    goldenPairA = state.players.find(p => p.id === idA);
+    goldenPairB = state.players.find(p => p.id === idB);
+    if (goldenPairA && goldenPairB) goldenPairNames = `${escHtml(goldenPairA.name)} & ${escHtml(goldenPairB.name)}`;
   }
 
   // Top ELO
@@ -2173,7 +2834,7 @@ function renderStatsFame() {
       subtitle: 'ผู้ชนะมากสุด',
       name: mvp ? escHtml(mvp.name) : 'ยังไม่มี',
       detail: mvp ? `${mvpWins} ชนะ` : '',
-      gradient: 'linear-gradient(135deg, #fbbf24, #f59e0b)'
+      player: mvp
     },
     {
       icon: '🔥',
@@ -2181,7 +2842,7 @@ function renderStatsFame() {
       subtitle: 'สตรีคชนะ ≥ 3 รวด',
       name: streakChamp ? escHtml(streakChamp.name) : 'ยังไม่มี',
       detail: streakChamp ? `${streakCount} รวด` : '',
-      gradient: 'linear-gradient(135deg, #f87171, #ef4444)'
+      player: streakChamp
     },
     {
       icon: '👥',
@@ -2189,7 +2850,7 @@ function renderStatsFame() {
       subtitle: 'คู่ที่ชนะด้วยกันมากสุด',
       name: goldenPairKey ? goldenPairNames : 'ยังไม่มี',
       detail: goldenPairKey ? `${goldenPairWins} ชนะด้วยกัน` : '',
-      gradient: 'linear-gradient(135deg, #34d399, #10b981)'
+      players: (goldenPairA && goldenPairB) ? [goldenPairA, goldenPairB] : null
     },
     {
       icon: '⭐',
@@ -2197,22 +2858,27 @@ function renderStatsFame() {
       subtitle: 'คะแนน ELO สูงสุด',
       name: topEloPlayer ? escHtml(topEloPlayer.name) : 'ยังไม่มี',
       detail: topEloPlayer ? `ELO ${Math.round(topEloScore)}` : '',
-      gradient: 'linear-gradient(135deg, #818cf8, #6366f1)'
+      player: topEloPlayer
     }
   ];
 
-  el.innerHTML = awardCards.map(a => `
+  el.innerHTML = awardCards.map(a => {
+    const avatarHtml = a.players
+      ? `<div style="display:flex;">${renderTierAvatar(a.players[0], 30)}<div style="margin-left:-10px;">${renderTierAvatar(a.players[1], 30)}</div></div>`
+      : (a.player ? renderTierAvatar(a.player, 40) : `<div class="award-icon">${a.icon}</div>`);
+    return `
     <div class="award-card">
       <div class="award-card-inner">
-        <div class="award-icon">${a.icon}</div>
+        ${avatarHtml}
         <div style="flex:1;">
-          <div class="award-title">${a.title} · <span style="font-size:11px;font-weight:500;text-transform:none;">${a.subtitle}</span></div>
+          <div class="award-title">${a.icon} ${a.title} · <span style="font-size:11px;font-weight:500;text-transform:none;">${a.subtitle}</span></div>
           <div class="award-name">${a.name}</div>
           ${a.detail ? `<div class="award-detail">${a.detail}</div>` : ''}
         </div>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 // =================== TAB 5: MATCH HISTORY ===================
@@ -2299,6 +2965,9 @@ function renderMatchHistory() {
         <span style="${teamBWon ? 'color:var(--success);font-weight:700;' : ''}">${escHtml(teamBNames)}</span>
       </div>
       ${!winnerIds ? '<div style="font-size:11px;color:var(--text3);margin-top:4px;">ไม่มีผล</div>' : ''}
+      ${(h.substitutions && h.substitutions.length) ? `<div style="font-size:11px;color:var(--warning);font-weight:600;margin-top:4px;">
+        🔁 เปลี่ยนตัว: ${h.substitutions.map(s => `${escHtml(s.outName)} ➜ ${escHtml(s.inName)}`).join(' · ')}
+      </div>` : ''}
     </div>`;
   }).join('');
 }
@@ -2363,18 +3032,23 @@ function switchStockTab(tab) {
   currentStockTab = tab;
   document.querySelectorAll('.stock-tab').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.stock-tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.stock-sidebar-item').forEach(b => b.classList.remove('active'));
   document.getElementById('stab-' + tab).classList.add('active');
   document.getElementById('stock-tab-' + tab).classList.add('active');
+  const sidebarBtn = document.getElementById('sidebar-' + tab);
+  if (sidebarBtn) sidebarBtn.classList.add('active');
   if (tab === 'dashboard') { renderStockHero(); renderUsageChart(); renderAlerts(); }
   if (tab === 'movement') { renderStockHero(); renderStockHistory(); }
-  if (tab === 'cost') { renderCostTab(); renderCostPlayers(); calcCost(); }
+  if (tab === 'expenses') { renderExpensesTab(); }
+  if (tab === 'sessioncalc') { initSessionCalcDate(); renderCostPlayers(); calcCost(); }
 }
 
 function renderStockPage() {
   renderStockHero();
   if (currentStockTab === 'dashboard') { renderUsageChart(); renderAlerts(); }
   if (currentStockTab === 'movement') renderStockHistory();
-  if (currentStockTab === 'cost') { renderCostTab(); renderCostPlayers(); calcCost(); }
+  if (currentStockTab === 'expenses') { renderExpensesTab(); }
+  if (currentStockTab === 'sessioncalc') { renderCostPlayers(); calcCost(); }
 }
 
 function appendStockHistory(type, amount, note) {
@@ -2390,6 +3064,73 @@ function appendStockHistory(type, amount, note) {
   if (state.stockHistory.length > 200) state.stockHistory = state.stockHistory.slice(0, 200);
 }
 
+// Current shuttlecock brand — a single "what are we using right now" field
+// (not a full multi-brand catalog), with an optional photo of the tube/box.
+let pendingBrandPhoto = null;
+
+function openBrandModal() {
+  const brand = state.stockBrand || { name: '', photo: null };
+  document.getElementById('input-brand-name').value = brand.name || '';
+  pendingBrandPhoto = brand.photo || null;
+  document.getElementById('input-brand-photo-file').value = '';
+  updateBrandPhotoPreview();
+  openModal('modal-brand');
+}
+
+function updateBrandPhotoPreview() {
+  const imgEl = document.getElementById('brand-photo-preview-img');
+  const initialEl = document.getElementById('brand-photo-preview-initial');
+  const removeBtn = document.getElementById('brand-photo-remove-btn');
+  if (pendingBrandPhoto) {
+    imgEl.src = pendingBrandPhoto;
+    imgEl.style.display = 'block';
+    initialEl.style.display = 'none';
+    removeBtn.style.display = '';
+  } else {
+    imgEl.style.display = 'none';
+    initialEl.style.display = '';
+    removeBtn.style.display = 'none';
+  }
+}
+
+function handleBrandPhotoSelect(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { alert('กรุณาเลือกไฟล์รูปภาพ'); return; }
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const size = 240;
+      const canvas = document.createElement('canvas');
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const scale = Math.max(size / img.width, size / img.height);
+      const sw = size / scale, sh = size / scale;
+      const sx = (img.width - sw) / 2, sy = (img.height - sh) / 2;
+      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, size, size);
+      pendingBrandPhoto = canvas.toDataURL('image/jpeg', 0.85);
+      updateBrandPhotoPreview();
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearBrandPhoto() {
+  pendingBrandPhoto = null;
+  document.getElementById('input-brand-photo-file').value = '';
+  updateBrandPhotoPreview();
+}
+
+function saveBrand() {
+  const name = document.getElementById('input-brand-name').value.trim();
+  state.stockBrand = { name, photo: pendingBrandPhoto };
+  save();
+  closeModal('modal-brand');
+  renderStockHero();
+}
+
 function renderStockHero() {
   const n = state.stockCount;
   const boxes = Math.floor(n / 12);
@@ -2397,8 +3138,23 @@ function renderStockHero() {
   const price = state.stockPricePerBox;
   const thr = state.stockAlertThreshold || 24;
 
+  const brand = state.stockBrand || { name: '', photo: null };
+  const brandNameEl = document.getElementById('stock-brand-name');
+  if (brandNameEl) brandNameEl.textContent = brand.name || 'ยังไม่ได้ตั้งชื่อยี่ห้อ';
+  const brandPhotoEl = document.getElementById('stock-brand-photo-wrap');
+  if (brandPhotoEl) brandPhotoEl.innerHTML = brand.photo ? `<img src="${brand.photo}" style="width:100%;height:100%;object-fit:cover;">` : '🏸';
+
+  const totalIn = state.stockHistory.filter(h => h.type === 'in').reduce((s, h) => s + h.amount, 0);
+  const totalUsed = state.stockHistory.filter(h => h.type === 'out').reduce((s, h) => s + h.amount, 0);
+  const totalInEl = document.getElementById('stock-total-in');
+  if (totalInEl) totalInEl.textContent = totalIn;
+  const totalUsedEl = document.getElementById('stock-total-used');
+  if (totalUsedEl) totalUsedEl.textContent = totalUsed;
+
   const bigEl = document.getElementById('stock-count-big');
   if (bigEl) bigEl.textContent = n;
+  const movementCountEl = document.getElementById('movement-stock-count');
+  if (movementCountEl) movementCountEl.textContent = n;
   const boxEl = document.getElementById('stock-box-count');
   if (boxEl) boxEl.textContent = boxes > 0
     ? `= ${boxes} กล่อง${rem > 0 ? ` + ${rem} ลูก` : ''}`
@@ -2422,9 +3178,6 @@ function renderStockHero() {
   if (iconEl) iconEl.textContent = icon;
   const badgeEl = document.getElementById('stock-status-badge');
   if (badgeEl) badgeEl.innerHTML = badgeHtml;
-
-  const priceEl = document.getElementById('stock-price-input');
-  if (priceEl && !priceEl.matches(':focus')) priceEl.value = price || '';
 
   const totalVal = price > 0 ? Math.ceil(n / 12) * price : 0;
   const valEl = document.getElementById('stock-value-display');
@@ -2482,38 +3235,92 @@ function renderUsageChart() {
   el.innerHTML = `<div class="chart-cols">${cols}</div>`;
 }
 
+// Dashboard alert: exactly one status line + one action button — settings
+// (the threshold) live in the Settings modal, not mixed in with this summary.
 function renderAlerts() {
   const el = document.getElementById('stock-alert-messages');
   if (!el) return;
   const n = state.stockCount;
   const thr = state.stockAlertThreshold || 24;
-  const thEl = document.getElementById('stock-alert-threshold');
-  if (thEl && !thEl.matches(':focus')) thEl.value = thr;
 
-  let alerts = [];
+  let color, msg;
   if (n === 0) {
-    alerts.push({ color: 'danger', msg: '❌ สต๊อกหมดแล้ว! กรุณาสั่งซื้อลูกแบดทันที' });
+    color = 'danger'; msg = '❌ สต๊อกหมดแล้ว! กรุณาสั่งซื้อลูกแบดทันที';
   } else if (n <= Math.floor(thr / 2)) {
-    alerts.push({ color: 'danger', msg: `⚠️ ใกล้หมดมาก! เหลือเพียง ${n} ลูก (${Math.floor(n/12)} กล่อง ${n%12} ลูก)` });
+    color = 'danger'; msg = `⚠️ สต๊อกใกล้หมดมาก! เหลือ ${n} ลูก`;
   } else if (n <= thr) {
-    alerts.push({ color: 'warning', msg: `🟡 สต๊อกน้อย เหลือ ${n} ลูก — ควรสั่งซื้อเพิ่ม` });
+    color = 'warning'; msg = `⚠️ สต๊อกใกล้หมด! เหลือ ${n} ลูก`;
   } else {
-    alerts.push({ color: 'success', msg: `✅ สต๊อกปกติ เหลือ ${n} ลูก` });
+    color = 'success'; msg = `✅ สต๊อกเพียงพอ เหลือ ${n} ลูก`;
   }
 
-  el.innerHTML = alerts.map(a =>
-    `<div style="padding:10px 12px;border-radius:8px;font-size:13px;font-weight:600;background:var(--${a.color}-light);color:var(--${a.color});">${a.msg}</div>`
-  ).join('');
+  el.innerHTML = `
+    <div style="padding:10px 12px;border-radius:8px;font-size:13px;font-weight:600;background:var(--${color}-light);color:var(--${color});margin-bottom:8px;">${msg}</div>
+    <button class="btn btn-ghost btn-full btn-sm" onclick="switchStockTab('movement')">📦 จัดการสต๊อก</button>
+  `;
 }
 
-function saveAlertThreshold() {
-  const v = parseInt(document.getElementById('stock-alert-threshold').value);
-  if (!isNaN(v) && v > 0) {
-    state.stockAlertThreshold = v;
-    save();
-    renderStockHero();
-    renderAlerts();
-  }
+function toggleCustomStockEntry() {
+  const el = document.getElementById('custom-stock-entry');
+  el.style.display = el.style.display === 'none' ? '' : 'none';
+}
+
+function openStockSettingsModal() {
+  document.getElementById('input-stock-alert-threshold').value = state.stockAlertThreshold || 24;
+  document.getElementById('input-stock-price').value = state.stockPricePerBox || '';
+  updateSettingsPricePreview();
+  openModal('modal-stock-settings');
+}
+
+function updateSettingsPricePreview() {
+  const v = parseFloat(document.getElementById('input-stock-price').value) || 0;
+  document.getElementById('settings-price-per-shuttle').textContent = v > 0
+    ? `ราคาต่อลูก: ${(v / 12).toFixed(2)} บาท`
+    : 'ตั้งราคา/กล่องเพื่อดูราคาต่อลูก';
+}
+
+function saveStockSettings() {
+  const thrVal = parseInt(document.getElementById('input-stock-alert-threshold').value);
+  const priceVal = parseInt(document.getElementById('input-stock-price').value);
+  if (!isNaN(thrVal) && thrVal > 0) state.stockAlertThreshold = thrVal;
+  if (!isNaN(priceVal) && priceVal >= 0) state.stockPricePerBox = priceVal;
+  save();
+  closeModal('modal-stock-settings');
+  renderStockHero();
+  renderAlerts();
+}
+
+// Reconcile a real-world recount — distinct from "เบิกออก" (genuine usage).
+// The organizer states what's actually on hand; we compute the delta and log
+// it with a clearly-labeled correction note so it never reads as usage.
+function openStockCorrectionModal() {
+  document.getElementById('correction-current-count').textContent = `${state.stockCount} ลูก`;
+  document.getElementById('input-correction-count').value = state.stockCount;
+  document.getElementById('correction-preview').textContent = '';
+  openModal('modal-stock-correction');
+}
+
+function updateCorrectionPreview() {
+  const newCount = parseInt(document.getElementById('input-correction-count').value);
+  const el = document.getElementById('correction-preview');
+  if (isNaN(newCount)) { el.textContent = ''; return; }
+  const delta = newCount - state.stockCount;
+  if (delta === 0) el.textContent = 'ไม่มีการเปลี่ยนแปลง';
+  else if (delta > 0) el.innerHTML = `<span class="stock-in">จะปรับเพิ่ม +${delta} ลูก</span>`;
+  else el.innerHTML = `<span class="stock-out">จะปรับลด ${delta} ลูก</span>`;
+}
+
+function saveStockCorrection() {
+  const newCount = parseInt(document.getElementById('input-correction-count').value);
+  if (isNaN(newCount) || newCount < 0) { alert('กรุณากรอกจำนวนที่ถูกต้อง'); return; }
+  const oldCount = state.stockCount;
+  const delta = newCount - oldCount;
+  if (delta === 0) { closeModal('modal-stock-correction'); return; }
+  state.stockCount = newCount;
+  appendStockHistory(delta > 0 ? 'in' : 'out', Math.abs(delta), `🔧 ปรับสต๊อก (นับใหม่): ${oldCount} → ${newCount}`);
+  save();
+  closeModal('modal-stock-correction');
+  renderStockPage();
 }
 
 function renderStock() { renderStockHero(); }
@@ -2522,7 +3329,7 @@ function adjustStock(delta) {
   state.stockCount = Math.max(0, state.stockCount + delta);
   let note = '';
   if (delta === 1) note = 'เพิ่มทีละลูก';
-  else if (delta === -1) note = 'ลดทีละลูก';
+  else if (delta === -1) note = 'เบิกออก 1 ลูก';
   else if (delta === 12) note = 'ซื้อ 1 กล่อง';
   else if (delta === -12) note = 'ใช้ 1 กล่อง';
   else if (delta === 24) note = 'ซื้อ 2 กล่อง';
@@ -2572,11 +3379,6 @@ function dashAddStock() {
   renderStockHero(); renderUsageChart(); renderAlerts();
 }
 
-function saveStockPrice() {
-  const v = parseInt(document.getElementById('stock-price-input').value);
-  if (!isNaN(v) && v >= 0) { state.stockPricePerBox = v; save(); renderStockPage(); }
-}
-
 function renderStockHistory() {
   const el = document.getElementById('stock-history-container');
   if (!el) return;
@@ -2584,25 +3386,21 @@ function renderStockHistory() {
     el.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:16px;">ยังไม่มีประวัติ</div>';
     return;
   }
-  const rows = state.stockHistory.map(r => {
+  el.innerHTML = state.stockHistory.map(r => {
     const d = new Date(r.date);
     const dateStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-    const inAmt = r.type === 'in' ? `<span class="stock-in">+${r.amount}</span>` : '';
-    const outAmt = r.type === 'out' ? `<span class="stock-out">-${r.amount}</span>` : '';
-    return `<tr>
-      <td>${dateStr}</td>
-      <td>${escHtml(r.note)}</td>
-      <td style="text-align:center;">${inAmt}</td>
-      <td style="text-align:center;">${outAmt}</td>
-      <td style="text-align:right;font-weight:600;">${r.balanceAfter}</td>
-    </tr>`;
+    const isIn = r.type === 'in';
+    return `<div class="history-item" style="display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-weight:600;font-size:13px;">${escHtml(r.note)}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:1px;">${dateStr}</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="${isIn ? 'stock-in' : 'stock-out'}" style="font-size:15px;">${isIn ? '+' : '-'}${r.amount}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:1px;">คงเหลือ ${r.balanceAfter}</div>
+      </div>
+    </div>`;
   }).join('');
-  el.innerHTML = `<table class="stock-history-table">
-    <thead><tr>
-      <th>วันที่</th><th>รายการ</th><th style="text-align:center;">เข้า</th><th style="text-align:center;">ออก</th><th style="text-align:right;">คงเหลือ</th>
-    </tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
 }
 
 function clearStockHistory() {
@@ -2613,80 +3411,138 @@ function clearStockHistory() {
 }
 
 // =================== COST TAB ===================
-function renderCostTab() {
-  const price = state.stockPricePerBox;
-  const priceEl = document.getElementById('cost-shuttle-price');
-  if (priceEl && !priceEl.matches(':focus')) priceEl.value = price ?? '';
-
-  const perLuke = price > 0 ? (price / 12).toFixed(2) : '-';
-  const perEl = document.getElementById('cost-per-shuttle');
-  if (perEl) perEl.textContent = price > 0 ? `${perLuke} บ.` : '-';
-
-  const n = state.stockCount;
-  const valEl = document.getElementById('cost-stock-value');
-  if (valEl) {
-    if (price > 0 && n > 0) {
-      const totalVal = Math.ceil(n / 12) * price;
-      valEl.textContent = `สต๊อกปัจจุบัน ${n} ลูก = มูลค่า ~${totalVal.toLocaleString()} บาท`;
-    } else {
-      valEl.textContent = 'ตั้งราคาต่อกล่องเพื่อดูมูลค่า';
-    }
-  }
-
-  renderMonthlyCost();
+// =================== EXPENSES (persistent monthly ledger) ===================
+function monthKey(dateStr) {
+  const d = new Date(dateStr);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+function monthLabel(key) {
+  const [y, m] = key.split('-');
+  const names = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  return `${names[parseInt(m) - 1]} ${y}`;
 }
 
-function syncStockPriceFromCost() {
-  const v = parseInt(document.getElementById('cost-shuttle-price')?.value);
-  if (!isNaN(v) && v >= 0) {
-    state.stockPricePerBox = v;
-    save();
-    const perEl = document.getElementById('cost-per-shuttle');
-    if (perEl) perEl.textContent = v > 0 ? `${(v/12).toFixed(2)} บ.` : '-';
-  }
+function openExpenseModal() {
+  document.getElementById('input-expense-category').value = 'court';
+  document.getElementById('input-expense-label').value = '';
+  document.getElementById('input-expense-amount').value = '';
+  document.getElementById('input-expense-date').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('edit-expense-id').value = '';
+  openModal('modal-expense');
 }
 
-function renderMonthlyCost() {
-  const el = document.getElementById('monthly-cost-container');
-  if (!el) return;
-  if (!state.stockHistory.length) {
-    el.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:16px;">ยังไม่มีข้อมูล</div>';
+function saveExpense() {
+  const category = document.getElementById('input-expense-category').value;
+  const label = document.getElementById('input-expense-label').value.trim();
+  const amount = parseFloat(document.getElementById('input-expense-amount').value);
+  const dateInput = document.getElementById('input-expense-date').value;
+  if (!label) { alert('กรุณากรอกรายละเอียด'); return; }
+  if (!amount || amount <= 0) { alert('กรุณากรอกจำนวนเงิน'); return; }
+  const date = dateInput ? new Date(dateInput + 'T12:00:00').toISOString() : new Date().toISOString();
+  state.expenses.unshift({ id: genId('exp'), date, category, label, amount });
+  save();
+  closeModal('modal-expense');
+  renderExpensesTab();
+}
+
+function deleteExpense(id) {
+  if (!confirm('ลบรายการค่าใช้จ่ายนี้?')) return;
+  state.expenses = state.expenses.filter(e => e.id !== id);
+  save();
+  renderExpensesTab();
+}
+
+function renderExpensesTab() {
+  const currentKey = monthKey(new Date().toISOString());
+  const allKeys = [...new Set(state.expenses.map(e => monthKey(e.date)))];
+  if (!allKeys.includes(currentKey)) allKeys.push(currentKey);
+  allKeys.sort((a, b) => b.localeCompare(a));
+
+  const selectEl = document.getElementById('expense-month-select');
+  const prevSelected = selectEl.value;
+  selectEl.innerHTML = allKeys.map(k => `<option value="${k}">${monthLabel(k)}</option>`).join('');
+  selectEl.value = allKeys.includes(prevSelected) ? prevSelected : currentKey;
+  const selectedKey = selectEl.value;
+
+  const monthExpenses = state.expenses.filter(e => monthKey(e.date) === selectedKey);
+  const totals = { court: 0, shuttle: 0, other: 0 };
+  monthExpenses.forEach(e => { totals[e.category] = (totals[e.category] || 0) + e.amount; });
+  const grandTotal = totals.court + totals.shuttle + totals.other;
+
+  document.getElementById('expense-total').textContent = `${Math.round(grandTotal).toLocaleString()} บาท`;
+  document.getElementById('expense-month-label').textContent = monthLabel(selectedKey);
+  document.getElementById('expense-cat-court').textContent = Math.round(totals.court).toLocaleString();
+  document.getElementById('expense-cat-shuttle').textContent = Math.round(totals.shuttle).toLocaleString();
+  document.getElementById('expense-cat-other').textContent = Math.round(totals.other).toLocaleString();
+
+  const catMeta = {
+    court: { icon: '🏟️', label: 'ค่าสนาม', cls: 'expense-cat-court' },
+    shuttle: { icon: '🏸', label: 'ค่าลูก', cls: 'expense-cat-shuttle' },
+    other: { icon: '🧾', label: 'อื่นๆ', cls: 'expense-cat-other' }
+  };
+  const listEl = document.getElementById('expense-list');
+  if (!monthExpenses.length) {
+    listEl.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:16px;">ยังไม่มีค่าใช้จ่ายในเดือนนี้</div>';
     return;
   }
-
-  const months = {};
-  state.stockHistory.forEach(r => {
-    const d = new Date(r.date);
-    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-    const label = `${d.getMonth()+1}/${d.getFullYear().toString().slice(2)}`;
-    if (!months[key]) months[key] = { label, in: 0, out: 0 };
-    if (r.type === 'in') months[key].in += r.amount;
-    else months[key].out += r.amount;
-  });
-
-  const sorted = Object.entries(months).sort((a,b) => b[0].localeCompare(a[0])).slice(0, 6);
-  const price = state.stockPricePerBox;
-
-  const rows = sorted.map(([key, m]) => {
-    const cost = price > 0 ? Math.round((m.out / 12) * price) : null;
-    return `<tr>
-      <td style="font-weight:600;">${m.label}</td>
-      <td style="text-align:center;"><span class="stock-out">-${m.out}</span></td>
-      <td style="text-align:center;"><span class="stock-in">+${m.in}</span></td>
-      <td style="text-align:right;font-weight:700;">${cost !== null ? cost.toLocaleString() + ' บ.' : '-'}</td>
-    </tr>`;
+  listEl.innerHTML = [...monthExpenses].sort((a, b) => new Date(b.date) - new Date(a.date)).map(e => {
+    const meta = catMeta[e.category] || catMeta.other;
+    const d = new Date(e.date);
+    const dateStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+    return `<div class="history-item" style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+      <div style="min-width:0;">
+        <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(e.label)}</div>
+        <div style="margin-top:3px;display:flex;align-items:center;gap:6px;">
+          <span class="expense-cat-badge ${meta.cls}">${meta.icon} ${meta.label}</span>
+          <span style="font-size:11px;color:var(--text3);">${dateStr}</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <div style="font-weight:800;font-size:14px;">${Math.round(e.amount).toLocaleString()} บ.</div>
+        <button class="player-card-action-btn" style="background:var(--danger-light);color:var(--danger);" onclick="deleteExpense('${e.id}')" title="ลบ">🗑</button>
+      </div>
+    </div>`;
   }).join('');
+}
 
-  el.innerHTML = `<table class="monthly-table">
-    <thead><tr>
-      <th>เดือน</th>
-      <th style="text-align:center;">ใช้ (ลูก)</th>
-      <th style="text-align:center;">รับ (ลูก)</th>
-      <th style="text-align:right;">ต้นทุน</th>
-    </tr></thead>
-    <tbody>${rows}</tbody>
-  </table>
-  ${price <= 0 ? '<div style="font-size:11px;color:var(--text3);margin-top:6px;">* ตั้งราคา/กล่องด้านบนเพื่อดูต้นทุน</div>' : ''}`;
+// =================== SESSION CALCULATOR ===================
+function initSessionCalcDate() {
+  const el = document.getElementById('cost-session-date');
+  if (el && !el.value) el.value = new Date().toISOString().slice(0, 10);
+}
+
+function resetSessionCalc() {
+  ['cost-rate', 'cost-hours', 'cost-courts', 'cost-shuttles'].forEach(id => {
+    document.getElementById(id).value = '0';
+  });
+  document.getElementById('cost-session-date').value = new Date().toISOString().slice(0, 10);
+  calcCost();
+}
+
+function saveSessionToExpenses() {
+  const rate = parseFloat(document.getElementById('cost-rate')?.value) || 0;
+  const hours = parseFloat(document.getElementById('cost-hours')?.value) || 0;
+  const courts = parseInt(document.getElementById('cost-courts')?.value) || 1;
+  const shuttles = parseInt(document.getElementById('cost-shuttles')?.value) || 0;
+  const shuttlePrice = state.stockPricePerBox || 0;
+
+  const courtTotal = rate * hours * courts;
+  const shuttleTotal = (shuttles / 12) * shuttlePrice;
+
+  if (courtTotal <= 0 && shuttleTotal <= 0) { alert('ยังไม่มีค่าใช้จ่ายให้บันทึก'); return; }
+
+  const dateInput = document.getElementById('cost-session-date').value;
+  const date = dateInput ? new Date(dateInput + 'T12:00:00').toISOString() : new Date().toISOString();
+  const dateLabel = new Date(date).toLocaleDateString('th-TH');
+  if (courtTotal > 0) {
+    state.expenses.unshift({ id: genId('exp'), date, category: 'court', label: `ค่าสนาม (${dateLabel})`, amount: Math.round(courtTotal) });
+  }
+  if (shuttleTotal > 0) {
+    state.expenses.unshift({ id: genId('exp'), date, category: 'shuttle', label: `ค่าลูก ${shuttles} ลูก (${dateLabel})`, amount: Math.round(shuttleTotal) });
+  }
+  save();
+  alert('บันทึกรอบเล่นลงค่าใช้จ่ายแล้ว');
+  resetSessionCalc();
 }
 
 // =================== COST CALCULATOR ===================
@@ -2740,7 +3596,7 @@ function calcCost() {
   const hours = parseFloat(document.getElementById('cost-hours')?.value) || 0;
   const courts = parseInt(document.getElementById('cost-courts')?.value) || 1;
   const shuttles = parseInt(document.getElementById('cost-shuttles')?.value) || 0;
-  const shuttlePrice = parseInt(document.getElementById('cost-shuttle-price')?.value) || 0;
+  const shuttlePrice = state.stockPricePerBox || 0;
 
   const courtTotal = rate * hours * courts;
   const boxes = shuttles / 12;
