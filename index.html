@@ -410,6 +410,15 @@
       padding: 16px 12px; position: sticky; top: 84px;
     }
     .stock-main { flex: 1; min-width: 0; }
+    /* Session calculator: total stays pinned in the right column while the
+       left column (inputs) scrolls, so it's always in view. */
+    .sessioncalc-layout {
+      display: grid; grid-template-columns: 1fr 300px; gap: 20px; align-items: start;
+      grid-template-areas: "main summary" "split split";
+    }
+    .sessioncalc-main-col { grid-area: main; }
+    .sessioncalc-summary-col { grid-area: summary; position: sticky; top: 84px; }
+    .sessioncalc-split-col { grid-area: split; }
   }
   /* Expense category badges */
   .expense-cat-badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; }
@@ -827,14 +836,14 @@
 
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
       <div class="card" style="text-align:center;padding:12px 6px;margin-bottom:0;">
-        <div style="font-size:20px;">🏟️</div>
+        <div style="font-size:20px;">🏸</div>
         <div id="expense-cat-court" style="font-size:15px;font-weight:800;margin-top:2px;">0</div>
         <div style="font-size:10px;color:var(--text3);">ค่าสนาม</div>
       </div>
       <div class="card" style="text-align:center;padding:12px 6px;margin-bottom:0;">
-        <div style="font-size:20px;">🏸</div>
+        <div style="font-size:20px;">🪶</div>
         <div id="expense-cat-shuttle" style="font-size:15px;font-weight:800;margin-top:2px;">0</div>
-        <div style="font-size:10px;color:var(--text3);">ค่าลูก</div>
+        <div style="font-size:10px;color:var(--text3);">ลูกแบด</div>
       </div>
       <div class="card" style="text-align:center;padding:12px 6px;margin-bottom:0;">
         <div style="font-size:20px;">🧾</div>
@@ -856,58 +865,68 @@
 
   <!-- ===== TAB 4: Session Calculator ===== -->
   <div class="stock-tab-content" id="stock-tab-sessioncalc">
+    <div class="sessioncalc-layout">
 
-    <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-      <div class="card-title" style="margin-bottom:0;">🧮 คำนวณรอบเล่น</div>
-      <input class="input" id="cost-session-date" type="date" style="width:auto;">
-    </div>
-
-    <div class="card">
-      <div class="card-title">🏟️ ข้อมูลการเล่น</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">ราคา/ชม. (บาท)</label>
-          <input class="input" id="cost-rate" type="number" value="0" inputmode="numeric" oninput="calcCost()">
+      <!-- Left column: all inputs -->
+      <div class="sessioncalc-main-col">
+        <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div class="card-title" style="margin-bottom:0;">🧮 คำนวณรอบเล่น</div>
+          <input class="input" id="cost-session-date" type="date" style="width:auto;">
         </div>
-        <div class="form-group">
-          <label class="form-label">จำนวนชั่วโมง</label>
-          <input class="input" id="cost-hours" type="number" value="0" inputmode="decimal" oninput="calcCost()">
+
+        <div class="card">
+          <div class="card-title">🏟️ ข้อมูลการเล่น</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">ราคา/ชม. (บาท)</label>
+              <input class="input" id="cost-rate" type="number" value="0" inputmode="numeric" oninput="calcCost()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">จำนวนชั่วโมง</label>
+              <input class="input" id="cost-hours" type="number" value="0" inputmode="decimal" oninput="calcCost()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">จำนวนสนาม</label>
+            <input class="input" id="cost-courts" type="number" value="0" inputmode="numeric" oninput="calcCost()">
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🏸 ลูกที่ใช้</div>
+          <div class="form-group">
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input class="input" id="cost-shuttles" type="number" value="0" inputmode="numeric" oninput="calcCost()">
+              <button class="btn btn-ghost btn-sm" onclick="fillShuttlesFromStock()" style="white-space:nowrap;">ดึงจากสต๊อก</button>
+            </div>
+            <div id="cost-shuttle-detail" style="font-size:12px;color:var(--text2);margin-top:4px;"></div>
+          </div>
         </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">จำนวนสนาม</label>
-        <input class="input" id="cost-courts" type="number" value="0" inputmode="numeric" oninput="calcCost()">
-      </div>
-    </div>
 
-    <div class="card">
-      <div class="card-title">🏸 ลูกที่ใช้</div>
-      <div class="form-group">
-        <div style="display:flex;gap:8px;align-items:center;">
-          <input class="input" id="cost-shuttles" type="number" value="0" inputmode="numeric" oninput="calcCost()">
-          <button class="btn btn-ghost btn-sm" onclick="fillShuttlesFromStock()" style="white-space:nowrap;">ดึงจากสต๊อก</button>
+      <!-- Right column (desktop): total stays in view while filling the form on the left -->
+      <div class="sessioncalc-summary-col">
+        <div class="card" id="cost-summary-card">
+          <div class="card-title">สรุปรายการ</div>
+          <div id="cost-summary"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
+            <button class="btn btn-ghost" onclick="resetSessionCalc()">ยกเลิก</button>
+            <button class="btn btn-primary" onclick="saveSessionToExpenses()">💾 บันทึกรอบเล่น</button>
+          </div>
         </div>
-        <div id="cost-shuttle-detail" style="font-size:12px;color:var(--text2);margin-top:4px;"></div>
       </div>
-    </div>
 
-    <div class="card" id="cost-summary-card">
-      <div class="card-title">สรุปรายการ</div>
-      <div id="cost-summary"></div>
-    </div>
+      <!-- Full-width: หารค่าใช้จ่ายรายคน -->
+      <div class="sessioncalc-split-col">
+        <div class="card">
+          <div class="card-title">💸 หารค่าใช้จ่ายรายคน</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">เลือกคนที่ร่วมจ่าย · ✂️ = มาครึ่งเวลา (จ่ายครึ่ง)</div>
+          <button class="btn btn-ghost btn-sm" onclick="fillFromActivePlayers()" style="margin-bottom:10px;">ดึงจากผู้เล่นที่เลือก</button>
+          <div id="cost-players-list"></div>
+          <div id="cost-result" style="margin-top:12px;"></div>
+        </div>
+      </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
-      <button class="btn btn-ghost" onclick="resetSessionCalc()">ยกเลิก</button>
-      <button class="btn btn-primary" onclick="saveSessionToExpenses()">💾 บันทึกรอบเล่น</button>
-    </div>
-
-    <!-- หารค่าใช้จ่ายรายคน -->
-    <div class="card">
-      <div class="card-title">💸 หารค่าใช้จ่ายรายคน</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">เลือกคนที่ร่วมจ่าย · ✂️ = มาครึ่งเวลา (จ่ายครึ่ง)</div>
-      <button class="btn btn-ghost btn-sm" onclick="fillFromActivePlayers()" style="margin-bottom:10px;">ดึงจากผู้เล่นที่เลือก</button>
-      <div id="cost-players-list"></div>
-      <div id="cost-result" style="margin-top:12px;"></div>
     </div>
   </div>
 
@@ -1075,16 +1094,37 @@
     <div class="modal-title">💰 เพิ่มค่าใช้จ่าย</div>
     <div class="form-group">
       <label class="form-label">ประเภท</label>
-      <select class="select" id="input-expense-category">
-        <option value="court">🏟️ ค่าสนาม</option>
-        <option value="shuttle">🏸 ค่าลูก</option>
+      <select class="select" id="input-expense-category" onchange="updateExpenseFormFields()">
+        <option value="court">🏸 ค่าสนาม</option>
+        <option value="shuttle">🪶 ลูกแบด</option>
         <option value="other">🧾 อื่นๆ</option>
       </select>
     </div>
-    <div class="form-group">
-      <label class="form-label">รายละเอียด</label>
-      <input class="input" id="input-expense-label" placeholder="เช่น ค่าสนามวันเสาร์..." maxlength="60">
+
+    <!-- Court: structured "hours x courts" instead of free text -->
+    <div id="expense-fields-court" class="form-row">
+      <div class="form-group">
+        <label class="form-label">จำนวนชั่วโมง</label>
+        <input class="input" id="input-expense-hours" type="number" min="0" inputmode="decimal" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">จำนวนสนาม</label>
+        <input class="input" id="input-expense-courts" type="number" min="1" inputmode="numeric" placeholder="1">
+      </div>
     </div>
+
+    <!-- Shuttle: structured quantity instead of free text -->
+    <div id="expense-fields-shuttle" class="form-group">
+      <label class="form-label">จำนวนลูก</label>
+      <input class="input" id="input-expense-shuttles" type="number" min="1" inputmode="numeric" placeholder="0">
+    </div>
+
+    <!-- Other: still free text since there's no fixed structure -->
+    <div id="expense-fields-other" class="form-group">
+      <label class="form-label">รายละเอียด</label>
+      <input class="input" id="input-expense-label" placeholder="เช่น ค่าเช่าไฟ..." maxlength="60">
+    </div>
+
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">จำนวนเงิน (บาท)</label>
@@ -1099,6 +1139,17 @@
     <div class="modal-btns">
       <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-expense')">ยกเลิก</button>
       <button class="btn btn-primary" style="flex:2" onclick="saveExpense()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Edit Match History Result -->
+<div class="modal-overlay" id="modal-edit-history">
+  <div class="modal">
+    <div class="modal-title">✏️ แก้ไขผลการแข่งขัน</div>
+    <div id="edit-history-teams"></div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-edit-history')">ปิด</button>
     </div>
   </div>
 </div>
@@ -1735,6 +1786,10 @@ function doRandomize() {
   // =================== ROUND ROBIN PATH ===================
   if (rrModeSelected) {
     const perTeam = mode === 'doubles' ? 2 : 1;
+    // Guard independently of the UI's canRR check — RR needs an even multiple
+    // of perTeam players to form whole teams, or nTeams/team-slicing below
+    // divides unevenly and crashes on an out-of-bounds player lookup.
+    if (activePlayers.length < perTeam * 2 || activePlayers.length % perTeam !== 0) return;
     // balancedShuffle: sort by skill DESC but shuffle randomly within same-skill group
     // This ensures different pairings each RR session even when all players have same skill
     const sorted = balancedShuffle([...activePlayers]);
@@ -2957,7 +3012,10 @@ function renderMatchHistory() {
     return `<div class="history-item">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
         <span style="font-size:12px;color:var(--text3);">${formatHistoryDate(h.date)}</span>
-        ${modeBadge}
+        <div style="display:flex;align-items:center;gap:6px;">
+          ${modeBadge}
+          <button class="player-card-action-btn" style="background:var(--surface2);color:var(--text2);" onclick="openEditHistoryModal('${h.id}')" title="แก้ไขผล">✏️</button>
+        </div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
         <span style="${teamAWon ? 'color:var(--success);font-weight:700;' : ''}">${escHtml(teamANames)}</span>
@@ -2976,6 +3034,49 @@ function clearMatchHistory() {
   if (!confirm('ล้างประวัติการแข่งขันทั้งหมด?')) return;
   state.matchHistory = [];
   save();
+  renderStatsHistory();
+}
+
+// Recompute every player's wins/losses/streak from scratch by replaying
+// matchHistory in chronological order. Needed after editing a past result
+// because streaks depend on order — a delta-adjust can't fix that safely,
+// only a full replay can. ELO/golden-pairs/form are already derived live
+// from matchHistory elsewhere, so they don't need any extra handling here.
+function recomputeStatsFromHistory() {
+  state.stats = {};
+  const chronological = [...state.matchHistory].reverse();
+  chronological.forEach(m => {
+    if (!m.winner) return;
+    const teamA = m.teams[0] || [], teamB = m.teams[1] || [];
+    const aWon = teamA.join(',') === m.winner.join(',');
+    (aWon ? teamA : teamB).forEach(id => updateStat(id, 'win'));
+    (aWon ? teamB : teamA).forEach(id => updateStat(id, 'loss'));
+  });
+}
+
+function openEditHistoryModal(id) {
+  const h = state.matchHistory.find(x => x.id === id);
+  if (!h) return;
+  const teamANames = (h.teams[0] || []).map(getPlayerName).join(' & ');
+  const teamBNames = (h.teams[1] || []).map(getPlayerName).join(' & ');
+  const winnerIds = h.winner ? h.winner.join(',') : null;
+  const aWon = winnerIds && h.teams[0].join(',') === winnerIds;
+  const bWon = winnerIds && h.teams[1].join(',') === winnerIds;
+  document.getElementById('edit-history-teams').innerHTML = `
+    <button class="btn ${aWon ? 'win-btn' : 'btn-ghost'} btn-full" style="margin-bottom:8px;" onclick="setHistoryWinner('${id}', 0)">${escHtml(teamANames)} ชนะ</button>
+    <button class="btn ${bWon ? 'win-btn' : 'btn-ghost'} btn-full" style="margin-bottom:8px;" onclick="setHistoryWinner('${id}', 1)">${escHtml(teamBNames)} ชนะ</button>
+    <button class="btn btn-ghost btn-full" onclick="setHistoryWinner('${id}', -1)">🚫 ไม่มีผล (ล้างผลลัพธ์)</button>
+  `;
+  openModal('modal-edit-history');
+}
+
+function setHistoryWinner(id, teamIdx) {
+  const h = state.matchHistory.find(x => x.id === id);
+  if (!h) return;
+  h.winner = teamIdx === -1 ? null : h.teams[teamIdx];
+  recomputeStatsFromHistory();
+  save();
+  closeModal('modal-edit-history');
   renderStatsHistory();
 }
 
@@ -3410,7 +3511,6 @@ function clearStockHistory() {
   renderStockHistory();
 }
 
-// =================== COST TAB ===================
 // =================== EXPENSES (persistent monthly ledger) ===================
 function monthKey(dateStr) {
   const d = new Date(dateStr);
@@ -3422,24 +3522,52 @@ function monthLabel(key) {
   return `${names[parseInt(m) - 1]} ${y}`;
 }
 
+// Show only the fields relevant to the selected category — court/shuttle get
+// structured quantity inputs so the ledger reads "2 ชั่วโมง × 2 สนาม" instead
+// of whatever free text happened to get typed in.
+function updateExpenseFormFields() {
+  const cat = document.getElementById('input-expense-category').value;
+  document.getElementById('expense-fields-court').style.display = cat === 'court' ? '' : 'none';
+  document.getElementById('expense-fields-shuttle').style.display = cat === 'shuttle' ? '' : 'none';
+  document.getElementById('expense-fields-other').style.display = cat === 'other' ? '' : 'none';
+}
+
 function openExpenseModal() {
   document.getElementById('input-expense-category').value = 'court';
+  document.getElementById('input-expense-hours').value = '';
+  document.getElementById('input-expense-courts').value = '';
+  document.getElementById('input-expense-shuttles').value = '';
   document.getElementById('input-expense-label').value = '';
   document.getElementById('input-expense-amount').value = '';
   document.getElementById('input-expense-date').value = new Date().toISOString().slice(0, 10);
   document.getElementById('edit-expense-id').value = '';
+  updateExpenseFormFields();
   openModal('modal-expense');
 }
 
 function saveExpense() {
   const category = document.getElementById('input-expense-category').value;
-  const label = document.getElementById('input-expense-label').value.trim();
   const amount = parseFloat(document.getElementById('input-expense-amount').value);
   const dateInput = document.getElementById('input-expense-date').value;
-  if (!label) { alert('กรุณากรอกรายละเอียด'); return; }
+
+  let detail;
+  if (category === 'court') {
+    const hours = parseFloat(document.getElementById('input-expense-hours').value) || 0;
+    const courts = parseInt(document.getElementById('input-expense-courts').value) || 1;
+    if (hours <= 0) { alert('กรุณากรอกจำนวนชั่วโมง'); return; }
+    detail = `${hours} ชั่วโมง × ${courts} สนาม`;
+  } else if (category === 'shuttle') {
+    const shuttles = parseInt(document.getElementById('input-expense-shuttles').value) || 0;
+    if (shuttles <= 0) { alert('กรุณากรอกจำนวนลูก'); return; }
+    detail = `${shuttles} ลูก`;
+  } else {
+    detail = document.getElementById('input-expense-label').value.trim();
+    if (!detail) { alert('กรุณากรอกรายละเอียด'); return; }
+  }
   if (!amount || amount <= 0) { alert('กรุณากรอกจำนวนเงิน'); return; }
+
   const date = dateInput ? new Date(dateInput + 'T12:00:00').toISOString() : new Date().toISOString();
-  state.expenses.unshift({ id: genId('exp'), date, category, label, amount });
+  state.expenses.unshift({ id: genId('exp'), date, category, label: detail, amount });
   save();
   closeModal('modal-expense');
   renderExpensesTab();
@@ -3476,8 +3604,8 @@ function renderExpensesTab() {
   document.getElementById('expense-cat-other').textContent = Math.round(totals.other).toLocaleString();
 
   const catMeta = {
-    court: { icon: '🏟️', label: 'ค่าสนาม', cls: 'expense-cat-court' },
-    shuttle: { icon: '🏸', label: 'ค่าลูก', cls: 'expense-cat-shuttle' },
+    court: { icon: '🏸', label: 'ค่าสนาม', cls: 'expense-cat-court' },
+    shuttle: { icon: '🪶', label: 'ลูกแบด', cls: 'expense-cat-shuttle' },
     other: { icon: '🧾', label: 'อื่นๆ', cls: 'expense-cat-other' }
   };
   const listEl = document.getElementById('expense-list');
@@ -3485,17 +3613,18 @@ function renderExpensesTab() {
     listEl.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:16px;">ยังไม่มีค่าใช้จ่ายในเดือนนี้</div>';
     return;
   }
+  // Category is the heading (what kind of cost), the detail line is the
+  // specific quantity (e.g. "5 ลูก" or "2 ชั่วโมง × 2 สนาม") — so looking
+  // back next month it's obvious at a glance where the money went.
   listEl.innerHTML = [...monthExpenses].sort((a, b) => new Date(b.date) - new Date(a.date)).map(e => {
     const meta = catMeta[e.category] || catMeta.other;
     const d = new Date(e.date);
     const dateStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
     return `<div class="history-item" style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
       <div style="min-width:0;">
+        <div class="expense-cat-badge ${meta.cls}" style="margin-bottom:4px;">${meta.icon} ${meta.label}</div>
         <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(e.label)}</div>
-        <div style="margin-top:3px;display:flex;align-items:center;gap:6px;">
-          <span class="expense-cat-badge ${meta.cls}">${meta.icon} ${meta.label}</span>
-          <span style="font-size:11px;color:var(--text3);">${dateStr}</span>
-        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">${dateStr}</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
         <div style="font-weight:800;font-size:14px;">${Math.round(e.amount).toLocaleString()} บ.</div>
@@ -3533,12 +3662,11 @@ function saveSessionToExpenses() {
 
   const dateInput = document.getElementById('cost-session-date').value;
   const date = dateInput ? new Date(dateInput + 'T12:00:00').toISOString() : new Date().toISOString();
-  const dateLabel = new Date(date).toLocaleDateString('th-TH');
   if (courtTotal > 0) {
-    state.expenses.unshift({ id: genId('exp'), date, category: 'court', label: `ค่าสนาม (${dateLabel})`, amount: Math.round(courtTotal) });
+    state.expenses.unshift({ id: genId('exp'), date, category: 'court', label: `${hours} ชั่วโมง × ${courts} สนาม`, amount: Math.round(courtTotal) });
   }
   if (shuttleTotal > 0) {
-    state.expenses.unshift({ id: genId('exp'), date, category: 'shuttle', label: `ค่าลูก ${shuttles} ลูก (${dateLabel})`, amount: Math.round(shuttleTotal) });
+    state.expenses.unshift({ id: genId('exp'), date, category: 'shuttle', label: `${shuttles} ลูก`, amount: Math.round(shuttleTotal) });
   }
   save();
   alert('บันทึกรอบเล่นลงค่าใช้จ่ายแล้ว');
@@ -3635,24 +3763,13 @@ function calcCost() {
 
   const perFull = Math.ceil(perShare);
 
-  // Feature 5: Better นกขุนทอง format
-  const now = new Date();
-  const todayDD = String(now.getDate()).padStart(2, '0');
-  const todayMM = String(now.getMonth() + 1).padStart(2, '0');
-  const pricePerShuttle = shuttlePrice > 0 ? (shuttlePrice / 12).toFixed(2) : '0.00';
-  const khunThongText =
-`* ค่าสนามแบด (${todayDD}/${todayMM})
-   * ค่าสนาม ${Math.round(courtTotal)} บาท
-   * ค่าลูก (${shuttles} ลูก) x (${pricePerShuttle} บ./ลูก) รวม ${Math.round(shuttleTotal)} บาท
-* รวม ${Math.round(grandTotal)} บาท (${shares} คน) = คนละ ${perFull} บาท`;
-
   resultEl.innerHTML = `
     <div style="background:var(--primary-light);border-radius:10px;padding:12px;margin-bottom:12px;text-align:center;">
       <div style="font-size:12px;color:var(--primary);font-weight:600;margin-bottom:2px;">คนที่จ่ายเต็ม จ่ายคนละ</div>
       <div style="font-size:32px;font-weight:900;color:var(--primary);">${perFull.toLocaleString()}</div>
       <div style="font-size:12px;color:var(--primary);">บาท</div>
     </div>
-    <div style="font-size:13px;margin-bottom:12px;">
+    <div style="font-size:13px;">
       ${paying.map(p => {
         const s = costPlayerShare[p.id] === 'half' ? 0.5 : 1;
         const amt = Math.ceil(perShare * s);
@@ -3665,41 +3782,7 @@ function calcCost() {
           <span style="font-weight:700;">${amt.toLocaleString()} บ.</span>
         </div>`;
       }).join('')}
-    </div>
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;">
-      <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:0.5px;margin-bottom:6px;">คัดลอกสำหรับนกขุนทอง</div>
-      <pre style="font-family:monospace;font-size:13px;color:var(--text);background:var(--bg);padding:10px 12px;border-radius:8px;margin-bottom:8px;white-space:pre-wrap;word-break:break-all;">${escHtml(khunThongText)}</pre>
-      <button class="btn btn-primary btn-full" id="copy-khunthong-btn" onclick="copyKhunThong()">
-        📋 คัดลอก
-      </button>
     </div>`;
-
-  // Store text for copy
-  window._khunThongText = khunThongText;
-}
-
-function copyKhunThong() {
-  const text = window._khunThongText || '';
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.getElementById('copy-khunthong-btn');
-    if (!btn) return;
-    btn.textContent = '✅ คัดลอกแล้ว!';
-    btn.style.background = 'var(--success)';
-    setTimeout(() => {
-      btn.textContent = '📋 คัดลอก';
-      btn.style.background = '';
-    }, 2000);
-  }).catch(() => {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed'; ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    const btn = document.getElementById('copy-khunthong-btn');
-    if (btn) { btn.textContent = '✅ คัดลอกแล้ว!'; setTimeout(() => { btn.textContent = '📋 คัดลอก'; }, 2000); }
-  });
 }
 
 // =================== UTILS ===================
