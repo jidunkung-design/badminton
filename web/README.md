@@ -31,7 +31,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Deploy on Cloudflare Workers
 
-Follow [the deployment guide](docs/deployment.md) for Node.js 22+, OpenNext and hosted Supabase. Run `npm run build:cloudflare` to build and `npm run preview:cloudflare` to test the Worker locally. `npm run deploy:cloudflare` checks the production environment before building and publishing.
+Deployment requires Node.js 22+, OpenNext and hosted Supabase. Run `npm run build:cloudflare` to build and `npm run preview:cloudflare` to test the Worker locally. `npm run deploy:cloudflare` checks the production environment before building and publishing. Supply the hosted Supabase URL and public anon key at build time and runtime; never include local development secrets or database seed accounts.
 
 ## Guest rooms
 
