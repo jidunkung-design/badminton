@@ -34,6 +34,21 @@ export type Database = {
   }
   public: {
     Tables: {
+      session_courts: {
+        Row: { session_id: string; court_no: number; starts_at: string | null; ends_at: string | null; retained_pair: string[] | null; retained_match_id: string | null }
+        Insert: { session_id: string; court_no: number; starts_at?: string | null; ends_at?: string | null; retained_pair?: string[] | null; retained_match_id?: string | null }
+        Update: { session_id?: string; court_no?: number; starts_at?: string | null; ends_at?: string | null; retained_pair?: string[] | null; retained_match_id?: string | null }
+        Relationships: [{ foreignKeyName: "session_courts_session_id_fkey"; columns: ["session_id"]; isOneToOne: false; referencedRelation: "sessions"; referencedColumns: ["id"] }]
+      }
+      active_court_matches: {
+        Row: { session_id: string; court_no: number; client_id: string; group_id: string; team_a: string[]; team_b: string[]; mode: Database["public"]["Enums"]["queue_mode"]; balance_weight: number; started_at: string; rotation_mode: string }
+        Insert: { session_id: string; court_no: number; client_id: string; group_id: string; team_a: string[]; team_b: string[]; mode: Database["public"]["Enums"]["queue_mode"]; balance_weight: number; started_at?: string; rotation_mode?: string }
+        Update: { session_id?: string; court_no?: number; client_id?: string; group_id?: string; team_a?: string[]; team_b?: string[]; mode?: Database["public"]["Enums"]["queue_mode"]; balance_weight?: number; started_at?: string; rotation_mode?: string }
+        Relationships: [
+          { foreignKeyName: "active_court_matches_group_id_fkey"; columns: ["group_id"]; isOneToOne: false; referencedRelation: "groups"; referencedColumns: ["id"] },
+          { foreignKeyName: "active_court_matches_session_id_court_no_fkey"; columns: ["session_id", "court_no"]; isOneToOne: true; referencedRelation: "session_courts"; referencedColumns: ["session_id", "court_no"] },
+        ]
+      }
       attendance: {
         Row: {
           player_id: string
@@ -106,18 +121,21 @@ export type Database = {
           created_by: string | null
           id: string
           name: string
+          room_slot: number
         }
         Insert: {
           created_at?: string
           created_by?: string | null
           id?: string
           name: string
+          room_slot?: number
         }
         Update: {
           created_at?: string
           created_by?: string | null
           id?: string
           name?: string
+          room_slot?: number
         }
         Relationships: [
           {
@@ -170,8 +188,12 @@ export type Database = {
           ended_at: string | null
           group_id: string
           id: string
+          rotation_mode: string
+          play_started_at: string | null
+          play_ended_at: string | null
           mode: Database["public"]["Enums"]["queue_mode"]
           session_id: string
+          streak_roster: string[] | null
           started_at: string
           winner_team: number | null
         }
@@ -182,8 +204,12 @@ export type Database = {
           ended_at?: string | null
           group_id: string
           id?: string
+          rotation_mode?: string
+          play_started_at?: string | null
+          play_ended_at?: string | null
           mode: Database["public"]["Enums"]["queue_mode"]
           session_id: string
+          streak_roster?: string[] | null
           started_at?: string
           winner_team?: number | null
         }
@@ -194,8 +220,12 @@ export type Database = {
           ended_at?: string | null
           group_id?: string
           id?: string
+          rotation_mode?: string
+          play_started_at?: string | null
+          play_ended_at?: string | null
           mode?: Database["public"]["Enums"]["queue_mode"]
           session_id?: string
+          streak_roster?: string[] | null
           started_at?: string
           winner_team?: number | null
         }
@@ -218,6 +248,7 @@ export type Database = {
       }
       players: {
         Row: {
+          gender: string
           archived_at: string | null
           created_at: string
           group_id: string
@@ -228,6 +259,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          gender?: string
           archived_at?: string | null
           created_at?: string
           group_id: string
@@ -238,6 +270,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          gender?: string
           archived_at?: string | null
           created_at?: string
           group_id?: string
@@ -266,24 +299,51 @@ export type Database = {
       }
       profiles: {
         Row: {
+          gender: string
           created_at: string
           display_name: string
           id: string
           is_super_admin: boolean
+          username: string | null
         }
         Insert: {
+          gender?: string
           created_at?: string
           display_name?: string
           id: string
           is_super_admin?: boolean
+          username?: string | null
         }
         Update: {
+          gender?: string
           created_at?: string
           display_name?: string
           id?: string
           is_super_admin?: boolean
+          username?: string | null
         }
         Relationships: []
+      }
+      room_join_requests: {
+        Row: { group_id: string; user_id: string; username: string; created_at: string; pin_verified: boolean }
+        Insert: { group_id: string; user_id: string; username: string; created_at?: string; pin_verified?: boolean }
+        Update: { group_id?: string; user_id?: string; username?: string; created_at?: string; pin_verified?: boolean }
+        Relationships: [
+          {
+            foreignKeyName: "room_join_requests_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "room_join_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       seasons: {
         Row: {
@@ -323,6 +383,7 @@ export type Database = {
           group_id: string
           id: string
           played_on: string
+          rotation_mode: string
           season_id: string
         }
         Insert: {
@@ -330,6 +391,7 @@ export type Database = {
           group_id: string
           id?: string
           played_on?: string
+          rotation_mode?: string
           season_id: string
         }
         Update: {
@@ -337,6 +399,7 @@ export type Database = {
           group_id?: string
           id?: string
           played_on?: string
+          rotation_mode?: string
           season_id?: string
         }
         Relationships: [
@@ -361,10 +424,36 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_my_locker: { Args: Record<string, never>; Returns: Json }
+      buy_cosmetic: { Args: { p_item_id: string; p_request_id: string }; Returns: Json }
+      buy_chest: { Args: { p_tier: string; p_request_id: string }; Returns: Json }
+      open_chest: { Args: { p_tier: string; p_request_id: string }; Returns: Json }
+      save_mascot: { Args: { p_skin: string; p_hair: string; p_equipped: Json }; Returns: undefined }
+      group_mascots: { Args: { p_group_id: string }; Returns: Json }
+      get_match_rewards: { Args: { p_match_id: string }; Returns: Json }
+      approve_room_member: { Args: { p_group_id: string; p_user_id: string }; Returns: string }
+      reject_room_member: { Args: { p_group_id: string; p_user_id: string }; Returns: string }
+      is_room_owner: { Args: { gid: string }; Returns: boolean }
+      claim_username: { Args: { p_username: string }; Returns: string }
+      create_room: { Args: { p_name: string; p_room_id: string; p_pin: string }; Returns: string }
+      join_room: { Args: { p_group_id: string; p_pin: string }; Returns: Json }
+      set_room_pin: { Args: { p_group_id: string; p_pin: string }; Returns: string }
+      room_pin_configured: { Args: { p_group_id: string }; Returns: boolean }
       can_manage_group: { Args: { gid: string }; Returns: boolean }
       is_group_member: { Args: { gid: string }; Returns: boolean }
       is_group_owner: { Args: { gid: string }; Returns: boolean }
       is_super_admin: { Args: never; Returns: boolean }
+      set_profile_gender: { Args: { p_gender: string }; Returns: string }
+      set_player_gender: { Args: { p_group_id: string; p_player_id: string; p_gender: string }; Returns: string }
+      set_session_rotation: { Args: { p_group_id: string; p_session_id: string; p_rotation_mode: string }; Returns: string }
+      release_retained_pair: { Args: { p_group_id: string; p_session_id: string; p_court_no: number; p_retained_match_id: string }; Returns: string }
+      get_pair_head_to_head: { Args: { p_group_id: string; p_team_a: string[]; p_team_b: string[] }; Returns: { played: number; team_a_wins: number; team_b_wins: number; draws: number }[] }
+      save_session_court: { Args: { p_group_id: string; p_session_id: string; p_court_no: number; p_starts_at: string; p_ends_at: string }; Returns: string }
+      begin_match: {
+        Args: { p_client_id: string; p_session_id: string; p_group_id: string; p_court_no: number; p_mode: Database["public"]["Enums"]["queue_mode"]; p_balance_weight: number; p_team_a: string[]; p_team_b: string[] }
+        Returns: string
+      }
+      get_player_durations: { Args: { p_group_id: string }; Returns: { player_id: string; average_minutes: number; timed_games: number }[] }
       record_match: {
         Args: {
           p_balance_weight: number

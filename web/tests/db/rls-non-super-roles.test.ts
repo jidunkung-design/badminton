@@ -61,7 +61,7 @@ describe('non-super owner', () => {
 })
 
 describe('non-super admin', () => {
-  it('can insert a player into their own group', async () => {
+  it('cannot add a player even within their own group', async () => {
     await admin.from('group_members').insert({ group_id: GROUP_A, user_id: MEMBER, role: 'admin' })
     const c = await signIn('member@example.com')
 
@@ -74,7 +74,7 @@ describe('non-super admin', () => {
     expect(role.data?.role).toBe('admin')
 
     const { error } = await c.from('players').insert({ group_id: GROUP_A, name: 'ผู้เล่นใหม่', skill: 4 })
-    expect(error).toBeNull()
+    expect(error).not.toBeNull()
   })
 })
 

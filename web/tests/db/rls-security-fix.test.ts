@@ -20,6 +20,7 @@ let sessionA: string
 let groupB: string
 let seasonB: string
 let sessionB: string
+let rosterA: string[]
 
 async function signIn(email: string): Promise<SupabaseClient> {
   const c = createClient(URL, ANON, { auth: { persistSession: false } })
@@ -45,15 +46,16 @@ beforeAll(async () => {
   seasonA = seA!.id
   const { data: ssA } = await admin.from('sessions').insert({ group_id: groupA, season_id: seasonA }).select('id').single()
   sessionA = ssA!.id
+  const roster = await admin.from('players').insert(
+    Array.from({ length: 4 }, (_, index) => ({ group_id: groupA, name: `ผู้เล่นทดสอบ ${index + 1}` })),
+  ).select('id')
+  expect(roster.error).toBeNull()
+  rosterA = roster.data!.map(player => player.id)
+  expect((await admin.from('attendance').insert(rosterA.map(player_id => ({ session_id: sessionA, player_id })))).error).toBeNull()
 
-  // Group B: a separate tenant with its own season/session, so we have a
-  // foreign resource to try to smuggle a reference to from group A. No
-  // group_members row is needed for SUPER here -- SUPER is_super_admin, so
-  // is_group_member/can_manage_group already pass for SUPER on every group via
-  // the is_super_admin() bypass, and skipping the membership row avoids a
-  // second 'owner' assignment competing with rls.test.ts's own group for SUPER.
-  const { data: b } = await admin.from('groups').insert({ name: 'กลุ่มบี', created_by: SUPER }).select('id').single()
-  groupB = b!.id
+  // Reuse the seeded foreign tenant so two seed rooms plus our room fit the
+  // global three-room cap. Only this test's new season/session are cleaned up.
+  groupB = '66666666-6666-6666-6666-666666666666'
   const { data: se } = await admin.from('seasons').insert({ group_id: groupB, name: 'ซีซั่นบี' }).select('id').single()
   seasonB = se!.id
   const { data: ss } = await admin.from('sessions').insert({ group_id: groupB, season_id: seasonB }).select('id').single()
@@ -61,12 +63,13 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  // Deleting the two groups cascades (on delete cascade) to every
-  // group_members, seasons, sessions, and matches row this file created, so
-  // no leftover state (in particular OUTSIDER's group_members row) survives
-  // for other test files that assume a clean slate.
-  await admin.from('groups').delete().eq('id', groupA)
-  await admin.from('groups').delete().eq('id', groupB)
+  // Remove our room and only the test season/session in the seeded foreign room.
+  // Clear RESTRICT references before deleting players through the room cascade.
+  expect((await admin.from('matches').delete().eq('group_id', groupA)).error).toBeNull()
+  expect((await admin.from('sessions').delete().eq('group_id', groupA)).error).toBeNull()
+  expect((await admin.from('groups').delete().eq('id', groupA)).error).toBeNull()
+  expect((await admin.from('sessions').delete().eq('id', sessionB)).error).toBeNull()
+  expect((await admin.from('seasons').delete().eq('id', seasonB)).error).toBeNull()
 })
 
 describe('privilege escalation via profiles', () => {
@@ -102,19 +105,34 @@ describe('anonymous access', () => {
 })
 
 describe('cross-group tenancy on matches', () => {
-  it('stops a manager of group A from inserting a match that points at group B\'s session', async () => {
-    const c = await signIn('member@example.com') // admin of group A only
-    const { error } = await c.from('matches').insert({
-      group_id: groupA,
-      session_id: sessionB, // foreign group's session
-      court_no: 1,
-      mode: 'manual',
-      client_id: crypto.randomUUID(),
-    })
-    expect(error).not.toBeNull()
+  const matchArgs = () => ({
+    p_client_id: crypto.randomUUID(),
+    p_group_id: groupA,
+    p_session_id: sessionA,
+    p_court_no: 1,
+    p_mode: 'manual',
+    p_balance_weight: 0.5,
+    p_winner_team: 1,
+    p_team_a: rosterA.slice(0, 2),
+    p_team_b: rosterA.slice(2, 4),
   })
 
-  it('still lets a manager insert a match against their own group\'s session', async () => {
+  it('rejects a foreign session through the guarded completion RPC', async () => {
+    const c = await signIn('member@example.com') // admin of group A only
+    const { error } = await c.rpc('record_match', { ...matchArgs(), p_session_id: sessionB })
+    expect(error?.message).toContain('session_invalid')
+  })
+
+  it('lets a manager record a complete checked-in roster through the RPC', async () => {
+    const c = await signIn('member@example.com')
+    const recorded = await c.rpc('record_match', matchArgs())
+    expect(recorded.error).toBeNull()
+    const roster = await c.from('match_players').select('player_id').eq('match_id', recorded.data)
+    expect(roster.error).toBeNull()
+    expect(new Set(roster.data!.map(player => player.player_id))).toEqual(new Set(rosterA))
+  })
+
+  it('blocks direct writes even for a manager of the matching room', async () => {
     const c = await signIn('member@example.com')
     const { error } = await c.from('matches').insert({
       group_id: groupA,
@@ -123,7 +141,7 @@ describe('cross-group tenancy on matches', () => {
       mode: 'manual',
       client_id: crypto.randomUUID(),
     })
-    expect(error).toBeNull()
+    expect(error).not.toBeNull()
   })
 })
 

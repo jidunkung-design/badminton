@@ -9,14 +9,22 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "db:types": "npx supabase gen types typescript --local > src/lib/db-types.ts"
+    "db:types": "npx supabase gen types typescript --local > src/lib/db-types.ts",
+    "build:cloudflare": "opennextjs-cloudflare build",
+    "preview:cloudflare": "npm run build:cloudflare && opennextjs-cloudflare preview",
+    "deploy:cloudflare": "node scripts/check-cloudflare-env.mjs && npm run build:cloudflare && opennextjs-cloudflare deploy -- --keep-vars"
   },
   "dependencies": {
+    "@heroui/react": "^3.2.5",
+    "@heroui/styles": "^3.2.5",
+    "@opennextjs/cloudflare": "1.20.6",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.0",
-    "next": "16.3.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "next": "16.3.3",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -25,8 +33,12 @@
     "@vitejs/plugin-react": "^6.0.5",
     "dotenv": "^17.4.2",
     "eslint": "^9",
-    "eslint-config-next": "16.3.0",
+    "eslint-config-next": "16.3.3",
     "typescript": "^5",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "wrangler": "4.132.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   }
 }

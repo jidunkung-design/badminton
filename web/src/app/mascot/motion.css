@@ -1,0 +1,43 @@
+.mascot-chest-body {
+  transform-origin: 50px 70px;
+}
+
+.mascot-chest-sparks {
+  opacity: 0;
+}
+
+.mascot-workshop[data-motion="on"] .mascot-chest-opening .mascot-chest-body {
+  animation: chest-anticipation 650ms ease-in-out infinite;
+}
+
+.mascot-workshop[data-motion="on"] .mascot-chest-opening .mascot-chest-sparks {
+  animation: chest-sparks 650ms ease-out infinite;
+}
+
+.mascot-workshop[data-motion="on"] .mascot-loot-reveal {
+  animation: loot-arrival 450ms cubic-bezier(.2, .8, .2, 1) both;
+}
+
+@keyframes chest-anticipation {
+  0%, 100% { transform: rotate(0); }
+  20%, 60% { transform: rotate(-5deg) translateY(-2px); }
+  40%, 80% { transform: rotate(5deg) translateY(-2px); }
+}
+
+@keyframes chest-sparks {
+  0%, 100% { opacity: 0; }
+  40%, 75% { opacity: 1; }
+}
+
+@keyframes loot-arrival {
+  from { opacity: 0; transform: translateY(10px) scale(.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot-workshop .mascot-chest-opening .mascot-chest-body,
+  .mascot-workshop .mascot-chest-opening .mascot-chest-sparks,
+  .mascot-workshop .mascot-loot-reveal {
+    animation: none !important;
+  }
+}

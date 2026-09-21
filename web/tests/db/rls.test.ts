@@ -21,7 +21,8 @@ async function signIn(email: string): Promise<SupabaseClient> {
 
 beforeAll(async () => {
   admin = createClient(URL, SERVICE, { auth: { persistSession: false } })
-  const { data } = await admin.from('groups').insert({ name: 'ก๊วนทดสอบ', created_by: SUPER }).select('id').single()
+  const { data, error } = await admin.from('groups').insert({ name: 'ก๊วนทดสอบ', created_by: SUPER }).select('id').single()
+  expect(error).toBeNull()
   groupId = data!.id
   await admin.from('group_members').insert({ group_id: groupId, user_id: SUPER, role: 'owner' })
   await admin.from('players').insert({ group_id: groupId, name: 'บอส', skill: 6 })

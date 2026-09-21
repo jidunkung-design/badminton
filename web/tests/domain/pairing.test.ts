@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import type { SessionPlayer } from '@/domain/types'
-import { QUEUE_PLAN, combinations, signature, bestSplit, buildEntry } from '@/domain/pairing'
+import { QUEUE_PLAN, combinations, signature, bestSplit, buildEntry, genderCompositionDifference } from '@/domain/pairing'
 
 const noPenalty = () => 0
 const balanced = { balanceWeight: 1, recentPartnerPenalty: noPenalty }
@@ -25,6 +25,30 @@ describe('signature', () => {
 })
 
 describe('bestSplit', () => {
+  it('prefers matching gender composition at equal or nearby ratings without overriding a large skill gap', () => {
+    for (const ratings of [[1000, 1000, 1000, 1000], [980, 1020, 1000, 1000]]) {
+      const four: SessionPlayer[] = ratings.map((elo, i) => ({ ...player(String(i), elo), gender: i < 2 ? 'male' : 'female' }))
+      const original = structuredClone(four)
+      const split = bestSplit(four, balanced)!
+      const genders = (ids: string[]) => ids.map(id => four.find(p => p.id === id)!.gender)
+      expect(genderCompositionDifference(genders(split.teamA), genders(split.teamB))).toBe(0)
+      expect(four).toEqual(original)
+    }
+    const four: SessionPlayer[] = [600, 1400, 1000, 1000].map((elo, i) => ({ ...player(String(i), elo), gender: i < 2 ? 'male' : 'female' }))
+    expect(bestSplit(four, balanced)!.teamA).toEqual(['0', '1'])
+    expect(bestSplit(four, balanced)!.gap).toBe(0)
+    expect(bestSplit(four, balanced)!.score).toBe(50)
+  })
+
+  it('uses only explicitly known gender and leaves legacy pairing neutral', () => {
+    expect(genderCompositionDifference(['male', 'male'], ['female', 'female'])).toBe(2)
+    expect(genderCompositionDifference(['male', 'female'], ['female', 'male'])).toBe(0)
+    expect(genderCompositionDifference(['male', undefined], ['female', 'female'])).toBeNull()
+    expect(genderCompositionDifference(['male', 'unspecified'], ['female', 'female'])).toBeNull()
+    const four: SessionPlayer[] = ['male-name', 'female-name', 'c', 'd'].map(id => player(id, 1000))
+    expect(bestSplit(four, balanced)!.teamA).toEqual(['male-name', 'female-name'])
+  })
+
   it('pairs strongest with weakest to level the two sides', () => {
     const four = [player('s1', 1200), player('s2', 1100), player('s3', 1000), player('s4', 900)]
     const split = bestSplit(four, balanced)!
@@ -57,12 +81,12 @@ describe('buildEntry', () => {
   it('never drops the players at the front of the queue', () => {
     // Ordered pool: index 0 is the most deserving.
     const pool = [
-      player('waited-longest', 700),
-      player('waited-second', 1400),
-      player('c', 1000),
-      player('d', 1000),
-      player('e', 1000),
-      player('f', 1000),
+      { ...player('waited-longest', 700), gender: 'female' as const },
+      { ...player('waited-second', 1400), gender: 'female' as const },
+      { ...player('c', 1000), gender: 'male' as const },
+      { ...player('d', 1000), gender: 'male' as const },
+      { ...player('e', 1000), gender: 'male' as const },
+      { ...player('f', 1000), gender: 'male' as const },
     ]
     const entry = buildEntry(pool, 'mix', balanced)!
     const picked = new Set([...entry.teamA, ...entry.teamB])

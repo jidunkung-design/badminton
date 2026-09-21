@@ -14,17 +14,17 @@ beforeAll(() => {
 
 describe('group cap', () => {
   // Regression coverage for a final-whole-branch-review finding: this test
-  // used to fill the system-wide 5-group cap with `filler N` groups and
+  // used to fill the system-wide 3-group cap with `filler N` groups and
   // never remove them, so every later run of the whole suite (and every
   // other tests/db/*.test.ts file that needs to insert its own group) found
   // less and less headroom until a `npx supabase db reset` was required.
   // Fixed with try/finally teardown: whatever headroom existed before this
   // test is exactly what exists after it, regardless of pass or fail.
-  it('refuses to create a sixth group', async () => {
+  it('refuses to create a fourth group', async () => {
     const created: string[] = []
     try {
       const { count } = await admin.from('groups').select('*', { count: 'exact', head: true })
-      const room = 5 - (count ?? 0)
+      const room = 3 - (count ?? 0)
       for (let i = 0; i < room; i++) {
         const { data, error } = await admin.from('groups').insert({ name: `filler ${i}` }).select('id').single()
         expect(error).toBeNull()

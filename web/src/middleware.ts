@@ -2,6 +2,10 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
+  // This isolated preview contains fictional local data and is unavailable in production.
+  if (process.env.NODE_ENV === 'development' && request.nextUrl.pathname === '/preview') {
+    return NextResponse.next()
+  }
   let response = NextResponse.next({ request })
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

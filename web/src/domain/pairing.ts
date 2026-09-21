@@ -1,4 +1,4 @@
-import type { QueueMode, SessionPlayer } from './types'
+import type { PlayerGender, QueueMode, SessionPlayer } from './types'
 import { blendedRating } from './rating'
 
 /**
@@ -56,6 +56,21 @@ function rate(p: SessionPlayer): number {
   return blendedRating(p.elo, p.seasonGames, p.skill)
 }
 
+/** Null means incomplete/unspecified information, not a mismatched pair. */
+export function genderCompositionDifference(
+  teamA: readonly (PlayerGender | undefined)[],
+  teamB: readonly (PlayerGender | undefined)[],
+): number | null {
+  if (teamA.length !== 2 || teamB.length !== 2
+    || [...teamA, ...teamB].some(gender => gender !== 'male' && gender !== 'female')) return null
+  return Math.abs(teamA.filter(gender => gender === 'male').length - teamB.filter(gender => gender === 'male').length)
+}
+
+function compositionPenalty(teamA: readonly SessionPlayer[], teamB: readonly SessionPlayer[]): number {
+  // ponytail: fixed 25-point soft preference; tune only when real-match feedback warrants it.
+  return 25 * (genderCompositionDifference(teamA.map(player => player.gender), teamB.map(player => player.gender)) ?? 0)
+}
+
 export function bestSplit(four: SessionPlayer[], opts: PairingOptions): SplitResult | null {
   if (four.length !== 4) return null
   let best: SplitResult | null = null
@@ -71,6 +86,32 @@ export function bestSplit(four: SessionPlayer[], opts: PairingOptions): SplitRes
     const repeat =
       opts.recentPartnerPenalty(teamA[0], teamA[1]) + opts.recentPartnerPenalty(teamB[0], teamB[1])
     const score = opts.balanceWeight * (gap / 4) + (1 - opts.balanceWeight) * repeat
+      + compositionPenalty(ia.map(i => four[i]), ib.map(i => four[i]))
+    if (!best || score < best.score) best = { teamA, teamB, gap, score }
+  }
+  return best
+}
+
+/** Preserve the winning pair and the fairness locks while choosing two challengers. */
+export function buildChallengerEntry(
+  retainedPair: readonly [SessionPlayer, SessionPlayer],
+  orderedPool: SessionPlayer[],
+  mode: Exclude<QueueMode, 'manual'>,
+  opts: PairingOptions,
+): SplitResult | null {
+  const teamA: [string, string] = [retainedPair[0].id, retainedPair[1].id]
+  const plan = QUEUE_PLAN[mode]
+  const pool = orderedPool.filter(player => !teamA.includes(player.id)).slice(0, plan.pool)
+  const lock = Math.min(plan.lock, 2)
+  let best: SplitResult | null = null
+  for (const extra of combinations(pool.slice(lock), 2 - lock)) {
+    const pair = [...pool.slice(0, lock), ...extra]
+    if (pair.length !== 2) continue
+    const teamB: [string, string] = [pair[0].id, pair[1].id]
+    if (opts.rejected?.has(signature(teamA, teamB))) continue
+    const gap = Math.round(Math.abs(rate(retainedPair[0]) + rate(retainedPair[1]) - rate(pair[0]) - rate(pair[1])) * 1e6) / 1e6
+    const score = opts.balanceWeight * gap / 4 + (1 - opts.balanceWeight) * opts.recentPartnerPenalty(...teamB)
+      + compositionPenalty(retainedPair, pair)
     if (!best || score < best.score) best = { teamA, teamB, gap, score }
   }
   return best

@@ -1,0 +1,61 @@
+.court-scene { overflow: hidden; border: 1px solid #dbe4d4; border-radius: 18px; background: #eef3e8; }
+.court-scene__toolbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 5px 10px 5px 14px; }
+.court-scene__toolbar p { font-size: 12px; color: #304c39; }
+.court-scene__toolbar .button { min-height: 36px; font-size: 11px; }
+.court-scene__stage { position: relative; aspect-ratio: 1.9; min-height: 260px; overflow: hidden; background: #548164; }
+.court-scene__lines { position: absolute; inset: 28px 6% 16px; border: 2px solid #e3ecd0; }
+.court-scene__lines::before { content: ''; position: absolute; inset: 13% 16%; border: 1px solid #e3ecd0; }
+.court-scene__lines::after { content: ''; position: absolute; inset: 50% 0 auto; border-top: 1px solid #e3ecd0; }
+.court-scene__net { position: absolute; inset: 26px auto 14px 50%; width: 5px; border-inline: 1px solid #e7eacc; background: repeating-linear-gradient(to bottom, #dce7cc 0 1px, #304c39 1px 5px); transform: translateX(-50%); box-shadow: 4px 0 0 #29473225; }
+.court-scene__side { position: absolute; top: 6px; font-size: 11px; font-weight: 600; color: #f4f8ec; }
+.court-scene__side--A { left: 21%; }
+.court-scene__side--B { right: 21%; }
+.court-scene__player { position: absolute; width: 28%; text-align: center; }
+.court-scene__player--A { left: 10%; }
+.court-scene__player--B { right: 10%; }
+.court-scene__player--0 { top: 8%; }
+.court-scene__player--1 { top: 54%; }
+.court-scene__character { width: 70%; max-width: 74px; margin-inline: auto; transform-origin: center bottom; }
+.court-scene__character .court-mascot { display: block; overflow: visible; }
+.court-scene__player--B .court-mascot { transform: scaleX(-1); }
+.court-scene__character .court-mascot__backdrop { display: none; }
+.court-scene__name { position: relative; display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: top; margin-top: -4px; border-radius: 5px; padding: 1px 7px; background: #f2f5e8; color: #213b30; font-size: 11px; line-height: 1.5; }
+.court-scene__rally { position: absolute; inset: 0; pointer-events: none; }
+.court-scene__shuttle { position: absolute; width: 22px; height: 22px; left: 48%; top: 25%; filter: drop-shadow(1px 3px 1px #17362444); }
+.court-scene__character .court-mascot__racket { transform-origin: 148px 184px; }
+
+.court-scene--motion.court-scene--playing .court-scene__shuttle { animation: court-scene-rally 4.8s ease-in-out infinite; }
+.court-scene--motion.court-scene--playing .court-scene__player .court-mascot__racket { animation: court-scene-hit 4.8s ease-in-out var(--court-hit-delay, 0s) infinite; }
+.court-scene__player--A.court-scene__player--1 { --court-hit-delay: -2.4s; }
+.court-scene__player--B.court-scene__player--0 { --court-hit-delay: -1.2s; }
+.court-scene__player--B.court-scene__player--1 { --court-hit-delay: -3.6s; }
+.court-scene--motion .court-scene__player--jump .court-scene__character { animation: court-scene-jump .85s ease-in-out 3; }
+.court-scene--motion .court-scene__player--dance .court-scene__character { animation: court-scene-dance .7s ease-in-out 4; }
+.court-scene--motion .court-scene__player--racket .court-mascot__racket { animation: court-scene-cheer 1.4s ease-in-out 2; }
+.court-scene--motion .court-scene__player--clap .court-mascot__clap-left { animation: court-scene-clap-left .55s ease-in-out 5; }
+.court-scene--motion .court-scene__player--clap .court-mascot__clap-right { animation: court-scene-clap-right .55s ease-in-out 5; }
+.court-scene:not(.court-scene--motion) .court-scene__character *,
+.court-scene:not(.court-scene--motion) .court-scene__shuttle { animation-play-state: paused; }
+
+@keyframes court-scene-rally {
+  0%, 100% { left: 31%; top: 32%; transform: rotate(-70deg); }
+  12.5% { left: 48%; top: 16%; transform: rotate(-10deg); }
+  25% { left: 66%; top: 72%; transform: rotate(80deg); }
+  37.5% { left: 48%; top: 48%; transform: rotate(180deg); }
+  50% { left: 31%; top: 74%; transform: rotate(250deg); }
+  62.5% { left: 48%; top: 20%; transform: rotate(330deg); }
+  75% { left: 66%; top: 32%; transform: rotate(440deg); }
+  87.5% { left: 48%; top: 10%; transform: rotate(540deg); }
+}
+@keyframes court-scene-hit { 0%, 12%, 100% { transform: rotate(0); } 5% { transform: rotate(-28deg); } }
+@keyframes court-scene-jump { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(-12px) rotate(-3deg); } 70% { transform: translateY(-2px) scaleY(.97); } }
+@keyframes court-scene-dance { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-7deg) translateX(-3px); } 75% { transform: rotate(7deg) translateX(3px); } }
+@keyframes court-scene-cheer { 0%, 100% { transform: rotate(0); } 25%, 70% { transform: rotate(-48deg); } }
+@keyframes court-scene-clap-left { 0%, 100% { transform: translateX(-5px); } 50% { transform: translateX(1px); } }
+@keyframes court-scene-clap-right { 0%, 100% { transform: translateX(5px); } 50% { transform: translateX(-1px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .court-scene .court-scene__character,
+  .court-scene .court-scene__character *,
+  .court-scene .court-scene__shuttle { animation: none !important; }
+}

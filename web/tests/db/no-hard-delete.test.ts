@@ -176,6 +176,8 @@ describe('record_match replay safety', () => {
       .single()
     expect(error).toBeNull()
     playerIds.push(data!.id)
+    const attendance = await admin.from('attendance').insert({ session_id: sessionId, player_id: data!.id })
+    expect(attendance.error).toBeNull()
     return data!.id
   }
 
@@ -184,7 +186,10 @@ describe('record_match replay safety', () => {
     // players they reference (match_players.player_id is `on delete
     // restrict`; deleting the match cascades to match_players first).
     await admin.from('matches').delete().eq('session_id', sessionId).neq('id', matchId)
-    for (const id of playerIds) await admin.from('players').delete().eq('id', id)
+    for (const id of playerIds) {
+      await admin.from('attendance').delete().eq('session_id', sessionId).eq('player_id', id)
+      await admin.from('players').delete().eq('id', id)
+    }
   })
 
   it('a replay with the same client_id and the same players succeeds and creates no duplicate rows', async () => {

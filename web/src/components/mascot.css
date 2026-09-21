@@ -1,0 +1,37 @@
+.court-mascot--animated .court-mascot__body {
+  transform-origin: 100px 238px;
+  animation: court-mascot-breathe 3.8s ease-in-out infinite;
+}
+
+.court-mascot--animated .court-mascot__eyes {
+  transform-origin: 100px 82px;
+  animation: court-mascot-blink 5.6s linear infinite;
+}
+
+.court-mascot--animated .court-mascot__racket {
+  transform-origin: 148px 184px;
+  animation: court-mascot-ready 3.8s ease-in-out infinite;
+}
+
+@keyframes court-mascot-breathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.008); }
+}
+
+@keyframes court-mascot-blink {
+  0%, 43%, 48%, 100% { transform: scaleY(1); }
+  45%, 46% { transform: scaleY(.1); }
+}
+
+@keyframes court-mascot-ready {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(2deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .court-mascot--animated .court-mascot__body,
+  .court-mascot--animated .court-mascot__eyes,
+  .court-mascot--animated .court-mascot__racket {
+    animation: none;
+  }
+}

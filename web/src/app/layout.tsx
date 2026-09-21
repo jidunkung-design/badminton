@@ -1,5 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Mitr, Anuphan } from "next/font/google";
+import Link from "next/link";
+import { ProfileLink } from "@/components/profile-link";
+import { ClubMark } from "@/components/club-mark";
+import { ActionToasts } from "@/components/action-toasts";
 import "./globals.css";
 
 // Self-hosted at build time (no CDN, no CSP hole, no layout shift).
@@ -27,12 +31,29 @@ export const metadata: Metadata = {
   description: "จัดก๊วนแบด เช็กชื่อ จัดคิว หารค่าสนาม",
 };
 
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover' };
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="th" className={`${mitr.variable} ${anuphan.variable}`}>
       <body>
-        <header className="bar">ก๊วนแบด</header>
-        <div className="wrap pane">{children}</div>
+        <a href="#main-content" className="skip-link">ข้ามไปเนื้อหา</a>
+        <header className="site-header">
+          <div className="site-header-inner">
+            <Link href="/" className="brand" aria-label="ก๊วนแบด หน้าหลัก">
+              <span className="brand-mark"><ClubMark /></span>
+              <span>ก๊วนแบด<span className="brand-caption">BADMINTON CLUB</span></span>
+            </Link>
+            <div className="flex items-center gap-5">
+              <ProfileLink />
+              {process.env.NODE_ENV === 'development' && (
+                <Link href="/preview" className="preview-link max-sm:hidden">ลองดูหน้าตัวอย่าง <span aria-hidden="true">↗</span></Link>
+              )}
+            </div>
+          </div>
+        </header>
+        <div id="main-content" className="app-main">{children}</div>
+        <ActionToasts />
       </body>
     </html>
   );

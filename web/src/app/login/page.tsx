@@ -1,55 +1,29 @@
-'use client'
+import { createServerSupabase } from '@/lib/supabase/server'
+import LoginForm from './LoginForm'
+import { redirect } from 'next/navigation'
+import type { PlayerGender } from '@/domain/types'
 
-import { useState } from 'react'
-import { createBrowserSupabase } from '@/lib/supabase/client'
+export const dynamic = 'force-dynamic'
 
-export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [sent, setSent] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  async function send(e: React.FormEvent) {
-    e.preventDefault()
-    setError(null)
-    const supabase = createBrowserSupabase()
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${location.origin}/auth/callback` },
-    })
-    if (error) setError('ส่งลิงก์ไม่สำเร็จ ลองใหม่อีกครั้ง')
-    else setSent(true)
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ join?: string }> }) {
+  const { join } = await searchParams
+  if (join && !/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i.test(join)) {
+    return <main className="py-12"><h1 className="text-2xl font-semibold">ลิงก์เชิญไม่ถูกต้อง</h1><p className="mt-3 text-muted">ขอลิงก์ใหม่จากเจ้าของห้องนะคะ</p></main>
   }
-
-  if (sent) {
-    return (
-      <main className="screen">
-        <h1>ส่งลิงก์เข้าอีเมลแล้ว</h1>
-        <div className="note info">
-          
-          เปิดอีเมลแล้วกดลิงก์เพื่อเข้าใช้งาน
-        </div>
-      </main>
-    )
+  const supabase = await createServerSupabase()
+  const { data: { user } } = await supabase.auth.getUser()
+  let username = ''
+  let gender: PlayerGender = 'unspecified'
+  if (user) {
+    if (join) {
+      const { data: membership } = await supabase.from('group_members').select('role')
+        .eq('group_id', join).eq('user_id', user.id).maybeSingle()
+      if (membership) redirect(`/g/${join}`)
+    }
+    const { data, error } = await supabase.from('profiles').select('username, gender').eq('id', user.id).maybeSingle()
+    if (error) return <main className="py-12"><h1 className="text-2xl font-semibold">โหลดข้อมูลผู้ใช้ไม่สำเร็จ</h1><p className="mt-3 text-muted">กรุณาโหลดหน้านี้ใหม่ก่อนสร้างหรือเข้าร่วมห้อง</p></main>
+    username = data?.username ?? ''
+    gender = data?.gender === 'male' || data?.gender === 'female' ? data.gender : 'unspecified'
   }
-
-  return (
-    <main className="screen">
-      <h1>เข้าสู่ระบบ</h1>
-      <form onSubmit={send} className="c screen">
-        <label htmlFor="email" className="fg">
-          <span>อีเมล</span>
-          <input
-            id="email"
-            type="email"
-            required
-            className="in"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
-        </label>
-        <button type="submit" className="b">ส่งลิงก์เข้าอีเมล</button>
-      </form>
-      {error && <div className="note err" role="alert">{error}</div>}
-    </main>
-  )
+  return <LoginForm key={join ?? 'create'} username={username} gender={gender} roomId={join ?? crypto.randomUUID()} joining={Boolean(join)} />
 }
