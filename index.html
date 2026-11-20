@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Badminton">
+<meta name="format-detection" content="telephone=no">
 <title>Badminton Match</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -458,41 +462,35 @@
   .stock-tab.active { background: var(--lime); font-weight: 700; }
   .stock-tab-content { display: none; }
   .stock-tab-content.active { display: block; }
-  .brand-card { display: flex; gap: 14px; align-items: center; border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; box-shadow: var(--shadow); position: relative; }
-  .brand-img { width: 96px; height: 96px; border-radius: 12px; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--surface2); }
-  .brand-img img { width: 100%; height: 100%; object-fit: cover; }
-  .brand-img .ic { font-size: 54px; color: var(--text3); }
-  .brand-name { font-size: 17px; font-weight: 600; padding-right: 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .brand-sub { font-size: 13px; color: var(--text2); }
-  .brand-edit { position: absolute; top: 12px; right: 12px; }
-  .brand-counts { display: flex; align-items: flex-end; gap: 14px; margin-top: 8px; }
-  .brand-counts > div + div { border-left: 1px solid var(--border); padding-left: 14px; }
-  .brand-counts b { font-size: 26px; font-weight: 600; line-height: 1.1; }
-  .brand-counts b small { font-size: 16px; font-weight: 500; }
-  .brand-counts span { display: block; font-size: 11px; color: var(--text2); }
-  .kpi { display: flex; align-items: center; gap: 10px; border-radius: 12px; padding: 12px; }
-  .kpi.in { background: var(--green-soft); }
-  .kpi.out { background: var(--orange-soft); }
-  .kpi-ico { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; flex-shrink: 0; }
-  .kpi.in .kpi-ico { background: var(--green); }
-  .kpi.out .kpi-ico { background: none; color: var(--orange); font-size: 30px; }
-  .kpi b { display: block; font-size: 20px; font-weight: 600; line-height: 1.2; }
-  .kpi.in b { color: var(--green); }
-  .kpi.out b { color: var(--orange); }
-  .kpi b small { font-size: 14px; font-weight: 500; }
-  .kpi span { font-size: 12px; color: var(--text2); }
-  .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .quick-btn { display: flex; align-items: center; gap: 12px; padding: 14px 12px; border-radius: 12px; border: none; cursor: pointer; text-align: left; }
-  .quick-btn:active { transform: scale(0.98); }
-  .quick-btn b { display: block; font-size: 18px; font-weight: 600; line-height: 1.2; }
-  .quick-btn span { font-size: 12px; color: var(--text2); }
-  .quick-btn .q-ico { width: 30px; height: 30px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-  .quick-btn.in { background: var(--green-soft); }
-  .quick-btn.in b { color: #17773f; }
-  .quick-btn.in .q-ico { background: var(--green); }
-  .quick-btn.out { background: var(--red-soft); }
-  .quick-btn.out b { color: var(--red); }
-  .quick-btn.out .q-ico { background: #f2706f; }
+  .stock-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 14px; }
+  @media (min-width: 520px) { .stock-grid { grid-template-columns: 1fr 1fr; } }
+  .stock-item { display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--border); border-radius: 14px; padding: 14px; background: var(--surface); box-shadow: var(--shadow); }
+  .stock-item.empty { background: var(--surface2); }
+  .si-top { display: flex; gap: 12px; align-items: center; }
+  .si-img { width: 52px; height: 52px; border-radius: 10px; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--surface2); }
+  .si-img img { width: 100%; height: 100%; object-fit: cover; }
+  .si-img .ic { font-size: 28px; color: var(--text3); }
+  .si-info { flex: 1; min-width: 0; }
+  .si-info b { display: block; font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .si-info span { font-size: 12px; color: var(--text2); }
+  .si-badge { flex-shrink: 0; align-self: flex-start; padding: 3px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+  .si-badge.out { background: var(--red-soft); color: var(--red); }
+  .si-badge.low { background: var(--orange-soft); color: #c2600e; }
+  .si-count { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+  .si-count b { font-size: 32px; font-weight: 700; line-height: 1; }
+  .si-count em { font-style: normal; font-size: 15px; font-weight: 500; }
+  .si-count span { font-size: 13px; color: var(--text2); }
+  .si-tubes { display: flex; gap: 4px; align-items: flex-end; flex-wrap: wrap; min-height: 30px; }
+  .tube { position: relative; width: 13px; height: 30px; border: 1.5px solid var(--border2); border-radius: 6px 6px 3px 3px; overflow: hidden; background: var(--surface2); }
+  .tube i { position: absolute; left: 0; right: 0; bottom: 0; background: var(--lime); }
+  .tube.full { border-color: var(--lime-border); }
+  .tube.full i { height: 100%; }
+  .tube-more { font-size: 12px; color: var(--text2); margin-left: 4px; }
+  .si-open { font-size: 12px; color: var(--text2); margin-top: -4px; }
+  .entry-tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .entry-tools .btn { white-space: normal; padding: 6px 8px; }
+  @media (max-width: 420px) { .entry-tools { grid-template-columns: 1fr 1fr; } .entry-tools .btn:first-child { grid-column: 1 / -1; } }
+  .stock-tab { white-space: nowrap; }
   .chart { position: relative; height: 120px; margin: 4px 0 22px 22px; }
   .chart-grid { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; }
   .chart-grid div { border-top: 1px dashed var(--border); position: relative; height: 0; }
@@ -507,9 +505,6 @@
   .alert-card b { display: block; font-size: 15px; font-weight: 600; }
   .alert-card span { font-size: 12px; color: var(--text2); }
   .alert-card .chev { margin-left: auto; font-size: 20px; color: var(--text2); }
-  .qty-row { display: grid; grid-template-columns: 1fr 64px 64px; gap: 8px; }
-  .chip-btn { border: 1px solid var(--border2); border-radius: 8px; background: var(--surface2); cursor: pointer; font-size: 14px; }
-  .chip-btn:hover { background: var(--surface3); }
   .mv-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
   .mv-row:last-child { border-bottom: none; }
   .mv-ico { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 15px; flex-shrink: 0; }
@@ -587,6 +582,8 @@
   .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
   .modal-btns .btn { min-height: 42px; }
   .modal-btns .btn-outline { font-weight: 500; }
+  .dialog-message { font-size: 16px; line-height: 1.6; white-space: pre-line; text-align: center; padding: 8px 4px 0; }
+  #dialog-btns.single { grid-template-columns: 1fr; }
   .photo-row { display: flex; gap: 16px; align-items: flex-start; }
   .photo-pick { position: relative; flex-shrink: 0; width: 112px; height: 112px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 700; color: var(--text2); cursor: pointer; }
   .photo-pick.square { border-radius: 12px; }
@@ -629,16 +626,160 @@
   .edit-team h5 { font-size: 14px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
   .edit-team div { display: flex; align-items: center; gap: 6px; font-size: 13px; padding: 2px 0; }
   .old-result { font-size: 12px; background: var(--surface2); border-radius: 8px; padding: 6px 10px; }
-  .done-ico { width: 56px; height: 56px; border-radius: 50%; background: var(--green); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 10px; }
-  .done-title { text-align: center; font-size: 20px; font-weight: 600; }
-  .done-sub { text-align: center; font-size: 13px; color: var(--text2); margin-bottom: 12px; }
-  .done-team { display: flex; align-items: center; justify-content: space-around; gap: 8px; background: var(--lime-soft); border: 1px solid #e4f1b0; border-radius: 12px; padding: 12px; margin-bottom: 14px; }
-  .done-team > div { display: flex; align-items: center; gap: 8px; font-weight: 600; }
 
   @media (max-width: 360px) {
     .bench-grid { grid-template-columns: repeat(3, 1fr); }
     .tiles.t3 .tile-num { font-size: 17px; }
   }
+
+  /* ---------- Touch devices ---------- */
+  button, .pcard { touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+
+  /* ---------- Tablet / iPad (portrait 768+, landscape 1024+) ---------- */
+  .courts-grid { display: block; }
+  @media (min-width: 700px) {
+    :root { --app-width: 1240px; --nav-height: 76px; }
+    body { font-size: 15px; }
+    .app { box-shadow: none; }
+    .appbar { height: 68px; padding: 0 28px; }
+    .appbar-title { font-size: 19px; }
+    .page { padding: 8px 28px 20px; }
+    /* Form-style pages read better at a comfortable width than stretched edge to edge */
+    #page-random, #page-stats, #page-tools { max-width: 880px; margin: 0 auto; }
+    .seg-btn { padding: 12px 8px; font-size: 16px; }
+
+    .nav { justify-content: center; gap: 10px; padding-left: 24px; padding-right: 24px; }
+    .nav-btn { flex: 0 1 170px; flex-direction: row; gap: 10px; font-size: 16px; }
+    .nav-btn .ic { font-size: 24px; }
+
+    .btn { min-height: 48px; font-size: 16px; }
+    .btn-sm { min-height: 40px; font-size: 14px; }
+    .btn-lg { min-height: 58px; font-size: 18px; }
+    .input, .select { height: 46px; font-size: 15px; }
+
+    .tiles { gap: 14px; }
+    .tile { padding: 14px 16px; }
+    .pcard-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .players-actions { max-width: 560px; margin-left: auto; }
+    .list-row { padding: 9px 6px; }
+
+    /* Match: courts side by side, big tap targets for "who won" */
+    .courts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; align-items: start; margin-bottom: 16px; }
+    .court-card { margin-bottom: 0; }
+    .court-head b { font-size: 20px; }
+    .team-box { padding: 10px; }
+    .team-player-name { font-size: 15px; }
+    .court-btns .btn { min-height: 60px; font-size: 18px; }
+    .round-tools { max-width: 520px; margin-left: auto; margin-right: auto; }
+    .bench-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .bench-item b { font-size: 14px; }
+
+    .fame-card { padding: 16px 18px; }
+    .hist-team div { font-size: 14px; }
+    .modal { max-width: 540px; padding: 22px; }
+  }
+  /* ---------- Backup menu / share / payments ---------- */
+  .app-menu button > span { display: flex; flex-direction: column; line-height: 1.3; }
+  .menu-sub { font-size: 11px; color: var(--text2); font-weight: 400; }
+  .menu-sub:empty { display: none; }
+  .menu-sub.warn { color: var(--red); }
+  .share-day-btn { margin-bottom: 14px; }
+  .share-day-btn .ic, .pay-head .btn .ic { font-size: 17px; }
+  .pay-box { margin-top: 14px; padding: 12px; border-radius: 12px; background: var(--surface2); }
+  .pay-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .pay-head b { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; }
+  .pay-head span { display: block; font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .pay-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--border); }
+  .pay-name { flex: 1; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pay-name small { color: var(--text2); }
+  .pay-amt { font-size: 14px; font-weight: 600; flex-shrink: 0; }
+  .pay-row.is-paid .pay-name, .pay-row.is-paid .pay-amt { color: var(--text2); }
+  .pay-btn { flex-shrink: 0; min-width: 92px; min-height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+    border: 1px solid var(--border2); border-radius: 8px; background: var(--surface); font-size: 13px; cursor: pointer; }
+  .pay-btn.on { background: var(--green-soft); border-color: var(--green); color: #17773f; font-weight: 600; }
+  .nav-brand { display: none; }
+
+  /* ---------- Computer: sidebar navigation + two-column pages ---------- */
+  @media (min-width: 1100px) {
+    :root { --sidebar: 232px; }
+    .app { max-width: none; margin: 0 0 0 var(--sidebar); padding-bottom: 32px; }
+    .appbar, .page { max-width: 1240px; margin-left: auto; margin-right: auto; }
+    #page-stats, #page-tools { max-width: 1180px; }
+    .app-menu .nav-dup { display: none !important; }
+    .nav {
+      left: 0; top: 0; bottom: 0; transform: none; width: var(--sidebar); max-width: none; height: 100vh;
+      flex-direction: column; justify-content: flex-start; gap: 4px; padding: 20px 14px;
+      border-top: none; border-right: 1px solid var(--border);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; padding: 4px 10px 22px; font-size: 18px; font-weight: 700; line-height: 1.2; }
+    .nav-brand .ic { font-size: 24px; padding: 7px; border-radius: 10px; background: var(--lime); box-sizing: content-box; }
+    .nav-btn { flex: 0 0 auto; justify-content: flex-start; padding: 12px 14px; }
+    .nav-btn:not(.active):hover { background: var(--surface2); }
+    #stats-sub-dashboard, #stock-tab-movement.active, #stock-tab-expenses.active {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 20px; align-items: start;
+    }
+    #stats-dashboard-summary, #stats-sub-dashboard > .share-day-btn { grid-column: 1 / -1; }
+    #stats-sub-dashboard > .share-day-btn { max-width: 360px; }
+    #stats-sub-dashboard .section-h { margin-top: 0; }
+    .stock-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  }
+  /* ---------- Live queue (organizer bar, share modal, viewer page) ---------- */
+  .live-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; font-size: 13px; }
+  .live-bar.on, .live-bar.err { padding: 8px 12px; border-radius: 10px; }
+  .live-bar.on { background: var(--green-soft); color: #17773f; }
+  .live-bar.err { background: var(--red-soft); color: var(--red); }
+  .live-bar.off { justify-content: flex-end; }
+  .live-bar > span { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+  .live-bar .link-btn .ic { font-size: 16px; margin-right: 4px; }
+  .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+  .live-bar.on .live-dot, .wc-chip.live .live-dot, .watch-conn.ok .live-dot { animation: livePulse 1.6s ease-in-out infinite; }
+  @keyframes livePulse { 50% { opacity: 0.3; } }
+  .live-p { font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
+  .live-qr { width: 220px; max-width: 70%; margin: 0 auto 8px; background: #fff; padding: 6px; border-radius: 12px; }
+  .live-qr svg { display: block; width: 100%; height: auto; }
+  .live-link { font-size: 12px; word-break: break-all; background: var(--surface2); border-radius: 8px; padding: 8px 10px; color: var(--text2); }
+  .live-st { font-size: 12px; color: var(--text2); }
+  .live-st.ok { color: var(--green); }
+  .live-st.err { color: var(--red); }
+  .live-actions { display: flex; justify-content: space-between; margin-top: 12px; }
+  .live-small { display: block; margin: 12px auto 0; font-size: 13px; }
+
+  body.watch-mode .nav, body.watch-mode #appbar-actions, body.watch-mode .app-menu { display: none !important; }
+  body.watch-mode .app { padding-bottom: 24px; margin-left: auto; }
+  #page-watch { max-width: 760px; margin: 0 auto; }
+  .watch-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .watch-conn { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; }
+  .watch-conn.ok { color: var(--green); }
+  .watch-conn.wait { color: var(--text2); }
+  .watch-conn.err { color: var(--red); }
+  .watch-me { margin-bottom: 6px; }
+  .watch-status { margin-top: 10px; padding: 12px 14px; border-radius: 12px; background: var(--surface2); }
+  .watch-status b { display: block; font-size: 17px; font-weight: 600; }
+  .watch-status span { font-size: 13px; color: var(--text2); }
+  .watch-status.play { background: var(--lime-soft); border: 1px solid var(--lime-border); }
+  .watch-status.next { background: var(--green-soft); }
+  .watch-status.next b { color: #17773f; }
+  .watch-courts { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-bottom: 8px; }
+  .watch-court { border: 1px solid var(--border); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow); padding: 12px 14px; text-align: center; }
+  .watch-court.is-done { background: var(--surface2); box-shadow: none; }
+  .wc-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; text-align: left; }
+  .wc-head b { font-size: 18px; font-weight: 700; }
+  .wc-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; padding: 3px 10px; border-radius: 99px; }
+  .wc-chip.live { background: var(--lime-soft); color: #4d6b00; font-weight: 600; }
+  .wc-chip.done { background: var(--surface3); color: var(--text2); }
+  .wc-team { font-size: 18px; font-weight: 600; line-height: 1.4; display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .wc-team.won { color: #17773f; }
+  .wc-team .ic { color: var(--gold); font-size: 18px; }
+  .wc-vs { font-size: 12px; color: var(--text3); font-weight: 700; margin: 2px 0; }
+  .amp { font-style: normal; color: var(--text3); font-weight: 400; margin: 0 6px; }
+  .is-me { background: var(--lime); border-radius: 6px; padding: 0 5px; color: var(--text); }
+  .watch-list { padding: 8px 14px; }
+  .wq-row, .wn-row { display: flex; gap: 12px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
+  .wq-row:last-of-type, .wn-row:last-of-type { border-bottom: none; }
+  .wq-label { flex-shrink: 0; width: 104px; font-size: 13px; color: var(--text2); }
+  .wq-row.first .wq-label { color: #17773f; font-weight: 600; }
+  .wq-row.first .wq-names { font-weight: 600; }
+  .wl-no { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--surface2); font-size: 12px; display: inline-flex; align-items: center; justify-content: center; }
 </style>
 </head>
 <body>
@@ -648,11 +789,16 @@
   <div class="appbar-title" id="appbar-title"></div>
   <div id="appbar-actions"></div>
   <div class="app-menu" id="app-menu">
-    <button onclick="menuGo('players')"><i data-icon="users"></i>ผู้เล่น</button>
-    <button onclick="menuGo('random')"><i data-icon="shuffle"></i>สุ่มคู่</button>
-    <button onclick="menuGo('match')"><i data-icon="trophy"></i>แข่งขัน</button>
-    <button onclick="menuGo('stats')"><i data-icon="chart"></i>สถิติ</button>
-    <button onclick="menuGo('tools')"><i data-icon="box"></i>สต๊อก</button>
+    <button class="nav-dup" onclick="menuGo('players')"><i data-icon="users"></i>ผู้เล่น</button>
+    <button class="nav-dup" onclick="menuGo('random')"><i data-icon="shuffle"></i>สุ่มคู่</button>
+    <button class="nav-dup" onclick="menuGo('match')"><i data-icon="trophy"></i>แข่งขัน</button>
+    <button class="nav-dup" onclick="menuGo('stats')"><i data-icon="chart"></i>สถิติ</button>
+    <button class="nav-dup" onclick="menuGo('tools')"><i data-icon="box"></i>สต๊อก</button>
+    <hr class="nav-dup">
+    <button onclick="toggleAppMenu(false);openLiveModal()"><i data-icon="broadcast"></i><span>ให้คนอื่นดูคิวผ่านมือถือ<small class="menu-sub" id="live-menu-sub"></small></span></button>
+    <button onclick="toggleAppMenu(false);exportBackup()"><i data-icon="download"></i><span>สำรองข้อมูลเป็นไฟล์<small class="menu-sub" id="backup-last"></small></span></button>
+    <button onclick="toggleAppMenu(false);importBackup()"><i data-icon="upload"></i>กู้คืนจากไฟล์สำรอง</button>
+    <input type="file" id="backup-file" accept=".json,application/json" style="display:none" onchange="handleBackupFile(this)">
     <hr>
     <button class="danger" onclick="toggleAppMenu(false);confirmReset()"><i data-icon="trash"></i>รีเซ็ตข้อมูล</button>
   </div>
@@ -758,16 +904,21 @@
   <!-- Dashboard sub-page -->
   <div id="stats-sub-dashboard">
     <div class="tiles t3" id="stats-dashboard-summary"></div>
+    <button class="btn btn-soft btn-full share-day-btn" onclick="shareDayResults()"><i data-icon="share"></i>แชร์สรุปผลวันนี้ลงกลุ่ม</button>
+   <div class="col">
     <div id="stats-dashboard-top"></div>
     <div class="card">
       <div class="card-title">จำนวนชนะของผู้เล่น (Top 6)</div>
       <div id="stats-dashboard-barchart"></div>
     </div>
+   </div>
+   <div class="col">
     <div class="section-h">
       <h3>แมทช์ล่าสุด</h3>
       <button class="link-btn" onclick="switchStatsTab('history')">ดูทั้งหมด<i data-icon="chevron-right"></i></button>
     </div>
     <div id="stats-dashboard-recent"></div>
+   </div>
   </div>
 
   <!-- Ranking sub-page -->
@@ -803,102 +954,91 @@
 </div>
 
 <!-- PAGE: Stock (4 tabs) -->
+<!-- PAGE: Live queue viewer (opened from the shared link, read-only) -->
+<div class="page" id="page-watch"><div id="watch-content"></div></div>
+
 <div class="page" id="page-tools">
   <div class="stock-tabs">
     <button class="stock-tab active" id="stab-dashboard" onclick="switchStockTab('dashboard')">ภาพรวม</button>
-    <button class="stock-tab" id="stab-movement" onclick="switchStockTab('movement')">สต๊อก</button>
+    <button class="stock-tab" id="stab-movement" onclick="switchStockTab('movement')">รับเข้า / เบิกออก</button>
     <button class="stock-tab" id="stab-expenses" onclick="switchStockTab('expenses')">ค่าใช้จ่าย</button>
     <button class="stock-tab" id="stab-sessioncalc" onclick="switchStockTab('sessioncalc')">หารค่าเล่น</button>
   </div>
 
-  <!-- ===== TAB 1: Dashboard ===== -->
+  <!-- ===== TAB 1: Inventory — one card per brand/model ===== -->
   <div class="stock-tab-content active" id="stock-tab-dashboard">
-    <div class="brand-card">
-      <div class="brand-img" id="stock-brand-photo-wrap"></div>
-      <div style="flex:1;min-width:0;">
-        <div class="brand-name" id="stock-brand-name">ยังไม่ได้ตั้งชื่อยี่ห้อ</div>
-        <div class="brand-sub" id="stock-status-badge"></div>
-        <div class="brand-counts">
-          <div><b id="stock-count-big">0</b><b><small> ลูก</small></b><span>คงเหลือ</span></div>
-          <div><b id="stock-box-count">0</b><b><small> กล่อง</small></b><span>(กล่องละ 12 ลูก)</span></div>
-        </div>
-      </div>
-      <button class="row-icon-btn brand-edit" onclick="openBrandModal()" aria-label="แก้ไขยี่ห้อ"><i data-icon="pencil"></i></button>
-    </div>
+    <div class="tiles t3" id="stock-summary"></div>
 
-    <div class="tiles">
-      <div class="kpi in"><div class="kpi-ico"><i data-icon="plus"></i></div><div><b><span id="stock-total-in" style="font-size:inherit;color:inherit;">0</span> <small>ลูก</small></b><span>รับเข้า (ทั้งหมด)</span></div></div>
-      <div class="kpi out"><div class="kpi-ico"><i data-icon="shuttle"></i></div><div><b><span id="stock-total-used" style="font-size:inherit;color:inherit;">0</span> <small>ลูก</small></b><span>ใช้แล้ว (ทั้งหมด)</span></div></div>
+    <div class="section-h" style="margin-top:4px;">
+      <h3>สินค้าในสต๊อก <small id="stock-item-count"></small></h3>
     </div>
+    <div class="stock-grid" id="stock-item-list"></div>
 
     <div class="card">
-      <div class="card-title">จัดการสต๊อกด่วน</div>
-      <div class="quick-grid">
-        <button class="quick-btn in" onclick="adjustStock(12)"><div class="q-ico"><i data-icon="plus"></i></div><div><b>+1 กล่อง</b><span>(12 ลูก)</span></div></button>
-        <button class="quick-btn in" onclick="adjustStock(24)"><div class="q-ico"><i data-icon="plus"></i></div><div><b>+2 กล่อง</b><span>(24 ลูก)</span></div></button>
-        <button class="quick-btn out" onclick="adjustStock(-1)"><div class="q-ico"><i data-icon="minus"></i></div><div><b>-1 ลูก</b></div></button>
-        <button class="quick-btn out" onclick="adjustStock(-12)"><div class="q-ico"><i data-icon="minus"></i></div><div><b>-1 กล่อง</b><span>(12 ลูก)</span></div></button>
-      </div>
-      <div id="stock-value-display"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">การใช้งานย้อนหลัง 14 วัน <span class="muted" style="font-weight:400;font-size:13px;">(ลูก)</span></div>
+      <div class="card-title">การใช้งานย้อนหลัง 14 วัน <span class="muted" style="font-weight:400;font-size:13px;">(ลูก · ทุกยี่ห้อ)</span></div>
       <div id="stock-usage-chart"></div>
     </div>
 
     <div id="stock-alert-messages"></div>
   </div>
 
-  <!-- ===== TAB 2: Stock Movement ===== -->
+  <!-- ===== TAB 2: Receive / use stock, manage products, history ===== -->
   <div class="stock-tab-content" id="stock-tab-movement">
-    <div class="brand-card">
-      <div class="brand-img" id="movement-brand-photo"></div>
-      <div style="flex:1;min-width:0;">
-        <div class="brand-name" id="movement-brand-name"></div>
-        <div style="margin-top:10px;"><b id="movement-stock-count" style="font-size:30px;font-weight:600;">0</b><b style="font-size:20px;font-weight:500;"> ลูก</b></div>
-        <div class="brand-sub" id="movement-box-count"></div>
-      </div>
-      <button class="row-icon-btn brand-edit" onclick="openBrandModal()" aria-label="แก้ไขยี่ห้อ"><i data-icon="pencil"></i></button>
-    </div>
-
-    <div class="card">
+   <div class="col">
+    <div class="card" id="stock-entry-card">
       <div class="card-title">บันทึกการรับเข้า / เบิกออก</div>
-      <div class="seg" style="margin-bottom:12px;">
-        <button class="seg-btn active-green" id="entry-in" onclick="setStockEntryType('in')">รับเข้า<small>(เพิ่มสต๊อก)</small></button>
-        <button class="seg-btn" id="entry-out" onclick="setStockEntryType('out')">เบิกออก<small>(ใช้ในการเล่น)</small></button>
-      </div>
-      <div class="form-group">
-        <label class="form-label">จำนวน</label>
-        <div class="qty-row">
-          <div class="input-suffix"><input class="input" id="stock-entry-input" type="number" min="1" max="9999" inputmode="numeric" placeholder="0"><span>ลูก</span></div>
-          <button class="chip-btn" onclick="setEntryQty(12)">12</button>
-          <button class="chip-btn" onclick="setEntryQty(24)">24</button>
+      <div id="stock-entry-empty" class="tiny" style="font-size:13px;padding:6px 0 12px;display:none;">ยังไม่มีสินค้าในสต๊อก กด "เพิ่มสินค้าใหม่" ด้านล่างก่อน</div>
+      <div id="stock-entry-form">
+        <label class="form-label">สินค้า</label>
+        <div class="si-top" style="margin-bottom:12px;">
+          <div class="si-img" id="si-entry-img"></div>
+          <div style="flex:1;min-width:0;">
+            <select class="select" id="stock-entry-item" onchange="selectStockEntryItem(this.value)"></select>
+            <div class="tiny" id="si-entry-count" style="margin-top:4px;font-size:12px;"></div>
+          </div>
         </div>
+        <div class="seg" style="margin-bottom:12px;">
+          <button class="seg-btn active-green" id="entry-in" onclick="setStockEntryType('in')">รับเข้า<small>(ซื้อ / เพิ่มสต๊อก)</small></button>
+          <button class="seg-btn" id="entry-out" onclick="setStockEntryType('out')">เบิกออก<small>(ใช้ในการเล่น)</small></button>
+        </div>
+        <label class="form-label">จำนวน</label>
+        <div class="form-row">
+          <div class="input-suffix"><input class="input" id="si-tubes" type="number" min="0" inputmode="numeric" placeholder="0" oninput="updateStockEntryPreview()"><span>หลอด</span></div>
+          <div class="input-suffix"><input class="input" id="si-balls" type="number" min="0" inputmode="numeric" placeholder="0" oninput="updateStockEntryPreview()"><span>ลูก</span></div>
+        </div>
+        <div class="tiny" id="si-preview" style="margin:6px 0 12px;font-size:12px;"></div>
+        <div class="form-group">
+          <label class="form-label">หมายเหตุ <small>(ถ้ามี)</small></label>
+          <input class="input" id="stock-entry-note" maxlength="60" placeholder="เช่น ซื้อเพิ่ม, ได้รับจากสปอนเซอร์">
+        </div>
+        <button class="btn btn-lime btn-full" onclick="submitStockEntry()">บันทึก</button>
       </div>
-      <div class="form-group">
-        <label class="form-label">หมายเหตุ <small>(ถ้ามี)</small></label>
-        <input class="input" id="stock-entry-note" maxlength="60" placeholder="เช่น ซื้อเพิ่ม, ได้รับจากสปอนเซอร์">
+      <div class="entry-tools">
+        <button class="btn btn-outline btn-sm" onclick="openProductModal()"><i data-icon="plus"></i>เพิ่มสินค้าใหม่</button>
+        <button class="btn btn-outline btn-sm entry-needs-item" onclick="openProductModal(currentStockItemId)"><i data-icon="pencil"></i>แก้ไขสินค้า</button>
+        <button class="btn btn-outline btn-sm entry-needs-item" onclick="openStockCorrectionModal()"><i data-icon="updown"></i>ปรับยอดตามที่นับได้</button>
       </div>
-      <button class="btn btn-lime btn-full" onclick="submitStockEntry()">บันทึก</button>
-      <button class="btn btn-soft btn-full btn-stack" style="margin-top:10px;" onclick="openStockCorrectionModal()">
-        <span style="display:flex;align-items:center;gap:6px;"><i data-icon="updown"></i>ปรับยอดจากการนับจริง</span>
-        <small class="muted">ใช้เมื่อนับสต๊อกจริงแล้วไม่ตรงกับยอดในระบบ</small>
-      </button>
     </div>
 
+   </div>
+   <div class="col">
     <div class="card">
-      <div class="section-h" style="margin:0 0 4px;">
+      <div class="section-h" style="margin:0 0 6px;">
         <h3 style="font-size:15px;">ประวัติการเคลื่อนไหว</h3>
-        <button class="link-btn" id="stock-history-toggle" onclick="toggleStockHistory()">ดูทั้งหมด<i data-icon="chevron-right"></i></button>
+        <select class="select add-select" id="stock-history-filter" onchange="stockHistoryExpanded = false; renderStockHistory()"></select>
       </div>
       <div id="stock-history-container"></div>
-      <button class="link-btn" style="color:var(--red);margin-top:6px;" onclick="clearStockHistory()"><i data-icon="trash"></i>&nbsp;ล้างประวัติ</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+        <button class="link-btn" style="color:var(--red);" onclick="clearStockHistory()"><i data-icon="trash"></i>&nbsp;ล้างประวัติ</button>
+        <button class="link-btn" id="stock-history-toggle" onclick="toggleStockHistory()">ดูทั้งหมด<i data-icon="chevron-right"></i></button>
+      </div>
     </div>
+   </div>
   </div>
 
   <!-- ===== TAB 3: Expenses — persistent monthly ledger ===== -->
   <div class="stock-tab-content" id="stock-tab-expenses">
+   <div class="col">
     <div class="month-nav">
       <button onclick="shiftExpenseMonth(-1)" aria-label="เดือนก่อน"><i data-icon="chevron-left"></i></button>
       <div id="expense-month-label"></div>
@@ -917,10 +1057,13 @@
 
     <button class="btn btn-lime btn-full btn-lg" onclick="openExpenseModal()"><i data-icon="plus"></i>เพิ่มค่าใช้จ่าย</button>
 
-    <div class="section-h"><h3>รายการค่าใช้จ่าย</h3></div>
+   </div>
+   <div class="col">
+    <div class="section-h" style="margin-top:0;"><h3>รายการค่าใช้จ่าย</h3></div>
     <div class="card" style="padding:4px 12px;">
       <div id="expense-list"></div>
     </div>
+   </div>
   </div>
 
   <!-- ===== TAB 4: Session Calculator ===== -->
@@ -928,7 +1071,7 @@
     <div class="card">
       <div class="form-row" style="align-items:center;margin-bottom:14px;">
         <div style="display:flex;align-items:center;gap:8px;font-size:14px;"><i data-icon="calendar" style="font-size:20px;"></i>วันที่เล่น</div>
-        <input class="input" id="cost-session-date" type="date">
+        <input class="input" id="cost-session-date" type="date" onchange="calcCost()">
       </div>
       <div class="form-row">
         <div class="form-group">
@@ -956,7 +1099,7 @@
           <input class="input" id="cost-shuttle-price" type="number" min="0" step="0.01" inputmode="decimal" oninput="calcCost()">
         </div>
         <div class="form-group" style="display:flex;align-items:flex-end;">
-          <button class="btn btn-soft btn-sm btn-full" style="min-height:42px;" onclick="fillShuttlesFromStock()">ดึงจำนวนจากสต๊อก</button>
+          <button class="btn btn-soft btn-sm btn-full" style="min-height:42px;" onclick="fillShuttlesFromStock()">ดึงจำนวนที่เบิกวันนั้น</button>
         </div>
       </div>
 
@@ -970,6 +1113,7 @@
         <select class="select add-select" id="cost-add-player" onchange="addCostPlayer(this.value)"></select>
       </div>
       <div id="cost-players-list"></div>
+      <div id="cost-pay-box"></div>
 
       <button class="btn btn-lime btn-full btn-lg" style="margin-top:14px;" id="cost-save-btn" onclick="saveSessionToExpenses()">บันทึกรอบเล่น</button>
     </div>
@@ -979,6 +1123,7 @@
 
 <!-- Bottom Nav -->
 <nav class="nav">
+  <div class="nav-brand"><i data-icon="shuttle"></i><span>Badminton<br>Match</span></div>
   <button class="nav-btn active" id="nav-players" onclick="goPage('players')"><i data-icon="users"></i>ผู้เล่น</button>
   <button class="nav-btn" id="nav-random" onclick="goPage('random')"><i data-icon="shuffle"></i>สุ่มคู่</button>
   <button class="nav-btn" id="nav-match" onclick="goPage('match')"><i data-icon="trophy"></i>แข่งขัน</button>
@@ -1057,11 +1202,11 @@
   </div>
 </div>
 
-<!-- Modal: Shuttlecock Brand -->
+<!-- Modal: Add / edit a shuttlecock product (brand / model) -->
 <div class="modal-overlay" id="modal-brand">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-title">เพิ่ม / แก้ไขยี่ห้อลูกแบด</div>
+      <div class="modal-title" id="product-modal-title">เพิ่มสินค้า</div>
       <button class="modal-close" onclick="closeModal('modal-brand')" aria-label="ปิด"><i data-icon="x"></i></button>
     </div>
     <div class="photo-row" style="align-items:center;">
@@ -1076,13 +1221,32 @@
       <input type="file" id="input-brand-photo-file" accept="image/*" style="display:none;" onchange="handleBrandPhotoSelect(event)">
       <div class="photo-fields">
         <label class="form-label">ชื่อยี่ห้อ / รุ่น <span class="req">*</span></label>
-        <input class="input" id="input-brand-name" placeholder="เช่น Yonex Mavis 350..." maxlength="40">
+        <input class="input" id="input-brand-name" placeholder="เช่น Yonex AS-30" maxlength="40">
       </div>
+    </div>
+    <div class="form-row" style="margin-top:14px;">
+      <div class="form-group">
+        <label class="form-label">จำนวนลูกต่อหลอด <span class="req">*</span></label>
+        <div class="input-suffix"><input class="input" id="input-product-pertube" type="number" min="1" max="99" inputmode="numeric" value="12"><span>ลูก</span></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">ราคาต่อหลอด</label>
+        <div class="input-suffix"><input class="input" id="input-product-price" type="number" min="0" inputmode="decimal" placeholder="0"><span>บาท</span></div>
+      </div>
+    </div>
+    <div id="product-initial">
+      <label class="form-label">จำนวนที่มีตอนนี้</label>
+      <div class="form-row">
+        <div class="input-suffix"><input class="input" id="input-product-tubes" type="number" min="0" inputmode="numeric" placeholder="0"><span>หลอด</span></div>
+        <div class="input-suffix"><input class="input" id="input-product-balls" type="number" min="0" inputmode="numeric" placeholder="0"><span>ลูก</span></div>
+      </div>
+      <div class="tiny" style="margin-top:4px;">ใส่ทั้งหลอดเต็มและลูกที่เหลือในหลอดที่เปิดแล้วได้</div>
     </div>
     <div class="modal-btns">
       <button class="btn btn-outline" onclick="closeModal('modal-brand')">ยกเลิก</button>
-      <button class="btn btn-lime" onclick="saveBrand()">บันทึก</button>
+      <button class="btn btn-lime" onclick="saveProduct()">บันทึก</button>
     </div>
+    <button class="link-btn" id="product-delete-btn" style="display:none;color:var(--red);margin:12px auto 0;" onclick="deleteProduct()"><i data-icon="trash"></i>&nbsp;ลบสินค้านี้</button>
   </div>
 </div>
 
@@ -1093,21 +1257,11 @@
       <div class="modal-title">ตั้งค่าสต๊อกลูกแบด</div>
       <button class="modal-close" onclick="closeModal('modal-stock-settings')" aria-label="ปิด"><i data-icon="x"></i></button>
     </div>
-    <div class="form-row" style="align-items:center;margin-bottom:16px;">
-      <label class="form-label" style="margin:0;">แจ้งเตือนเมื่อเหลือน้อยกว่า <span class="req">*</span></label>
+    <div class="form-row" style="align-items:center;">
+      <label class="form-label" style="margin:0;">แจ้งเตือนเมื่อสต๊อกรวมเหลือน้อยกว่า <span class="req">*</span></label>
       <div class="input-suffix"><input class="input" id="input-stock-alert-threshold" type="number" min="1" max="999" inputmode="numeric"><span>ลูก</span></div>
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">ราคาต่อกล่อง <span class="req">*</span></label>
-        <div class="input-suffix"><input class="input" id="input-stock-price" type="number" min="0" inputmode="numeric" oninput="updateSettingsPricePreview()"><span>บาท</span></div>
-        <div class="tiny" style="margin-top:4px;">( 12 ลูก / กล่อง )</div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">ราคาต่อลูก (อัตโนมัติ)</label>
-        <div class="input-suffix"><input class="input" id="settings-price-per-shuttle" readonly tabindex="-1"><span>บาท</span></div>
-      </div>
-    </div>
+    <div class="tiny" style="margin-top:8px;">ราคาและจำนวนลูกต่อหลอดตั้งแยกได้ที่สินค้าแต่ละรายการ</div>
     <div class="modal-btns">
       <button class="btn btn-outline" onclick="closeModal('modal-stock-settings')">ยกเลิก</button>
       <button class="btn btn-lime" onclick="saveStockSettings()">บันทึก</button>
@@ -1119,7 +1273,7 @@
 <div class="modal-overlay" id="modal-stock-correction">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-title">ปรับยอดสต๊อกลูกแบด</div>
+      <div class="modal-title" id="correction-title">ปรับยอดสต๊อกลูกแบด</div>
       <button class="modal-close" onclick="closeModal('modal-stock-correction')" aria-label="ปิด"><i data-icon="x"></i></button>
     </div>
     <div class="form-row r3">
@@ -1243,19 +1397,42 @@
   </div>
 </div>
 
-<!-- Modal: Round recorded -->
-<div class="modal-overlay" id="modal-result">
+<!-- Modal: share the live queue with players -->
+<div class="modal-overlay" id="modal-live">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-title">บันทึกผลการแข่งขันเรียบร้อยแล้ว</div>
-      <button class="modal-close" onclick="closeModal('modal-result')" aria-label="ปิด"><i data-icon="x"></i></button>
+      <div class="modal-title">ให้คนอื่นดูคิวผ่านมือถือ</div>
+      <button class="modal-close" onclick="closeModal('modal-live')" aria-label="ปิด"><i data-icon="x"></i></button>
     </div>
-    <div id="result-body"></div>
-    <button class="btn btn-lime btn-full" onclick="closeModal('modal-result');goPage('random')">สุ่มรอบถัดไป</button>
+    <div id="live-body"></div>
+  </div>
+</div>
+
+<!-- Modal: in-app confirm / notice (last, so it stacks above any open modal) -->
+<div class="modal-overlay" id="modal-dialog">
+  <div class="modal" style="max-width:400px;">
+    <div class="dialog-message" id="dialog-message"></div>
+    <div class="modal-btns" id="dialog-btns">
+      <button class="btn btn-outline" id="dialog-cancel" onclick="closeDialog(false)">ยกเลิก</button>
+      <button class="btn btn-lime" id="dialog-ok" onclick="closeDialog(true)">ตกลง</button>
+    </div>
   </div>
 </div>
 
 <script>
+// =================== LIVE QUEUE: viewer link detection ===================
+// A link like ?watch=<room>&db=<firebase host> opens the read-only queue page.
+// The host must be a Firebase Realtime Database address, so a tampered link
+// can't point the page somewhere else.
+const WATCH = (() => {
+  const q = new URLSearchParams(location.search);
+  const room = q.get('watch'), db = (q.get('db') || '').toLowerCase();
+  if (!room || !/^[A-Za-z0-9]{16,40}$/.test(room)) return null;
+  if (!/^[a-z0-9-]+(\.[a-z0-9-]+)*\.(firebasedatabase\.app|firebaseio\.com)$/.test(db)) return null;
+  return { room, db };
+})();
+// Where the app is published — used for viewer links when it's opened from a local file
+const PUBLIC_APP_URL = 'https://jidunkung-design.github.io/badminton/';
 // =================== STATE ===================
 let state = {
   players: [],
@@ -1270,6 +1447,10 @@ let state = {
   currentMatches: [],
   roundComplete: false,
   benchQueue: [],
+  lastPlayedSeq: {}, // playerId → playSeq when they last went on court (bench rotation)
+  playSeq: 0,
+  playCount: {}, // playerId → games started on playDay
+  playDay: '',
   rrActive: false,
   rrTeams: [],
   rrRounds: [],
@@ -1279,7 +1460,10 @@ let state = {
   stockCount: 0,
   stockPricePerBox: 170,
   stockAlertThreshold: 24,
-  stockBrand: { name: '', photo: null },
+  stockBrand: { name: '', photo: null }, // legacy single brand — migrated into stockItems
+  stockItems: [], // { id, name, photo, perTube, pricePerTube, count }
+  archivedMatchCount: 0, // decided games trimmed off matchHistory (kept for totals)
+  payments: {},          // 'yyyy-mm-dd' → { playerId: true } who has paid for that session
   expenses: [], // persistent monthly expense ledger: {id, date, category, label, amount}
   rrTotalMatches: 0,
   matchHistory: [],   // Feature 1
@@ -1338,6 +1522,7 @@ let randomMode = 'balanced';
 
 // =================== STORAGE ===================
 function save() {
+  if (WATCH) return; // viewer page: read-only, never touch this browser's own data
   try {
     localStorage.setItem('bmt_players', JSON.stringify(state.players));
     localStorage.setItem('bmt_stats', JSON.stringify(state.stats));
@@ -1349,6 +1534,10 @@ function save() {
     localStorage.setItem('bmt_courts', state.courts);
     localStorage.setItem('bmt_activePlayers', JSON.stringify([...state.activePlayers]));
     localStorage.setItem('bmt_benchQueue', JSON.stringify(state.benchQueue));
+    localStorage.setItem('bmt_lastPlayedSeq', JSON.stringify(state.lastPlayedSeq || {}));
+    localStorage.setItem('bmt_playSeq', state.playSeq || 0);
+    localStorage.setItem('bmt_playCount', JSON.stringify(state.playCount || {}));
+    localStorage.setItem('bmt_playDay', state.playDay || '');
     localStorage.setItem('bmt_rrActive', state.rrActive);
     localStorage.setItem('bmt_rrTeams', JSON.stringify(state.rrTeams));
     localStorage.setItem('bmt_rrRounds', JSON.stringify(state.rrRounds));
@@ -1360,11 +1549,23 @@ function save() {
     localStorage.setItem('bmt_stockPricePerBox', state.stockPricePerBox);
     localStorage.setItem('bmt_stockAlertThreshold', state.stockAlertThreshold);
     localStorage.setItem('bmt_stockBrand', JSON.stringify(state.stockBrand));
+    localStorage.setItem('bmt_stockItems', JSON.stringify(state.stockItems));
+    localStorage.setItem('bmt_archivedMatchCount', state.archivedMatchCount || 0);
+    localStorage.setItem('bmt_payments', JSON.stringify(state.payments || {}));
     localStorage.setItem('bmt_expenses', JSON.stringify(state.expenses));
     localStorage.setItem('bmt_matchHistory', JSON.stringify(state.matchHistory));
     localStorage.setItem('bmt_stockHistory', JSON.stringify(state.stockHistory));
-  } catch(e) {}
+    saveWarned = false;
+    livePublishSoon();
+  } catch(e) {
+    // Usually the browser's storage quota (large player photos). Say so once instead of losing data silently.
+    if (!saveWarned) {
+      saveWarned = true;
+      notify('บันทึกข้อมูลไม่สำเร็จ — พื้นที่เก็บข้อมูลในเครื่องอาจเต็ม\nลองลบรูปผู้เล่นที่ไม่ใช้ หรือล้างประวัติเก่า');
+    }
+  }
 }
+let saveWarned = false;
 
 function load() {
   try {
@@ -1379,6 +1580,10 @@ function load() {
     const ap = JSON.parse(localStorage.getItem('bmt_activePlayers') || '[]');
     state.activePlayers = new Set(ap);
     state.benchQueue = JSON.parse(localStorage.getItem('bmt_benchQueue') || '[]');
+    state.lastPlayedSeq = JSON.parse(localStorage.getItem('bmt_lastPlayedSeq') || '{}');
+    state.playSeq = parseInt(localStorage.getItem('bmt_playSeq') || '0');
+    state.playCount = JSON.parse(localStorage.getItem('bmt_playCount') || '{}');
+    state.playDay = localStorage.getItem('bmt_playDay') || '';
     state.rrActive = localStorage.getItem('bmt_rrActive') === 'true';
     state.rrTeams = JSON.parse(localStorage.getItem('bmt_rrTeams') || '[]');
     state.rrRounds = JSON.parse(localStorage.getItem('bmt_rrRounds') || '[]');
@@ -1390,6 +1595,21 @@ function load() {
     state.stockPricePerBox = parseInt(localStorage.getItem('bmt_stockPricePerBox') || '170');
     state.stockAlertThreshold = parseInt(localStorage.getItem('bmt_stockAlertThreshold') || '24');
     state.stockBrand = JSON.parse(localStorage.getItem('bmt_stockBrand') || 'null') || { name: '', photo: null };
+    state.archivedMatchCount = parseInt(localStorage.getItem('bmt_archivedMatchCount') || '0') || 0;
+    state.payments = JSON.parse(localStorage.getItem('bmt_payments') || '{}') || {};
+    state.stockItems = JSON.parse(localStorage.getItem('bmt_stockItems') || 'null');
+    if (!Array.isArray(state.stockItems)) {
+      // Older versions kept one brand + one ball count: turn that into the first item
+      state.stockItems = [];
+      const b = state.stockBrand || {};
+      if (state.stockCount > 0 || b.name || b.photo) {
+        state.stockItems.push({
+          id: 'si' + Date.now(), name: b.name || 'ลูกแบด', photo: b.photo || null,
+          perTube: 12, pricePerTube: state.stockPricePerBox || 0, count: state.stockCount || 0
+        });
+      }
+    }
+    state.stockCount = state.stockItems.reduce((s, it) => s + (it.count || 0), 0);
     state.expenses = JSON.parse(localStorage.getItem('bmt_expenses') || '[]');
     state.matchHistory = JSON.parse(localStorage.getItem('bmt_matchHistory') || '[]');
     state.stockHistory = JSON.parse(localStorage.getItem('bmt_stockHistory') || '[]');
@@ -1546,7 +1766,7 @@ function updatePhotoPreview() {
 function handlePhotoSelect(event) {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
-  if (!file.type.startsWith('image/')) { alert('กรุณาเลือกไฟล์รูปภาพ'); return; }
+  if (!file.type.startsWith('image/')) { notify('กรุณาเลือกไฟล์รูปภาพ'); return; }
   const reader = new FileReader();
   reader.onload = () => {
     const img = new Image();
@@ -1604,7 +1824,7 @@ function savePlayer() {
   const name = document.getElementById('input-name').value.trim();
   const skill = parseInt(document.getElementById('input-skill').value);
   const editId = document.getElementById('edit-player-id').value;
-  if (!name) { alert('กรุณากรอกชื่อ'); return; }
+  if (!name) { notify('กรุณากรอกชื่อ'); return; }
   if (editId) {
     const p = state.players.find(x => x.id === editId);
     if (p) { p.name = name; p.skill = skill; p.photo = pendingPhoto; }
@@ -1619,8 +1839,8 @@ function savePlayer() {
   closeModal('modal-player');
 }
 
-function removePlayer(id) {
-  if (!confirm('ลบผู้เล่นนี้?')) return;
+async function removePlayer(id) {
+  if (!(await askConfirm('ลบผู้เล่นนี้?', { okText: 'ลบ', danger: true }))) return;
   state.players = state.players.filter(p => p.id !== id);
   state.activePlayers.delete(id);
   delete state.stats[id];
@@ -1765,101 +1985,182 @@ function makeRRMatchObj(courtNum, pair, mode) {
   };
 }
 
-// Recency-weighted scoring — lower = better
-// Teammate pairs (same team) penalised 20× heavier than opponent pairs
-function scoreCandidateMatches(matchesCfg) {
-  const hist = state.pairHistory;
-  const tmHist = state.teammateHistory || [];
-  const n = hist.length;
-  const tn = tmHist.length;
+// =================== PAIRING ENGINE ===================
+// Penalty weights — lower total score = better line-up.
+// teammate: played on the SAME team (heaviest), meet: was on the same court at all.
+// Recent games cost the most and fade out; how often a pair has played adds a
+// little on top so, over a session, everyone gets to play with everyone.
+const PAIR_WEIGHTS = {
+  teammateRecent: 100,  // teamed up in the previous game
+  teammateCount: 12,    // per time teamed up in the last 40 games
+  meetRecent: 14,       // shared a court in the previous game
+  meetCount: 2,         // per time shared a court in the last 40 games
+  balance: 18,          // per 1.0 skill difference between the two teams (balanced mode)
+};
+const PAIR_HISTORY_WINDOW = 40;
+const PAIR_LOG_LIMIT = 3000;        // pair entries kept (~500 doubles games)
+const MATCH_HISTORY_LIMIT = 500;    // games kept in ประวัติการแข่งขัน
 
-  // Build lookup: "a|b" → last index (recency)
-  const lastSeenAll = {};
-  for (let k = 0; k < n; k++) {
-    const a = hist[k].a < hist[k].b ? hist[k].a : hist[k].b;
-    const b = hist[k].a < hist[k].b ? hist[k].b : hist[k].a;
-    lastSeenAll[a + '|' + b] = k;
-  }
-  // Teammate lookup: "a|b" → last index in teammateHistory
-  const lastSeenTm = {};
-  for (let k = 0; k < tn; k++) {
-    const a = tmHist[k].a < tmHist[k].b ? tmHist[k].a : tmHist[k].b;
-    const b = tmHist[k].a < tmHist[k].b ? tmHist[k].b : tmHist[k].a;
-    lastSeenTm[a + '|' + b] = k;
-  }
+function pairKey(a, b) {
+  return a < b ? a + '|' + b : b + '|' + a;
+}
 
-  let score = 0;
-  matchesCfg.forEach(m => {
-    // Score per-team pairs (teammate penalty ×20)
-    [m.teams[0], m.teams[1]].forEach(team => {
-      for (let i = 0; i < team.length; i++) {
-        for (let j = i + 1; j < team.length; j++) {
-          const a = team[i] < team[j] ? team[i] : team[j];
-          const b = team[i] < team[j] ? team[j] : team[i];
-          const key = a + '|' + b;
-          const tmIdx = lastSeenTm[key];
-          if (tmIdx !== undefined) score += (tmIdx + 1) * 20; // heavy: was teammate recently
-          const allIdx = lastSeenAll[key];
-          if (allIdx !== undefined) score += (allIdx + 1); // light: any co-occurrence
-        }
-      }
+// For every pair: how many games ago they last played (age 1 = most recent game)
+// and how many times within the window — separately for teammates and for any meeting.
+function buildPairStats() {
+  const ordinal = {};
+  let n = 0;
+  state.pairHistory.forEach(h => { if (!(h.matchId in ordinal)) ordinal[h.matchId] = n++; });
+  const collect = (list) => {
+    const map = {};
+    list.forEach(h => {
+      const age = n - (h.matchId in ordinal ? ordinal[h.matchId] : n - 1);
+      const s = map[pairKey(h.a, h.b)] || (map[pairKey(h.a, h.b)] = { age: Infinity, count: 0 });
+      if (age < s.age) s.age = age;
+      if (age <= PAIR_HISTORY_WINDOW) s.count++;
     });
-    // Score cross-team (opponent) pairs — light penalty only
-    for (let i = 0; i < m.teams[0].length; i++) {
-      for (let j = 0; j < m.teams[1].length; j++) {
-        const a = m.teams[0][i] < m.teams[1][j] ? m.teams[0][i] : m.teams[1][j];
-        const b = m.teams[0][i] < m.teams[1][j] ? m.teams[1][j] : m.teams[0][i];
-        const idx = lastSeenAll[a + '|' + b];
-        if (idx !== undefined) score += (idx + 1);
-      }
+    return map;
+  };
+  return { teammate: collect(state.teammateHistory || []), meet: collect(state.pairHistory) };
+}
+
+// courts: how many games run at once, so "recent" spans a whole round of courts
+function pairPenalty(stats, a, b, together, courts) {
+  const key = pairKey(a, b);
+  const span = Math.max(1, courts);
+  const W = PAIR_WEIGHTS;
+  let p = 0;
+  if (together) {
+    const t = stats.teammate[key];
+    if (t) p += W.teammateRecent * Math.exp(-(t.age - 1) / (4 * span)) + W.teammateCount * t.count;
+  }
+  const m = stats.meet[key];
+  if (m) p += W.meetRecent * Math.exp(-(m.age - 1) / (2 * span)) + W.meetCount * m.count;
+  return p;
+}
+
+const teamKey = team => [...team].sort().join('+');
+const matchupKey = (A, B) => [teamKey(A), teamKey(B)].sort().join(' vs ');
+
+// The teams (doubles) and match-ups (any mode) currently on court, so
+// "สุ่มคู่ใหม่" actually comes back with something different.
+function lineupAvoidSet(matches) {
+  const avoid = new Set();
+  matches.forEach(m => {
+    m.teams.forEach(t => { if (t.length > 1) avoid.add(teamKey(t)); });
+    avoid.add(matchupKey(m.teams[0], m.teams[1]));
+  });
+  return avoid;
+}
+
+function scoreLineup(cfg, stats, balanced, skillOf, courts, avoid) {
+  let score = 0;
+  cfg.forEach(m => {
+    const [A, B] = m.teams;
+    if (avoid) {
+      if (avoid.has(matchupKey(A, B))) score += 1000;
+      [A, B].forEach(t => { if (t.length > 1 && avoid.has(teamKey(t))) score += 1000; });
+    }
+    // Singles: the opponent is the "partner" that matters, so weigh it like a teammate repeat
+    const singles = A.length === 1;
+    [A, B].forEach(team => {
+      for (let i = 0; i < team.length; i++)
+        for (let j = i + 1; j < team.length; j++) score += pairPenalty(stats, team[i], team[j], true, courts);
+    });
+    A.forEach(a => B.forEach(b => { score += pairPenalty(stats, a, b, singles, courts); }));
+    if (balanced) {
+      const sum = t => t.reduce((s, id) => s + (skillOf[id] || 0), 0);
+      score += PAIR_WEIGHTS.balance * Math.abs(sum(A) - sum(B));
     }
   });
   return score;
 }
 
-// Generate all rotation-based balanced candidates (doubles)
-// Tries every cyclic shift of the bottom-half players against the top-half
-function generateRotatedCandidates(sortedPlaying, courts) {
-  const n2 = 2 * courts;
-  const top = sortedPlaying.slice(0, n2);
-  const bot = sortedPlaying.slice(n2);
-  const results = [];
-  for (let rot = 0; rot < n2; rot++) {
-    const rb = [...bot.slice(rot), ...bot.slice(0, rot)];
-    const cfg = [];
-    for (let i = 0; i < courts; i++) {
-      cfg.push({ court: i + 1, teams: [
-        [top[i].id, rb[n2 - 1 - i].id],
-        [top[n2 - 1 - i].id, rb[i].id]
-      ]});
+// Search line-ups for the given players (exactly courts × per-court of them):
+// many random starts, each improved by swapping players until no swap helps.
+// Returns { matches: [{ court, teams }], score }.
+function findBestLineup(players, courts, mode, balanced, recentCourts, pairStats, avoid) {
+  const per = mode === 'doubles' ? 2 : 1;
+  const size = per * 2;
+  const stats = pairStats || buildPairStats();
+  const skillOf = {};
+  players.forEach(p => { skillOf[p.id] = p.skill; });
+  const toCfg = arr => Array.from({ length: courts }, (_, c) => {
+    const s = arr.slice(c * size, (c + 1) * size);
+    return { court: c + 1, teams: [s.slice(0, per), s.slice(per)] };
+  });
+  const span = recentCourts || courts;
+  const evalArr = arr => scoreLineup(toCfg(arr), stats, balanced, skillOf, span, avoid);
+  const ids = players.map(p => p.id);
+  // Swapping two players on the same team changes nothing — skip those
+  const sameTeam = (i, j) => Math.floor(i / per) === Math.floor(j / per);
+
+  let best = null, bestScore = Infinity;
+  const starts = ids.length <= 4 ? 6 : 40;
+  for (let s = 0; s < starts; s++) {
+    const arr = shuffle([...ids]);
+    let score = evalArr(arr);
+    let improved = true;
+    while (improved) {
+      improved = false;
+      for (let i = 0; i < arr.length; i++) {
+        for (let j = i + 1; j < arr.length; j++) {
+          if (sameTeam(i, j)) continue;
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+          const ns = evalArr(arr);
+          if (ns < score - 1e-9) { score = ns; improved = true; }
+          else [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+      }
     }
-    results.push(cfg);
+    if (score < bestScore) { bestScore = score; best = arr.slice(); }
   }
-  return results;
+  return { matches: toCfg(best), score: bestScore };
 }
 
-function buildMatchesFromPlaying(playing, courts, mode) {
-  const matches = [];
-  if (mode === 'doubles') {
-    const n = courts;
-    for (let i = 0; i < n; i++) {
-      const a1 = playing[i];
-      const a2 = playing[4 * n - 1 - i];
-      const b1 = playing[2 * n - 1 - i];
-      const b2 = playing[2 * n + i];
-      matches.push({ court: i + 1, teams: [[a1.id, a2.id], [b1.id, b2.id]] });
-    }
-  } else {
-    for (let i = 0; i < courts; i++) {
-      const a = playing[i];
-      const b = playing[courts * 2 - 1 - i];
-      matches.push({ court: i + 1, teams: [[a.id], [b.id]] });
-    }
-  }
-  return matches;
+// Remember when each player last stepped on court, so whoever has waited
+// longest goes on first (bench rotation and the per-court "next game").
+// Also counts games per player for today. Returns the previous values so a
+// line-up that never got played can be taken back.
+function markPlayed(ids) {
+  state.playSeq = (state.playSeq || 0) + 1;
+  if (!state.lastPlayedSeq) state.lastPlayedSeq = {};
+  const today = toDateInput(new Date());
+  if (state.playDay !== today) { state.playDay = today; state.playCount = {}; }
+  const prev = {};
+  ids.forEach(id => {
+    prev[id] = id in state.lastPlayedSeq ? state.lastPlayedSeq[id] : null;
+    state.lastPlayedSeq[id] = state.playSeq;
+    state.playCount[id] = (state.playCount[id] || 0) + 1;
+  });
+  return prev;
 }
 
-function doRandomize() {
+function unmarkPlayed(prev) {
+  Object.entries(prev || {}).forEach(([id, v]) => {
+    if (v === null) delete state.lastPlayedSeq[id];
+    else state.lastPlayedSeq[id] = v;
+    if (state.playCount && state.playCount[id]) state.playCount[id]--;
+  });
+}
+
+function playsToday(id) {
+  return state.playDay === toDateInput(new Date()) ? ((state.playCount || {})[id] || 0) : 0;
+}
+
+// Who should go on court first: waited longest, then fewest games today.
+// (Sort ascending = first to play; descending = first to sit out.)
+function waitOrder(a, b) {
+  return lastPlayed(a.id) - lastPlayed(b.id) || playsToday(a.id) - playsToday(b.id);
+}
+
+function lastPlayed(id) {
+  const v = (state.lastPlayedSeq || {})[id];
+  return v === undefined ? -1 : v;
+}
+
+// avoid: optional set from lineupAvoidSet() — line-ups to steer away from
+function doRandomize(avoid) {
   const courts = parseInt(document.getElementById('court-count').value);
   const mode = modeState;
   state.mode = mode;
@@ -1870,6 +2171,10 @@ function doRandomize() {
   const needed = courts * perCourt;
 
   if (activePlayers.length < needed && !rrModeSelected) return;
+
+  // Courts being replaced before a result was recorded never actually played —
+  // don't let them push those players to the back of the queue
+  state.currentMatches.forEach(m => { if (!m.done) unmarkPlayed(m.prevSeq); });
 
   // =================== ROUND ROBIN PATH ===================
   if (rrModeSelected) {
@@ -1885,11 +2190,10 @@ function doRandomize() {
     const teams = Array.from({ length: nTeams }, () => []);
 
     if (mode === 'doubles') {
-      // Snake draft: top half paired with bottom half
-      // sorted[i] (higher skill) + sorted[nTeams+i] (lower skill) → balanced teams
+      // Fold pairing: strongest with weakest, 2nd with 2nd-weakest, ... → balanced teams
       // With balancedShuffle, order within skill groups is randomized → different teams each time
       for (let i = 0; i < nTeams; i++) {
-        teams[i] = [sorted[i].id, sorted[nTeams + i].id];
+        teams[i] = [sorted[i].id, sorted[2 * nTeams - 1 - i].id];
       }
     } else {
       sorted.forEach((p, i) => { teams[i] = [p.id]; });
@@ -1918,59 +2222,21 @@ function doRandomize() {
   }
 
   // =================== NORMAL PATH ===================
-  const activeIds = activePlayers.map(p => p.id);
-  const activeSet = new Set(activeIds);
-  state.benchQueue = state.benchQueue.filter(id => activeSet.has(id));
-  activeIds.forEach(id => {
-    if (!state.benchQueue.includes(id)) state.benchQueue.push(id);
-  });
+  // Replacing courts where some results are already in → this is a new round
+  // (a fully finished round was already counted in recordWin)
+  const cur = state.currentMatches.filter(m => !m.rrMatch);
+  if (cur.some(m => m.done) && !cur.every(m => m.done)) state.round++;
 
+  // Whoever played most recently (then most games today) sits out first; ties at random
   const benchCount = activePlayers.length - needed;
-  const benchIds = new Set(state.benchQueue.splice(0, benchCount));
-  state.benchQueue.push(...benchIds);
-
+  const byRecent = shuffle([...activePlayers]).sort((a, b) => waitOrder(b, a));
+  const benchIds = new Set(byRecent.slice(0, benchCount).map(p => p.id));
   const bench = activePlayers.filter(p => benchIds.has(p.id));
-  let playing = activePlayers.filter(p => !benchIds.has(p.id));
+  const playing = activePlayers.filter(p => !benchIds.has(p.id));
 
-  // Feature 2: apply random mode
-  if (randomMode === 'free') {
-    shuffle(playing);
-  } else {
-    playing.sort((a, b) => b.skill - a.skill);
-  }
+  const { matches } = findBestLineup(playing, courts, mode, randomMode === 'balanced', null, null, avoid);
 
-  // Avoid repeat pairs — collect all candidates then pick lowest recency score
-  let allCandidates = [];
-
-  if (mode === 'doubles' && randomMode === 'balanced') {
-    // Sort by skill first, then try every rotation of bottom half
-    const sortedPlaying = [...playing].sort((a, b) => b.skill - a.skill);
-    allCandidates = generateRotatedCandidates(sortedPlaying, courts);
-    // Also try a few random-shuffled-within-skill-groups variants
-    // Also try many random shuffles within skill groups
-    for (let i = 0; i < 30; i++) {
-      const c = balancedShuffle([...playing]);
-      allCandidates.push(buildMatchesFromPlaying(c, courts, mode));
-    }
-  } else {
-    // Free mode or singles: try 20 random shuffles
-    for (let i = 0; i < 20; i++) {
-      const c = [...playing];
-      shuffle(c);
-      allCandidates.push(buildMatchesFromPlaying(c, courts, mode));
-    }
-  }
-
-  // Pick the candidate with the lowest recency-weighted repeat score
-  let bestMatches = allCandidates[0];
-  let bestScore = Infinity;
-  for (const cfg of allCandidates) {
-    const s = scoreCandidateMatches(cfg);
-    if (s < bestScore) { bestScore = s; bestMatches = cfg; }
-    if (bestScore === 0) break;
-  }
-
-  state.currentMatches = bestMatches.map((m, idx) => ({
+  state.currentMatches = matches.map(m => ({
     id: genId('m'),
     court: m.court,
     teams: m.teams,
@@ -1978,8 +2244,15 @@ function doRandomize() {
     winner: null,
     bench: bench.map(p => p.id),
     mode: mode,
+    randomMode,
+    roundNo: state.round,
     substitutions: []
   }));
+  const prevSeq = markPlayed(playing.map(p => p.id));
+  state.currentMatches.forEach(m => {
+    m.prevSeq = {};
+    [...m.teams[0], ...m.teams[1]].forEach(id => { m.prevSeq[id] = prevSeq[id]; });
+  });
   state.roundComplete = false;
 
   save();
@@ -2035,9 +2308,9 @@ function renderMatchPage() {
     const b = (state.rrTeams[pair[1]] || []).map(id => getPlayerName(id)).join(' & ');
     return `${escHtml(a)} <span class="muted">vs</span> ${escHtml(b)}`;
   };
-  let html = '';
+  let html = liveMatchBar();
 
-  const roundNo = allDone ? state.round - 1 : state.round;
+  const roundNo = Math.max(...state.currentMatches.map(m => m.roundNo || (allDone ? state.round - 1 : state.round)));
   html += `<div class="round-head">
     <h2>${icon('trophy', 'fill:currentColor')}${isRR ? `รอบย่อยที่ ${state.rrRoundIdx + 1}` : `รอบที่ ${roundNo}`}</h2>
     <p>${allCourtsDone ? 'บันทึกผลครบทุกสนามแล้ว' : 'กรุณาเลือกทีมที่ชนะในแต่ละสนาม'}</p>
@@ -2076,6 +2349,7 @@ function renderMatchPage() {
     </div>`;
   }
 
+  html += '<div class="courts-grid">';
   state.currentMatches.forEach((m, idx) => {
     const teamA = m.teams[0].map(id => state.players.find(p => p.id === id)).filter(Boolean);
     const teamB = m.teams[1].map(id => state.players.find(p => p.id === id)).filter(Boolean);
@@ -2119,7 +2393,9 @@ function renderMatchPage() {
       }
     } else {
       if (m.winner) html += `<div class="court-done">${icon('check-circle')}ทีม ${isWinA ? 'A' : 'B'} ชนะ</div>`;
-      if (m.rrMatch) {
+      if (!m.rrMatch) {
+        html += `<button class="btn btn-lime btn-full btn-lg" style="margin-top:10px;" onclick="startNextOnCourt(${idx})">${icon('chevrons-right')}คู่ถัดไป สนาม ${m.court}</button>`;
+      } else {
         if (state.rrRoundQueue.length > 0) {
           html += `<div style="margin-top:10px;">
             <button class="btn btn-lime btn-sm btn-full" onclick="pickRRMatch(${idx}, 0)">${icon('chevrons-right')}แมทช์ถัดไปในคิว (เหลือ ${state.rrRoundQueue.length})</button>
@@ -2129,7 +2405,21 @@ function renderMatchPage() {
             ` : ''}
           </div>`;
         } else if (!rrRoundComplete) {
-          html += `<div class="tiny" style="margin-top:8px;text-align:center;">⏳ รอสนามอื่นเสร็จก่อน เริ่มรอบย่อยถัดไป</div>`;
+          // Don't wait for the whole sub-round: bring forward any later match whose teams are free
+          const pullable = getPullableRRMatches(idx);
+          if (pullable.length) {
+            html += `<div style="margin-top:10px;">
+              <button class="btn btn-lime btn-full btn-lg" onclick="pullRRMatch(${idx}, 0)">${icon('chevrons-right')}แมทช์ถัดไป สนาม ${m.court}</button>
+              <div class="tiny" style="text-align:center;margin-top:4px;">${vsLine(pullable[0].pair)}</div>
+              ${pullable.length > 1 ? `
+                <div class="tiny" style="margin:8px 0 4px;">หรือเลือกแมทช์อื่น:</div>
+                ${pullable.slice(1).map((opt, oi) => `<button class="btn btn-soft btn-sm btn-full" style="margin-bottom:6px;" onclick="pullRRMatch(${idx}, ${oi + 1})">${vsLine(opt.pair)}</button>`).join('')}
+              ` : ''}
+            </div>`;
+          } else {
+            const busyCourts = state.currentMatches.filter((x, i) => i !== idx && !x.done).map(x => x.court).join(', ');
+            html += `<div class="note-box" style="margin:10px 0 0;">${icon('info')}<span>แมทช์ที่เหลือทุกคู่ต้องใช้ทีมที่กำลังเล่นอยู่ในสนาม ${busyCourts} จึงต้องรอสนามนั้นจบก่อน</span></div>`;
+          }
         }
       }
     }
@@ -2140,6 +2430,7 @@ function renderMatchPage() {
 
     html += `</div></div>`;
   });
+  html += '</div>';
 
   if (isRR && state.rrRoundQueue.length) {
     html += `<div class="card">
@@ -2149,9 +2440,11 @@ function renderMatchPage() {
   }
 
   if (!isRR && bench.length) {
-    const benchPlayers = bench.map(id => state.players.find(p => p.id === id)).filter(Boolean);
+    // Longest wait first — the same order "คู่ถัดไป" uses to pick who goes on
+    const benchPlayers = bench.map(id => state.players.find(p => p.id === id)).filter(Boolean)
+      .sort(waitOrder);
     html += `<div class="card" style="padding:12px;">
-      <div class="card-title" style="margin-bottom:10px;">ผู้เล่นที่รอพัก (${benchPlayers.length} คน)</div>
+      <div class="card-title" style="margin-bottom:10px;">ผู้เล่นที่รอพัก (${benchPlayers.length} คน) <span class="tiny" style="font-weight:400;">เรียงตามเวลารอ</span></div>
       <div class="bench-grid">
         ${benchPlayers.map(p => `<div class="bench-item">${renderTierAvatar(p, 28)}<div><b>${escHtml(p.name)}</b>${skillPill(p)}</div></div>`).join('')}
       </div>
@@ -2160,25 +2453,22 @@ function renderMatchPage() {
 
   if (rrAllComplete) {
     html += `<button class="btn btn-lime btn-full btn-lg" onclick="goPage('random')">${icon('refresh')}สุ่มทีมใหม่</button>`;
-  } else if (!isRR) {
-    html += `<button class="btn btn-lime btn-full btn-lg btn-stack" ${allDone ? '' : 'disabled'} onclick="goPage('random')">
-      <span style="display:flex;align-items:center;gap:6px;">${icon('chevrons-right')}สุ่มรอบถัดไป</span>
-      ${allDone ? '' : '<small>กรุณาบันทึกผลให้ครบทุกสนามก่อน</small>'}
-    </button>`;
+  } else if (allDone) {
+    html += `<button class="btn btn-outline btn-full btn-lg" onclick="goPage('random')">${icon('shuffle')}สุ่มใหม่ทุกสนาม</button>`;
   }
 
   el.innerHTML = html;
 }
 
 // Feature 3: re-randomize current round
-function reRandomizeRound() {
-  if (!confirm('สุ่มคู่ใหม่? ผลที่บันทึกไว้ในรอบนี้จะถูกยกเลิก')) return;
-  doRandomize();
+async function reRandomizeRound() {
+  if (!(await askConfirm('สุ่มคู่ใหม่ทุกสนาม?\nสนามที่ยังไม่บันทึกผลจะถูกล้าง (ผลที่บันทึกแล้วยังอยู่ในประวัติ)', { okText: 'สุ่มใหม่' }))) return;
+  doRandomize(lineupAvoidSet(state.currentMatches.filter(m => !m.done)));
 }
 
 // Feature 3: end current match (mark undone courts as done with no winner)
-function endCurrentMatch() {
-  if (!confirm('สิ้นสุดการแข่งขัน? สนามที่ยังเล่นอยู่จะถูกบันทึกว่าไม่มีผล')) return;
+async function endCurrentMatch() {
+  if (!(await askConfirm('สิ้นสุดการแข่งขัน? สนามที่ยังเล่นอยู่จะถูกบันทึกว่าไม่มีผล'))) return;
   state.currentMatches.forEach(m => {
     if (!m.done) {
       m.done = true;
@@ -2194,15 +2484,6 @@ function recordWin(matchIdx, teamIdx) {
   const m = state.currentMatches[matchIdx];
   if (m.done) return;
   if (!m.id) m.id = genId('m');
-
-  // Snapshot everything needed to undo this result (Feature 4)
-  const statsBefore = {};
-  [...m.teams[0], ...m.teams[1]].forEach(id => {
-    statsBefore[id] = state.stats[id] ? JSON.parse(JSON.stringify(state.stats[id])) : null;
-  });
-  const roundBefore = state.round;
-  const rrDoneMatchesBefore = state.rrDoneMatches;
-  const rrActiveBefore = state.rrActive;
 
   m.done = true;
   m.winner = m.teams[teamIdx];
@@ -2242,11 +2523,21 @@ function recordWin(matchIdx, teamIdx) {
     winner: m.winner,
     rrMatch: !!m.rrMatch,
     court: m.court,
-    roundNum: state.round,
+    roundNum: m.roundNo || state.round,
+    // Names at the time of the game, so history still reads right if a player is deleted later
+    names: Object.fromEntries(allIds.map(id => [id, getPlayerName(id)])),
     substitutions: m.substitutions || []
   };
   state.matchHistory.unshift(histRecord);
-  if (state.matchHistory.length > 50) state.matchHistory = state.matchHistory.slice(0, 50);
+  if (state.matchHistory.length > MATCH_HISTORY_LIMIT) {
+    // remember how many decided games fall off the end, so totals stay right
+    state.archivedMatchCount = (state.archivedMatchCount || 0) +
+      state.matchHistory.slice(MATCH_HISTORY_LIMIT).filter(x => x.winner).length;
+    state.matchHistory = state.matchHistory.slice(0, MATCH_HISTORY_LIMIT);
+  }
+  // Pairing only looks at the last few dozen games; cap these so storage doesn't fill up over months
+  if (state.pairHistory.length > PAIR_LOG_LIMIT) state.pairHistory = state.pairHistory.slice(-PAIR_LOG_LIMIT);
+  if (state.teammateHistory.length > PAIR_LOG_LIMIT) state.teammateHistory = state.teammateHistory.slice(-PAIR_LOG_LIMIT);
 
   const allDoneNow = state.currentMatches.every(x => x.done);
   if (m.rrMatch) {
@@ -2263,32 +2554,50 @@ function recordWin(matchIdx, teamIdx) {
     if (allDoneNow) state.round++;
   }
 
-  m._undo = { statsBefore, roundBefore, rrDoneMatchesBefore, rrActiveBefore, histId: histRecord.id, matchId: m.id };
+  m._undo = { histId: histRecord.id, matchId: m.id };
 
   save();
   renderMatchPage();
-  if (!m.rrMatch && allDoneNow) showRoundResult();
 }
 
 // Feature 4: undo a mis-clicked result and let them pick the winner again
-function undoMatchResult(matchIdx) {
+async function undoMatchResult(matchIdx) {
   const m = state.currentMatches[matchIdx];
   if (!m || !m.done || !m._undo) return;
-  if (!confirm('ยกเลิกผลแมทช์นี้ เพื่อเลือกผู้ชนะใหม่?')) return;
+  // "คู่ถัดไป" on another court may already have taken some of these players
+  const liveElsewhere = new Set();
+  state.currentMatches.forEach((x, i) => { if (i !== matchIdx && !x.done) [...x.teams[0], ...x.teams[1]].forEach(id => liveElsewhere.add(id)); });
+  if ([...m.teams[0], ...m.teams[1]].some(id => liveElsewhere.has(id))) {
+    notify('ผู้เล่นในแมทช์นี้ถูกจัดลงสนามอื่นแล้ว\nแก้ผลได้ที่หน้า สถิติ › ประวัติการแข่งขัน');
+    return;
+  }
+  if (!(await askConfirm('ยกเลิกผลแมทช์นี้ เพื่อเลือกผู้ชนะใหม่?'))) return;
   const u = m._undo;
+  const wasAllDone = state.currentMatches.every(x => x.done);
 
-  Object.keys(u.statsBefore).forEach(id => {
-    if (u.statsBefore[id] === null) delete state.stats[id];
-    else state.stats[id] = u.statsBefore[id];
-  });
+  // Take back only this game's result. (Restoring a snapshot of the players'
+  // stats would also wipe games they played afterwards on another court.)
+  const h = state.matchHistory.find(x => x.id === u.histId);
+  if (h) applyResultToStats(h.teams, h.winner, -1);
+  else applyResultToStats(m.teams, m.winner, -1);
 
-  state.pairHistory = state.pairHistory.filter(h => h.matchId !== u.matchId);
-  state.teammateHistory = state.teammateHistory.filter(h => h.matchId !== u.matchId);
-  state.matchHistory = state.matchHistory.filter(h => h.id !== u.histId);
+  state.pairHistory = state.pairHistory.filter(x => x.matchId !== u.matchId);
+  state.teammateHistory = state.teammateHistory.filter(x => x.matchId !== u.matchId);
+  state.matchHistory = state.matchHistory.filter(x => x.id !== u.histId);
+  refreshStreaks([...m.teams[0], ...m.teams[1]]);
 
-  state.round = u.roundBefore;
-  state.rrDoneMatches = u.rrDoneMatchesBefore;
-  state.rrActive = u.rrActiveBefore;
+  if (m.rrMatch) {
+    // 2) Remove exactly one game from the counter — other courts keep theirs
+    const wasComplete = state.rrTotalMatches > 0 && state.rrDoneMatches >= state.rrTotalMatches;
+    state.rrDoneMatches = Math.max(0, state.rrDoneMatches - 1);
+    if (wasComplete) state.round = Math.max(1, state.round - 1);
+    state.rrActive = state.rrDoneMatches < state.rrTotalMatches;
+  } else if (wasAllDone) {
+    // recordWin moved to the next round when the last court finished; step back,
+    // but never below a round a court is already on (คู่ถัดไป numbers courts itself)
+    const courtRounds = state.currentMatches.map(x => x.roundNo || 0);
+    state.round = Math.max(1, state.round - 1, ...courtRounds);
+  }
 
   m.done = false;
   m.winner = null;
@@ -2327,15 +2636,18 @@ function refreshSubInOptions() {
   state.currentMatches.forEach(x => {
     if (!x.done) [...x.teams[0], ...x.teams[1]].forEach(id => busy.add(id));
   });
-  // RR mode: also exclude players already queued for a match later this sub-round
+  // RR mode: players waiting for a later match this sub-round can still fill in —
+  // list them last and say so. Their queued match won't start while they're on court.
+  const queued = new Set();
   if (state.rrActive && state.rrRoundQueue && state.rrRoundQueue.length) {
     state.rrRoundQueue.forEach(pair => {
-      [...(state.rrTeams[pair[0]] || []), ...(state.rrTeams[pair[1]] || [])].forEach(id => busy.add(id));
+      [...(state.rrTeams[pair[0]] || []), ...(state.rrTeams[pair[1]] || [])].forEach(id => queued.add(id));
     });
   }
-  const available = state.players.filter(p => state.activePlayers.has(p.id) && !busy.has(p.id));
+  const available = state.players.filter(p => state.activePlayers.has(p.id) && !busy.has(p.id))
+    .sort((a, b) => queued.has(a.id) - queued.has(b.id));
   inSel.innerHTML = available.length
-    ? available.map(p => `<option value="${p.id}">${escHtml(p.name)} · ${p.skill}.0</option>`).join('')
+    ? available.map(p => `<option value="${p.id}">${escHtml(p.name)} · ${p.skill}.0${queued.has(p.id) ? ' (รอคิวแมทช์ถัดไป)' : ''}</option>`).join('')
     : `<option value="">— ไม่มีคนว่าง —</option>`;
   refreshSubAvatars();
 }
@@ -2349,7 +2661,7 @@ function confirmSub() {
   const [teamIdxStr, outId] = outSel.value.split('|');
   const teamIdx = parseInt(teamIdxStr);
   const inId = inSel.value;
-  if (!inId) { alert('ไม่มีคนว่างให้เปลี่ยนตัวตอนนี้'); return; }
+  if (!inId) { notify('ไม่มีคนว่างให้เปลี่ยนตัวตอนนี้'); return; }
   if (inId === outId) { closeModal('modal-sub'); return; }
 
   const slot = m.teams[teamIdx].indexOf(outId);
@@ -2373,11 +2685,87 @@ function confirmSub() {
   renderMatchPage();
 }
 
+// Normal mode: as soon as a court finishes, put the next game on it without
+// waiting for the other courts. Whoever has waited longest goes on first;
+// among players who have waited equally long, pick the ones that repeat least.
+function startNextOnCourt(idx) {
+  const m = state.currentMatches[idx];
+  if (!m || !m.done || m.rrMatch) return;
+  const mode = m.mode || state.mode;
+  const need = mode === 'doubles' ? 4 : 2;
+  const busy = new Set();
+  state.currentMatches.forEach((x, i) => {
+    if (i !== idx && !x.done) [...x.teams[0], ...x.teams[1]].forEach(id => busy.add(id));
+  });
+  const free = state.players.filter(p => state.activePlayers.has(p.id) && !busy.has(p.id));
+  if (free.length < need) { notify(`ผู้เล่นว่างมีแค่ ${free.length} คน ต้องการ ${need} คน`); return; }
+
+  const ordered = shuffle([...free]).sort(waitOrder);
+  const cutoff = ordered[need - 1];
+  const sure = ordered.filter(p => waitOrder(p, cutoff) < 0);
+  const pool = ordered.filter(p => waitOrder(p, cutoff) === 0);
+  const k = need - sure.length;
+  const balanced = (m.randomMode || randomMode) === 'balanced';
+
+  const picks = [];
+  if (pool.length <= 10) {
+    const combo = (start, chosen) => {
+      if (chosen.length === k) { picks.push(chosen.slice()); return; }
+      for (let i = start; i < pool.length; i++) { chosen.push(pool[i]); combo(i + 1, chosen); chosen.pop(); }
+    };
+    combo(0, []);
+  } else {
+    for (let t = 0; t < 40; t++) picks.push(shuffle([...pool]).slice(0, k));
+  }
+  let best = null;
+  const pairStats = buildPairStats();
+  picks.forEach(pick => {
+    const r = findBestLineup([...sure, ...pick], 1, mode, balanced, state.currentMatches.length, pairStats);
+    if (!best || r.score < best.score) best = r;
+  });
+
+  const teams = best.matches[0].teams;
+  // Each court counts its own rounds; state.round tracks the furthest one (page header)
+  const roundNo = (m.roundNo || state.round) + 1;
+  state.round = Math.max(state.round, roundNo);
+  state.currentMatches[idx] = {
+    roundNo,
+    id: genId('m'),
+    court: m.court,
+    teams,
+    done: false,
+    winner: null,
+    bench: [],
+    mode,
+    randomMode: m.randomMode || randomMode,
+    substitutions: []
+  };
+  state.currentMatches[idx].prevSeq = markPlayed([...teams[0], ...teams[1]]);
+  save();
+  renderMatchPage();
+}
+
 // Feature: let the organizer bring any queued RR matchup to a free court,
 // not just whichever one happens to be first in the queue (e.g. when that
 // pair isn't ready/present yet).
+// Names of this pairing's players who are still on another unfinished court
+// (e.g. filling in as a substitute) — that pairing can't start yet.
+function rrPairBusyPlayers(pair, courtIdx) {
+  const live = new Set();
+  state.currentMatches.forEach((x, i) => {
+    if (i !== courtIdx && !x.done) [...x.teams[0], ...x.teams[1]].forEach(id => live.add(id));
+  });
+  return [...(state.rrTeams[pair[0]] || []), ...(state.rrTeams[pair[1]] || [])]
+    .filter(id => live.has(id)).map(getPlayerName);
+}
+
 function pickRRMatch(courtIdx, queueIdx) {
   if (queueIdx < 0 || queueIdx >= state.rrRoundQueue.length) return;
+  const busy = rrPairBusyPlayers(state.rrRoundQueue[queueIdx], courtIdx);
+  if (busy.length) {
+    notify(`${busy.join(', ')} ยังเล่นแทนอยู่ในสนามอื่น\nรอให้สนามนั้นจบก่อน หรือเลือกแมทช์อื่นในคิว`);
+    return;
+  }
   const pair = state.rrRoundQueue.splice(queueIdx, 1)[0];
   const mode = state.currentMatches[courtIdx] ? state.currentMatches[courtIdx].mode : state.mode;
   state.currentMatches[courtIdx] = makeRRMatchObj(courtIdx + 1, pair, mode);
@@ -2402,17 +2790,47 @@ function getSwappableRRMatches(courtIdx) {
 
   const results = [];
   state.rrRoundQueue.forEach((pair, qi) => {
-    if (busyTeamIdx.has(pair[0]) || busyTeamIdx.has(pair[1])) return;
+    if (busyTeamIdx.has(pair[0]) || busyTeamIdx.has(pair[1]) || rrPairBusyPlayers(pair, courtIdx).length) return;
     if (pair[0] === m.teamIdxA && pair[1] === m.teamIdxB) return;
     results.push({ source: 'queue', queueIdx: qi, pair });
   });
   for (let ri = state.rrRoundIdx + 1; ri < state.rrRounds.length; ri++) {
     state.rrRounds[ri].forEach((pair, pairIdx) => {
-      if (busyTeamIdx.has(pair[0]) || busyTeamIdx.has(pair[1])) return;
+      if (busyTeamIdx.has(pair[0]) || busyTeamIdx.has(pair[1]) || rrPairBusyPlayers(pair, courtIdx).length) return;
       results.push({ source: 'round', roundIdx: ri, pairIdx, pair });
     });
   }
   return results;
+}
+
+// A court that finished while this sub-round's queue is empty can start any
+// not-yet-played pairing from a later sub-round, as long as neither team is
+// still playing on another court — no need to wait for the whole sub-round.
+function getPullableRRMatches(courtIdx) {
+  const busyTeamIdx = new Set();
+  state.currentMatches.forEach((x, i) => {
+    if (i === courtIdx || !x.rrMatch || x.done) return;
+    busyTeamIdx.add(x.teamIdxA);
+    busyTeamIdx.add(x.teamIdxB);
+  });
+  const results = [];
+  for (let ri = state.rrRoundIdx + 1; ri < state.rrRounds.length; ri++) {
+    state.rrRounds[ri].forEach((pair, pairIdx) => {
+      if (!busyTeamIdx.has(pair[0]) && !busyTeamIdx.has(pair[1]) && !rrPairBusyPlayers(pair, courtIdx).length) results.push({ roundIdx: ri, pairIdx, pair });
+    });
+  }
+  return results;
+}
+
+function pullRRMatch(courtIdx, choiceIdx) {
+  const m = state.currentMatches[courtIdx];
+  if (!m || !m.done || !m.rrMatch) return;
+  const choice = getPullableRRMatches(courtIdx)[choiceIdx];
+  if (!choice) return;
+  state.rrRounds[choice.roundIdx].splice(choice.pairIdx, 1);
+  state.currentMatches[courtIdx] = makeRRMatchObj(courtIdx + 1, choice.pair, m.mode);
+  save();
+  renderMatchPage();
 }
 
 function toggleSwapPicker(courtIdx) {
@@ -2601,12 +3019,12 @@ function renderStatsMain() {
 // =================== TAB 1: DASHBOARD ===================
 function renderStatsDashboard() {
   const players = state.players;
-  const totalMatchCount = (state.matchHistory || []).filter(m => m.winner).length;
+  const totalMatchCount = (state.archivedMatchCount || 0) + (state.matchHistory || []).filter(m => m.winner).length;
   const tile = (ic, n, label) => `<div class="tile"><div class="tile-top">${ic}<span class="tile-num">${n}</span></div><div class="tile-label">${label}</div></div>`;
   document.getElementById('stats-dashboard-summary').innerHTML =
     tile(icon('shuttle'), totalMatchCount, 'แมทช์') +
     tile(icon('users'), players.length, 'ผู้เล่น') +
-    tile(icon('refresh'), Math.max(0, state.round - 1), 'รอบ');
+    tile(icon('refresh'), Math.max(0, ...(state.matchHistory || []).filter(m => !m.rrMatch).map(m => m.roundNum || 0)), 'รอบ');
 
   // --- Top Player Card (most wins) ---
   let topPlayer = null, topWins = -1;
@@ -2914,7 +3332,10 @@ function formatHistoryDate(iso) {
 
 function getPlayerName(id) {
   const p = state.players.find(x => x.id === id);
-  return p ? p.name : id;
+  if (p) return p.name;
+  // Deleted player: use the name saved with their games
+  const h = (state.matchHistory || []).find(x => x.names && x.names[id]);
+  return h ? h.names[id] : 'ผู้เล่นที่ถูกลบ';
 }
 
 function renderMatchHistory() {
@@ -2967,27 +3388,37 @@ function renderMatchHistory() {
   }).join('');
 }
 
-function clearMatchHistory() {
-  if (!confirm('ล้างประวัติการแข่งขันทั้งหมด?')) return;
+async function clearMatchHistory() {
+  if (!(await askConfirm('ล้างประวัติการแข่งขันทั้งหมด?\nสถิติ ชนะ/แพ้ ELO และ Hall of Fame ของทุกคนจะเริ่มนับใหม่ด้วย', { okText: 'ล้างประวัติ', danger: true }))) return;
   state.matchHistory = [];
+  state.stats = {};
+  state.archivedMatchCount = 0;
+  state.currentMatches.forEach(m => { delete m._undo; }); // nothing left to undo against
   save();
   renderStatsHistory();
 }
 
-// Recompute every player's wins/losses/streak from scratch by replaying
-// matchHistory in chronological order. Needed after editing a past result
-// because streaks depend on order — a delta-adjust can't fix that safely,
-// only a full replay can. ELO/golden-pairs/form are already derived live
-// from matchHistory elsewhere, so they don't need any extra handling here.
-function recomputeStatsFromHistory() {
-  state.stats = {};
+// matchHistory only keeps the latest MATCH_HISTORY_LIMIT games, so stats can't
+// be rebuilt from it (that wiped every older win/loss). Editing a result adjusts
+// wins/losses of just that game's players; streaks depend on order, so they are
+// replayed from the history we still have.
+function refreshStreaks(ids) {
   const chronological = [...state.matchHistory].reverse();
-  chronological.forEach(m => {
-    if (!m.winner) return;
-    const teamA = m.teams[0] || [], teamB = m.teams[1] || [];
-    const aWon = teamA.join(',') === m.winner.join(',');
-    (aWon ? teamA : teamB).forEach(id => updateStat(id, 'win'));
-    (aWon ? teamB : teamA).forEach(id => updateStat(id, 'loss'));
+  const historyComplete = state.matchHistory.length < MATCH_HISTORY_LIMIT;
+  ids.forEach(id => {
+    const s = state.stats[id];
+    if (!s) return;
+    let streak = 0, type = null, max = 0;
+    chronological.forEach(m => {
+      if (!m.winner || ![...(m.teams[0] || []), ...(m.teams[1] || [])].includes(id)) return;
+      const t = m.winner.includes(id) ? 'win' : 'loss';
+      streak = t === type ? streak + 1 : 1;
+      type = t;
+      if (t === 'win' && streak > max) max = streak;
+    });
+    s.streak = streak;
+    s.streakType = type;
+    s.maxStreak = historyComplete ? max : Math.max(max, s.maxStreak || 0);
   });
 }
 
@@ -3000,11 +3431,38 @@ function openEditHistoryModal(id) {
   openModal('modal-edit-history');
 }
 
+// Add (+1) or take back (-1) one game's result in every player's wins/losses.
+// Streaks depend on order, so callers follow up with refreshStreaks().
+function applyResultToStats(teams, winner, sign) {
+  if (!winner) return;
+  const winKey = winner.join(',');
+  teams.forEach(team => {
+    const won = team.join(',') === winKey;
+    team.forEach(pid => {
+      const s = state.stats[pid] || (state.stats[pid] = { wins: 0, losses: 0, streak: 0, maxStreak: 0, streakType: null });
+      if (won) s.wins = Math.max(0, s.wins + sign);
+      else s.losses = Math.max(0, s.losses + sign);
+    });
+  });
+}
+
 function setHistoryWinner(id, teamIdx) {
   const h = state.matchHistory.find(x => x.id === id);
   if (!h) return;
-  h.winner = teamIdx === -1 ? null : h.teams[teamIdx];
-  recomputeStatsFromHistory();
+  const newWinner = teamIdx === -1 ? null : h.teams[teamIdx];
+  const key = w => (w ? w.join(',') : '');
+  if (key(newWinner) !== key(h.winner)) {
+    // take the old result back out, then count the new one
+    applyResultToStats(h.teams, h.winner, -1);
+    h.winner = newWinner;
+    applyResultToStats(h.teams, newWinner, 1);
+    refreshStreaks([...h.teams[0], ...h.teams[1]]);
+    // If this game is still shown on a court, keep it in sync and drop its
+    // "undo" snapshot — restoring that would overwrite the edit just made.
+    state.currentMatches.forEach(m => {
+      if (m._undo && m._undo.histId === id) { m.winner = newWinner; delete m._undo; }
+    });
+  }
   save();
   closeModal('modal-edit-history');
   renderStatsHistory();
@@ -3017,9 +3475,40 @@ function openModal(id) {
 function closeModal(id) {
   document.getElementById(id).classList.remove('show');
 }
+// In-app replacements for confirm()/alert(). Native dialogs look out of place,
+// and some embedded browsers block them silently — the button then seems dead.
+let dialogResolve = null;
+function showDialog(message, { okText = 'ตกลง', cancelText = null, danger = false } = {}) {
+  if (dialogResolve) dialogResolve(false);
+  document.getElementById('dialog-message').textContent = message;
+  const ok = document.getElementById('dialog-ok');
+  ok.textContent = okText;
+  ok.className = 'btn ' + (danger ? 'btn-danger' : 'btn-lime');
+  const cancel = document.getElementById('dialog-cancel');
+  cancel.style.display = cancelText ? '' : 'none';
+  cancel.textContent = cancelText || '';
+  document.getElementById('dialog-btns').classList.toggle('single', !cancelText);
+  openModal('modal-dialog');
+  return new Promise(resolve => { dialogResolve = resolve; });
+}
+function closeDialog(result) {
+  closeModal('modal-dialog');
+  const resolve = dialogResolve;
+  dialogResolve = null;
+  if (resolve) resolve(result);
+}
+function askConfirm(message, opts) {
+  return showDialog(message, { cancelText: 'ยกเลิก', okText: 'ยืนยัน', ...opts });
+}
+function notify(message) {
+  return showDialog(message);
+}
+
 document.querySelectorAll('.modal-overlay').forEach(m => {
   m.addEventListener('click', e => {
-    if (e.target === m) m.classList.remove('show');
+    if (e.target !== m) return;
+    if (m.id === 'modal-dialog') closeDialog(false);
+    else m.classList.remove('show');
   });
 });
 
@@ -3037,6 +3526,10 @@ function doReset() {
   state.round = 1;
   state.activePlayers = new Set();
   state.benchQueue = [];
+  state.lastPlayedSeq = {};
+  state.playSeq = 0;
+  state.playCount = {};
+  state.playDay = '';
   state.rrActive = false;
   state.rrTeams = [];
   state.rrRounds = [];
@@ -3068,41 +3561,229 @@ function switchStockTab(tab) {
   document.getElementById('stock-tab-' + tab).classList.add('active');
   const sidebarBtn = document.getElementById('sidebar-' + tab);
   if (sidebarBtn) sidebarBtn.classList.add('active');
-  if (tab === 'dashboard') { renderStockHero(); renderUsageChart(); renderAlerts(); }
-  if (tab === 'movement') { renderStockHero(); renderStockHistory(); }
+  if (tab === 'dashboard') { renderStockItems(); renderUsageChart(); renderAlerts(); }
+  if (tab === 'movement') { renderStockEntryForm(); renderStockHistory(); }
   if (tab === 'expenses') { renderExpensesTab(); }
   if (tab === 'sessioncalc') { initSessionCalcDate(); renderCostPlayers(); calcCost(); }
 }
 
 function renderStockPage() {
-  renderStockHero();
-  if (currentStockTab === 'dashboard') { renderUsageChart(); renderAlerts(); }
-  if (currentStockTab === 'movement') renderStockHistory();
+  if (currentStockTab === 'dashboard') { renderStockItems(); renderUsageChart(); renderAlerts(); }
+  if (currentStockTab === 'movement') { renderStockEntryForm(); renderStockHistory(); }
   if (currentStockTab === 'expenses') { renderExpensesTab(); }
   if (currentStockTab === 'sessioncalc') { renderCostPlayers(); calcCost(); }
 }
 
-function appendStockHistory(type, amount, note) {
+// ---------- Inventory: one item per brand/model ----------
+// item: { id, name, photo, perTube, pricePerTube, count }  (count = balls left)
+// state.stockCount is kept as the total across items for the rest of the app.
+function stockTotal() {
+  return state.stockItems.reduce((s, it) => s + (it.count || 0), 0);
+}
+
+function syncStockTotal() {
+  state.stockCount = stockTotal();
+}
+
+function findStockItem(id) {
+  return state.stockItems.find(it => it.id === id);
+}
+
+// "2 หลอด + 5 ลูก"
+function tubeBreakdown(count, perTube) {
+  const tubes = Math.floor(count / perTube), rest = count % perTube;
+  if (tubes && rest) return `${tubes} หลอด + ${rest} ลูก`;
+  if (tubes) return `${tubes} หลอด`;
+  return `${rest} ลูก`;
+}
+
+function stockItemValue(it) {
+  return it.pricePerTube ? it.count / it.perTube * it.pricePerTube : 0;
+}
+
+// Average price per ball across what's on the shelf (used by the session calculator)
+function avgBallPrice() {
+  const priced = state.stockItems.filter(it => it.pricePerTube > 0);
+  if (!priced.length) return 0;
+  const balls = priced.reduce((s, it) => s + it.count, 0);
+  if (balls) return priced.reduce((s, it) => s + stockItemValue(it), 0) / balls;
+  return priced.reduce((s, it) => s + it.pricePerTube / it.perTube, 0) / priced.length;
+}
+
+function appendStockHistory(type, amount, note, item) {
   const record = {
     id: 'sh' + Date.now() + Math.random().toString(36).slice(2),
     date: new Date().toISOString(),
     type,
     amount,
     note,
-    balanceAfter: state.stockCount
+    itemId: item ? item.id : null,
+    itemName: item ? item.name : '',
+    balanceAfter: item ? item.count : state.stockCount
   };
   state.stockHistory.unshift(record);
-  if (state.stockHistory.length > 200) state.stockHistory = state.stockHistory.slice(0, 200);
+  if (state.stockHistory.length > 500) state.stockHistory = state.stockHistory.slice(0, 500);
 }
 
-// Current shuttlecock brand — a single "what are we using right now" field
-// (not a full multi-brand catalog), with an optional photo of the tube/box.
-let pendingBrandPhoto = null;
+// Change one item's ball count (never below 0) and log it. Returns the real change.
+// adjust = true for recount corrections / removals, which aren't real usage.
+function changeItemStock(item, delta, note, adjust) {
+  const before = item.count;
+  item.count = Math.max(0, before + delta);
+  const real = item.count - before;
+  if (!real) return 0;
+  syncStockTotal();
+  appendStockHistory(real > 0 ? 'in' : 'out', Math.abs(real), note, item);
+  if (adjust) state.stockHistory[0].adjust = true;
+  return real;
+}
 
-function openBrandModal() {
-  const brand = state.stockBrand || { name: '', photo: null };
-  document.getElementById('input-brand-name').value = brand.name || '';
-  pendingBrandPhoto = brand.photo || null;
+// Balls actually taken out for play on a given yyyy-mm-dd (recount corrections excluded;
+// older records have no flag, so their 🔧 note marks them)
+function ballsUsedOn(dateKey) {
+  return state.stockHistory
+    .filter(r => r.type === 'out' && !r.adjust && !String(r.note || '').startsWith('🔧') && toDateInput(new Date(r.date)) === dateKey)
+    .reduce((s, r) => s + r.amount, 0);
+}
+
+function stockImgHtml(item) {
+  return item && item.photo ? `<img src="${item.photo}" alt="">` : icon('shuttle');
+}
+
+// Tubes drawn as little pills: full ones solid, the opened one filled to what's left
+function tubesHtml(item) {
+  const full = Math.floor(item.count / item.perTube);
+  const rest = item.count % item.perTube;
+  const MAX = 12;
+  let html = '';
+  for (let i = 0; i < Math.min(full, MAX); i++) html += '<span class="tube full"><i></i></span>';
+  if (rest && full < MAX) html += `<span class="tube"><i style="height:${Math.round(rest / item.perTube * 100)}%"></i></span>`;
+  if (full > MAX) html += `<span class="tube-more">+${full - MAX} หลอด</span>`;
+  if (!item.count) html = '<span class="tube"></span>';
+  return html;
+}
+
+function renderStockItems() {
+  const items = state.stockItems;
+  const total = stockTotal();
+  const fullTubes = items.reduce((s, it) => s + Math.floor(it.count / it.perTube), 0);
+  const value = items.reduce((s, it) => s + stockItemValue(it), 0);
+  const tile = (ic, n, label) => `<div class="tile"><div class="tile-top">${ic}<span class="tile-num">${n}</span></div><div class="tile-label">${label}</div></div>`;
+  document.getElementById('stock-summary').innerHTML =
+    tile(icon('shuttle'), total.toLocaleString(), 'คงเหลือรวม (ลูก)') +
+    tile(icon('box'), fullTubes.toLocaleString(), 'หลอดเต็ม') +
+    tile(icon('dots'), `฿${fmtMoney(value)}`, 'มูลค่าโดยประมาณ');
+  document.getElementById('stock-item-count').textContent = items.length ? `(${items.length} รายการ)` : '';
+
+  const list = document.getElementById('stock-item-list');
+  if (!items.length) {
+    list.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="icon">🏸</div><p>ยังไม่มีสินค้าในสต๊อก<br>เพิ่มได้ที่แท็บ "รับเข้า / เบิกออก"</p></div>`;
+    return;
+  }
+  // Most stock first; empty items sink to the bottom
+  list.innerHTML = [...items].sort((a, b) => (b.count > 0) - (a.count > 0) || b.count - a.count).map(it => {
+    const rest = it.count % it.perTube;
+    let badge = '';
+    if (!it.count) badge = '<span class="si-badge out">หมด</span>';
+    else if (it.count < it.perTube) badge = '<span class="si-badge low">เหลือไม่ถึงหลอด</span>';
+    const meta = [`หลอดละ ${it.perTube} ลูก`, it.pricePerTube ? `฿${fmtMoney(it.pricePerTube)}/หลอด` : ''].filter(Boolean).join(' · ');
+    return `<div class="stock-item ${it.count ? '' : 'empty'}">
+      <div class="si-top">
+        <div class="si-img">${stockImgHtml(it)}</div>
+        <div class="si-info"><b>${escHtml(it.name)}</b><span>${meta}</span></div>
+        ${badge}
+      </div>
+      <div class="si-count"><b>${it.count}</b><em>ลูก</em><span>= ${tubeBreakdown(it.count, it.perTube)}</span></div>
+      <div class="si-tubes">${tubesHtml(it)}</div>
+      ${rest ? `<div class="si-open">หลอดที่เปิดอยู่เหลือ ${rest} ลูก</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ---------- รับเข้า / เบิกออก tab ----------
+let currentStockItemId = null;
+let stockEntryType = 'in';
+let stockHistoryExpanded = false;
+
+function renderStockEntryForm() {
+  const items = state.stockItems;
+  const has = items.length > 0;
+  document.getElementById('stock-entry-form').style.display = has ? '' : 'none';
+  document.getElementById('stock-entry-empty').style.display = has ? 'none' : '';
+  document.querySelectorAll('.entry-needs-item').forEach(b => { b.disabled = !has; });
+  if (!has) { currentStockItemId = null; return; }
+  if (!findStockItem(currentStockItemId)) currentStockItemId = items[0].id;
+  document.getElementById('stock-entry-item').innerHTML = items.map(it =>
+    `<option value="${it.id}">${escHtml(it.name)} — เหลือ ${it.count} ลูก</option>`).join('');
+  document.getElementById('stock-entry-item').value = currentStockItemId;
+  const it = findStockItem(currentStockItemId);
+  document.getElementById('si-entry-img').innerHTML = stockImgHtml(it);
+  document.getElementById('si-entry-count').textContent = `คงเหลือ ${tubeBreakdown(it.count, it.perTube)} · หลอดละ ${it.perTube} ลูก`;
+  setStockEntryType(stockEntryType);
+}
+
+function selectStockEntryItem(id) {
+  currentStockItemId = id;
+  renderStockEntryForm();
+}
+
+function setStockEntryType(t) {
+  stockEntryType = t;
+  document.getElementById('entry-in').className = 'seg-btn' + (t === 'in' ? ' active-green' : '');
+  document.getElementById('entry-out').className = 'seg-btn' + (t === 'out' ? ' active-red' : '');
+  updateStockEntryPreview();
+}
+
+function stockEntryQty(it) {
+  const tubes = parseInt(document.getElementById('si-tubes').value) || 0;
+  const balls = parseInt(document.getElementById('si-balls').value) || 0;
+  return Math.max(0, tubes) * it.perTube + Math.max(0, balls);
+}
+
+function updateStockEntryPreview() {
+  const it = findStockItem(currentStockItemId);
+  const el = document.getElementById('si-preview');
+  if (!it) return;
+  const n = stockEntryQty(it);
+  if (!n) { el.textContent = `1 หลอด = ${it.perTube} ลูก`; return; }
+  const after = stockEntryType === 'in' ? it.count + n : it.count - n;
+  el.innerHTML = after < 0
+    ? `<span style="color:var(--red);">มีแค่ ${it.count} ลูก เบิกได้ไม่เกินนี้</span>`
+    : `รวม ${n} ลูก → คงเหลือ <b style="color:var(--text);">${after} ลูก</b> (${tubeBreakdown(after, it.perTube)})`;
+}
+
+function submitStockEntry() {
+  const it = findStockItem(currentStockItemId);
+  if (!it) return;
+  const n = stockEntryQty(it);
+  if (!n) { notify('กรุณากรอกจำนวนหลอดหรือจำนวนลูก'); return; }
+  if (stockEntryType === 'out' && n > it.count) { notify(`${it.name} มีแค่ ${it.count} ลูก`); return; }
+  const note = document.getElementById('stock-entry-note').value.trim();
+  changeItemStock(it, stockEntryType === 'in' ? n : -n, note || (stockEntryType === 'in' ? 'รับเข้าสต๊อก' : 'ใช้ในการเล่น'));
+  save();
+  ['si-tubes', 'si-balls', 'stock-entry-note'].forEach(id => { document.getElementById(id).value = ''; });
+  renderStockPage();
+  document.getElementById('si-preview').innerHTML =
+    `<span style="color:var(--green);font-weight:600;">✓ บันทึกแล้ว: ${stockEntryType === 'in' ? 'รับเข้า' : 'เบิกออก'} ${n} ลูก · ${escHtml(it.name)} เหลือ ${it.count} ลูก</span>`;
+}
+
+// ---------- Product add / edit ----------
+let pendingBrandPhoto = null;
+let editingProductId = null;
+
+function openProductModal(id) {
+  const it = id ? findStockItem(id) : null;
+  editingProductId = it ? it.id : null;
+  document.getElementById('product-modal-title').textContent = it ? 'แก้ไขข้อมูลสินค้า' : 'เพิ่มสินค้า';
+  document.getElementById('input-brand-name').value = it ? it.name : '';
+  document.getElementById('input-product-pertube').value = it ? it.perTube : 12;
+  document.getElementById('input-product-price').value = it && it.pricePerTube ? it.pricePerTube : '';
+  document.getElementById('input-product-tubes').value = '';
+  document.getElementById('input-product-balls').value = '';
+  // Starting stock only when adding; later changes go through รับเข้า / เบิกออก so they're logged
+  document.getElementById('product-initial').style.display = it ? 'none' : '';
+  document.getElementById('product-delete-btn').style.display = it ? 'flex' : 'none';
+  pendingBrandPhoto = it ? it.photo : null;
   document.getElementById('input-brand-photo-file').value = '';
   updateBrandPhotoPreview();
   openModal('modal-brand');
@@ -3127,7 +3808,7 @@ function updateBrandPhotoPreview() {
 function handleBrandPhotoSelect(event) {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
-  if (!file.type.startsWith('image/')) { alert('กรุณาเลือกไฟล์รูปภาพ'); return; }
+  if (!file.type.startsWith('image/')) { notify('กรุณาเลือกไฟล์รูปภาพ'); return; }
   const reader = new FileReader();
   reader.onload = () => {
     const img = new Image();
@@ -3154,49 +3835,40 @@ function clearBrandPhoto() {
   updateBrandPhotoPreview();
 }
 
-function saveBrand() {
+function saveProduct() {
   const name = document.getElementById('input-brand-name').value.trim();
-  state.stockBrand = { name, photo: pendingBrandPhoto };
+  const perTube = parseInt(document.getElementById('input-product-pertube').value);
+  const price = parseFloat(document.getElementById('input-product-price').value) || 0;
+  if (!name) { notify('กรุณากรอกชื่อยี่ห้อ / รุ่น'); return; }
+  if (!perTube || perTube < 1) { notify('กรุณากรอกจำนวนลูกต่อหลอด'); return; }
+  const existing = editingProductId ? findStockItem(editingProductId) : null;
+  if (existing) {
+    Object.assign(existing, { name, perTube, pricePerTube: price, photo: pendingBrandPhoto });
+  } else {
+    const it = { id: genId('si'), name, photo: pendingBrandPhoto, perTube, pricePerTube: price, count: 0 };
+    state.stockItems.push(it);
+    currentStockItemId = it.id; // ready to receive/use right away in the form
+    const tubes = Math.max(0, parseInt(document.getElementById('input-product-tubes').value) || 0);
+    const balls = Math.max(0, parseInt(document.getElementById('input-product-balls').value) || 0);
+    if (tubes * perTube + balls) changeItemStock(it, tubes * perTube + balls, 'ยอดเริ่มต้น');
+  }
+  syncStockTotal();
   save();
   closeModal('modal-brand');
-  renderStockHero();
+  renderStockPage();
 }
 
-function renderStockHero() {
-  const n = state.stockCount;
-  const boxes = Math.floor(n / 12);
-  const rem = n % 12;
-  const price = state.stockPricePerBox;
-  const thr = state.stockAlertThreshold || 24;
-
-  const brand = state.stockBrand || { name: '', photo: null };
-  const brandName = brand.name || 'ยังไม่ได้ตั้งชื่อยี่ห้อ';
-  document.getElementById('stock-brand-name').textContent = brandName;
-  document.getElementById('movement-brand-name').textContent = brandName;
-  document.getElementById('stock-brand-photo-wrap').innerHTML = brandImgHtml(brand);
-  document.getElementById('movement-brand-photo').innerHTML = brandImgHtml(brand);
-
-  const totalIn = state.stockHistory.filter(h => h.type === 'in').reduce((s, h) => s + h.amount, 0);
-  const totalUsed = state.stockHistory.filter(h => h.type === 'out').reduce((s, h) => s + h.amount, 0);
-  document.getElementById('stock-total-in').textContent = totalIn.toLocaleString();
-  document.getElementById('stock-total-used').textContent = totalUsed.toLocaleString();
-
-  document.getElementById('stock-count-big').textContent = n;
-  document.getElementById('stock-box-count').textContent = boxes;
-  document.getElementById('movement-stock-count').textContent = n;
-  document.getElementById('movement-box-count').textContent = `คงเหลือ (${boxes} กล่อง${rem ? ` + ${rem} ลูก` : ''})`;
-
-  let color, label;
-  if (n === 0) { color = 'var(--red)'; label = 'หมดแล้ว!'; }
-  else if (n <= Math.floor(thr / 2)) { color = 'var(--red)'; label = 'ใกล้หมด!'; }
-  else if (n <= thr) { color = 'var(--warning)'; label = 'สต๊อกน้อย'; }
-  else { color = 'var(--green)'; label = 'สต๊อกพอ'; }
-  document.getElementById('stock-status-badge').innerHTML = `<span style="color:${color};font-weight:500;">● ${label}</span>`;
-
-  const totalVal = price > 0 ? Math.ceil(n / 12) * price : 0;
-  document.getElementById('stock-value-display').innerHTML = price > 0
-    ? `<div class="sum-line muted" style="margin-top:12px;"><span>มูลค่าสต๊อกโดยประมาณ</span><b style="color:var(--text);">฿ ${totalVal.toLocaleString()}</b></div>`
-    : '';
+async function deleteProduct() {
+  const it = findStockItem(editingProductId);
+  if (!it) return;
+  const msg = it.count ? `ลบ "${it.name}"?\nยังเหลืออยู่ ${it.count} ลูก จะถูกตัดออกจากสต๊อก` : `ลบ "${it.name}"?`;
+  if (!(await askConfirm(msg, { okText: 'ลบ', danger: true }))) return;
+  if (it.count) changeItemStock(it, -it.count, 'ลบสินค้าออกจากสต๊อก', true);
+  state.stockItems = state.stockItems.filter(x => x.id !== it.id);
+  syncStockTotal();
+  save();
+  closeModal('modal-brand');
+  renderStockPage();
 }
 
 function renderUsageChart() {
@@ -3231,130 +3903,118 @@ function renderUsageChart() {
   el.innerHTML = `<div class="chart"><div class="chart-grid">${grid}</div><div class="chart-bars">${cols}</div></div>`;
 }
 
-// Dashboard alert: exactly one status line + one action button — settings
-// (the threshold) live in the Settings modal, not mixed in with this summary.
 function renderAlerts() {
   const el = document.getElementById('stock-alert-messages');
   if (!el) return;
-  const n = state.stockCount;
+  const n = stockTotal();
   const thr = state.stockAlertThreshold || 24;
   const low = n <= thr;
-  const boxes = thr % 12 ? (thr / 12).toFixed(1) : thr / 12;
-  el.innerHTML = `<button class="alert-card" onclick="openStockSettingsModal()">
+  const empty = state.stockItems.filter(it => !it.count).map(it => it.name);
+  // Read-only summary; the threshold is changed from the ⚙️ button in the app bar
+  el.innerHTML = `<div class="alert-card" style="cursor:default;">
     ${icon('bell', low ? 'color:var(--red)' : '')}
     <div>
       <b>การแจ้งเตือนสต๊อกต่ำ</b>
-      <span>แจ้งเตือนเมื่อคงเหลือต่ำกว่า ${thr} ลูก (${boxes} กล่อง)</span>
-      ${low ? `<span style="display:block;color:var(--red);font-weight:600;margin-top:2px;">${n === 0 ? 'สต๊อกหมดแล้ว! กรุณาสั่งซื้อลูกแบด' : `ตอนนี้เหลือ ${n} ลูก — ควรสั่งเพิ่ม`}</span>` : ''}
+      <span>แจ้งเตือนเมื่อสต๊อกรวมเหลือต่ำกว่า ${thr} ลูก</span>
+      ${low ? `<span style="display:block;color:var(--red);font-weight:600;margin-top:2px;">${n === 0 ? 'สต๊อกหมดแล้ว! กรุณาสั่งซื้อลูกแบด' : `ตอนนี้เหลือรวม ${n} ลูก — ควรสั่งเพิ่ม`}</span>` : ''}
+      ${empty.length ? `<span style="display:block;margin-top:2px;">หมดแล้ว: ${escHtml(empty.join(', '))}</span>` : ''}
     </div>
-    <span class="chev">${icon('chevron-right')}</span>
-  </button>`;
+  </div>`;
 }
 
 function openStockSettingsModal() {
   document.getElementById('input-stock-alert-threshold').value = state.stockAlertThreshold || 24;
-  document.getElementById('input-stock-price').value = state.stockPricePerBox || '';
-  updateSettingsPricePreview();
   openModal('modal-stock-settings');
-}
-
-function updateSettingsPricePreview() {
-  const v = parseFloat(document.getElementById('input-stock-price').value) || 0;
-  document.getElementById('settings-price-per-shuttle').value = v > 0 ? +(v / 12).toFixed(2) : '';
 }
 
 function saveStockSettings() {
   const thrVal = parseInt(document.getElementById('input-stock-alert-threshold').value);
-  const priceVal = parseInt(document.getElementById('input-stock-price').value);
   if (!isNaN(thrVal) && thrVal > 0) state.stockAlertThreshold = thrVal;
-  if (!isNaN(priceVal) && priceVal >= 0) state.stockPricePerBox = priceVal;
   save();
   closeModal('modal-stock-settings');
-  renderStockHero();
-  renderAlerts();
+  renderStockPage();
 }
 
-// Reconcile a real-world recount — distinct from "เบิกออก" (genuine usage).
-// The organizer states what's actually on hand; we compute the delta and log
-// it with a clearly-labeled correction note so it never reads as usage.
+// Reconcile a real-world recount of one product — distinct from "เบิกออก" (genuine
+// usage). The organizer states what's actually on hand; we log the difference with
+// a clearly-labeled correction note so it never reads as usage.
 function openStockCorrectionModal() {
-  document.getElementById('correction-current-count').value = state.stockCount;
-  document.getElementById('input-correction-count').value = state.stockCount;
+  const it = findStockItem(currentStockItemId);
+  if (!it) return;
+  document.getElementById('correction-title').textContent = `ปรับยอด · ${it.name}`;
+  document.getElementById('correction-current-count').value = it.count;
+  document.getElementById('input-correction-count').value = it.count;
   document.getElementById('input-correction-reason').value = 'ยอดปรับจากการนับ ไม่ใช่การเบิกใช้';
   updateCorrectionPreview();
   openModal('modal-stock-correction');
 }
 
 function updateCorrectionPreview() {
+  const it = findStockItem(currentStockItemId);
+  if (!it) return;
   const newCount = parseInt(document.getElementById('input-correction-count').value);
   const el = document.getElementById('correction-preview');
-  const delta = isNaN(newCount) ? 0 : newCount - state.stockCount;
+  const delta = isNaN(newCount) ? 0 : newCount - it.count;
   el.value = isNaN(newCount) ? '' : (delta > 0 ? `+${delta}` : `${delta}`);
   el.style.background = delta < 0 ? 'var(--red-soft)' : delta > 0 ? 'var(--green-soft)' : '';
   el.style.color = delta < 0 ? 'var(--red)' : delta > 0 ? 'var(--green)' : '';
 }
 
 function saveStockCorrection() {
+  const it = findStockItem(currentStockItemId);
+  if (!it) return;
   const newCount = parseInt(document.getElementById('input-correction-count').value);
-  if (isNaN(newCount) || newCount < 0) { alert('กรุณากรอกจำนวนที่ถูกต้อง'); return; }
+  if (isNaN(newCount) || newCount < 0) { notify('กรุณากรอกจำนวนที่ถูกต้อง'); return; }
   const reason = document.getElementById('input-correction-reason').value.trim();
-  if (!reason) { alert('กรุณาระบุเหตุผลในการปรับยอด'); return; }
-  const oldCount = state.stockCount;
-  const delta = newCount - oldCount;
-  if (delta === 0) { closeModal('modal-stock-correction'); return; }
-  state.stockCount = newCount;
-  appendStockHistory(delta > 0 ? 'in' : 'out', Math.abs(delta), `🔧 ปรับยอด ${oldCount} → ${newCount} · ${reason}`);
+  if (!reason) { notify('กรุณาระบุเหตุผลในการปรับยอด'); return; }
+  const oldCount = it.count;
+  if (newCount === oldCount) { closeModal('modal-stock-correction'); return; }
+  changeItemStock(it, newCount - oldCount, `🔧 ปรับยอด ${oldCount} → ${newCount} · ${reason}`, true);
   save();
   closeModal('modal-stock-correction');
   renderStockPage();
 }
 
-function renderStock() { renderStockHero(); }
-
-function adjustStock(delta) {
-  state.stockCount = Math.max(0, state.stockCount + delta);
-  let note = '';
-  if (delta === 1) note = 'เพิ่มทีละลูก';
-  else if (delta === -1) note = 'เบิกออก 1 ลูก';
-  else if (delta === 12) note = 'ซื้อ 1 กล่อง';
-  else if (delta === -12) note = 'ใช้ 1 กล่อง';
-  else if (delta === 24) note = 'ซื้อ 2 กล่อง';
-  else note = delta > 0 ? `เพิ่ม ${delta}` : `ลด ${Math.abs(delta)}`;
-  appendStockHistory(delta > 0 ? 'in' : 'out', Math.abs(delta), note);
-  save();
-  renderStockPage();
-}
-
-
 function renderStockHistory() {
   const el = document.getElementById('stock-history-container');
   const toggle = document.getElementById('stock-history-toggle');
+  const filterEl = document.getElementById('stock-history-filter');
   if (!el) return;
-  if (!state.stockHistory.length) {
+  const prev = filterEl.value;
+  filterEl.innerHTML = `<option value="">ทุกยี่ห้อ</option>` +
+    state.stockItems.map(it => `<option value="${it.id}">${escHtml(it.name)}</option>`).join('');
+  filterEl.value = state.stockItems.some(it => it.id === prev) ? prev : '';
+  const all = filterEl.value ? state.stockHistory.filter(r => r.itemId === filterEl.value) : state.stockHistory;
+  if (!all.length) {
     el.innerHTML = '<div class="tiny" style="text-align:center;padding:16px;font-size:13px;">ยังไม่มีประวัติ</div>';
     toggle.style.display = 'none';
     return;
   }
-  toggle.style.display = state.stockHistory.length > 5 ? '' : 'none';
-  toggle.innerHTML = stockHistoryExpanded ? 'ย่อ' : `ดูทั้งหมด${icon('chevron-right')}`;
-  const rows = stockHistoryExpanded ? state.stockHistory : state.stockHistory.slice(0, 5);
+  toggle.style.display = all.length > 10 ? '' : 'none';
+  toggle.innerHTML = stockHistoryExpanded ? 'ย่อ' : `ดูทั้งหมด (${all.length})${icon('chevron-right')}`;
+  const rows = stockHistoryExpanded ? all : all.slice(0, 10);
   el.innerHTML = rows.map(r => {
     const isIn = r.type === 'in';
     const cls = isIn ? 'in' : 'out';
     return `<div class="mv-row">
       <span class="mv-ico ${cls}">${icon(isIn ? 'plus' : 'minus')}</span>
       <span class="mv-amt ${cls}">${isIn ? '+' : '-'}${r.amount}</span>
-      <div class="mv-main"><b>${isIn ? 'รับเข้า' : 'เบิกออก'}</b><span>${escHtml(r.note)}</span></div>
+      <div class="mv-main"><b>${isIn ? 'รับเข้า' : 'เบิกออก'}${r.itemName ? ` · ${escHtml(r.itemName)}` : ''}</b><span>${escHtml(r.note)}</span></div>
       <div class="mv-date">${thaiDate(r.date)} ${hhmm(new Date(r.date))}<br>คงเหลือ ${r.balanceAfter}</div>
     </div>`;
   }).join('');
 }
 
-function clearStockHistory() {
-  if (!confirm('ล้างประวัติสต๊อกทั้งหมด?')) return;
+function toggleStockHistory() {
+  stockHistoryExpanded = !stockHistoryExpanded;
+  renderStockHistory();
+}
+
+async function clearStockHistory() {
+  if (!(await askConfirm('ล้างประวัติสต๊อกทั้งหมด?\n(จำนวนคงเหลือของแต่ละยี่ห้อไม่เปลี่ยน)', { okText: 'ล้างประวัติ', danger: true }))) return;
   state.stockHistory = [];
   save();
-  renderStockHistory();
+  renderStockPage();
 }
 
 // =================== EXPENSES (persistent monthly ledger) ===================
@@ -3409,19 +4069,19 @@ function saveExpense() {
   if (category === 'court') {
     const hours = parseFloat(document.getElementById('input-expense-hours').value) || 0;
     const courts = parseInt(document.getElementById('input-expense-courts').value) || 1;
-    if (hours <= 0) { alert('กรุณากรอกจำนวนชั่วโมง'); return; }
+    if (hours <= 0) { notify('กรุณากรอกจำนวนชั่วโมง'); return; }
     detail = `${hours} ชั่วโมง × ${courts} สนาม`;
     Object.assign(extra, { hours, courts });
   } else if (category === 'shuttle') {
     const shuttles = parseInt(document.getElementById('input-expense-shuttles').value) || 0;
-    if (shuttles <= 0) { alert('กรุณากรอกจำนวนลูก'); return; }
+    if (shuttles <= 0) { notify('กรุณากรอกจำนวนลูก'); return; }
     detail = `${shuttles} ลูก`;
     extra.shuttles = shuttles;
   } else {
     detail = document.getElementById('input-expense-label').value.trim();
-    if (!detail) { alert('กรุณากรอกรายละเอียด'); return; }
+    if (!detail) { notify('กรุณากรอกรายละเอียด'); return; }
   }
-  if (!amount || amount <= 0) { alert('กรุณากรอกจำนวนเงิน'); return; }
+  if (!amount || amount <= 0) { notify('กรุณากรอกจำนวนเงิน'); return; }
 
   const date = dateInput ? new Date(dateInput + 'T12:00:00').toISOString() : new Date().toISOString();
   const existing = editId ? state.expenses.find(x => x.id === editId) : null;
@@ -3437,8 +4097,8 @@ function saveExpense() {
   renderExpensesTab();
 }
 
-function deleteExpense(id) {
-  if (!confirm('ลบรายการค่าใช้จ่ายนี้?')) return;
+async function deleteExpense(id) {
+  if (!(await askConfirm('ลบรายการค่าใช้จ่ายนี้?', { okText: 'ลบ', danger: true }))) return;
   state.expenses = state.expenses.filter(e => e.id !== id);
   save();
   closeModal('modal-expense');
@@ -3488,7 +4148,8 @@ function initSessionCalcDate() {
   const el = document.getElementById('cost-session-date');
   if (el && !el.value) el.value = toDateInput(new Date());
   const priceEl = document.getElementById('cost-shuttle-price');
-  if (priceEl && priceEl.value === '' && state.stockPricePerBox) priceEl.value = +(state.stockPricePerBox / 12).toFixed(2);
+  const avg = avgBallPrice();
+  if (priceEl && priceEl.value === '' && avg) priceEl.value = +avg.toFixed(2);
 }
 
 function resetSessionCalc() {
@@ -3499,7 +4160,7 @@ function resetSessionCalc() {
   calcCost();
 }
 
-function saveSessionToExpenses() {
+async function saveSessionToExpenses() {
   const rate = parseFloat(document.getElementById('cost-rate').value) || 0;
   const hours = parseFloat(document.getElementById('cost-hours').value) || 0;
   const courts = parseInt(document.getElementById('cost-courts').value) || 1;
@@ -3508,18 +4169,26 @@ function saveSessionToExpenses() {
   const courtTotal = rate * hours * courts;
   const shuttleTotal = shuttles * getShuttleUnitPrice();
 
-  if (courtTotal <= 0 && shuttleTotal <= 0) { alert('ยังไม่มีค่าใช้จ่ายให้บันทึก'); return; }
+  if (courtTotal <= 0 && shuttleTotal <= 0) { notify('ยังไม่มีค่าใช้จ่ายให้บันทึก'); return; }
 
+  // Shuttles are often logged as an expense when bought — ask, so they aren't counted twice
+  let addShuttle = shuttleTotal > 0;
+  if (addShuttle) {
+    addShuttle = await askConfirm(`บันทึกค่าลูกแบด ฿${fmtMoney(shuttleTotal)} ลงค่าใช้จ่ายด้วยไหม?\n\nถ้าบันทึกค่าลูกแบดไว้แล้วตอนซื้อ ให้เลือก "ไม่ต้อง" จะได้ไม่นับซ้ำ`,
+      { okText: 'บันทึกด้วย', cancelText: 'ไม่ต้อง' });
+    if (!addShuttle && courtTotal <= 0) return;
+  }
   const dateInput = document.getElementById('cost-session-date').value;
   const date = dateInput ? new Date(dateInput + 'T12:00:00').toISOString() : new Date().toISOString();
   if (courtTotal > 0) {
     state.expenses.unshift({ id: genId('exp'), date, category: 'court', label: `${hours} ชั่วโมง × ${courts} สนาม`, amount: Math.round(courtTotal), hours, courts });
   }
-  if (shuttleTotal > 0) {
+  if (addShuttle) {
     state.expenses.unshift({ id: genId('exp'), date, category: 'shuttle', label: `${shuttles} ลูก`, amount: Math.round(shuttleTotal), shuttles });
   }
+  storePaySnapshot(); // keep who owes what for this date after the form is cleared
   save();
-  alert('บันทึกรอบเล่นลงค่าใช้จ่ายแล้ว');
+  notify('บันทึกรอบเล่นลงค่าใช้จ่ายแล้ว\nติดตามคนที่ยังไม่จ่ายได้ที่ "เก็บเงิน" ของวันนั้น');
   resetSessionCalc();
 }
 
@@ -3580,7 +4249,10 @@ function fillFromActivePlayers() {
 }
 
 function fillShuttlesFromStock() {
-  document.getElementById('cost-shuttles').value = state.stockCount;
+  const dateKey = document.getElementById('cost-session-date').value || toDateInput(new Date());
+  const used = ballsUsedOn(dateKey);
+  if (!used) { notify('ยังไม่มีการเบิกลูกแบดในวันที่เลือก\nบันทึกเบิกออกได้ที่แท็บ "รับเข้า / เบิกออก"'); return; }
+  document.getElementById('cost-shuttles').value = used;
   calcCost();
 }
 
@@ -3615,6 +4287,7 @@ function calcCost() {
     shareTile('ครึ่งเวลา', '(เล่นบางช่วง)', half, Math.ceil(perShare * 0.5));
 
   document.getElementById('cost-save-btn').textContent = `บันทึกรอบเล่น (รวม ฿ ${fmtMoney(grandTotal)})`;
+  renderPayBox();
 }
 
 // =================== UI HELPERS (icons, avatars, dates) ===================
@@ -3630,6 +4303,12 @@ const ICONS = {
   x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
   plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
   minus: '<path d="M5 12h14"/>',
+  broadcast: '<path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/>',
+  copy: '<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+  share: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/>',
+  download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
+  upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
+  wallet: '<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
   check: '<path d="M20 6 9 17l-5-5"/>',
   'check-circle': '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
   scale: '<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>',
@@ -3732,6 +4411,7 @@ function toggleAppMenu(force) {
   const m = document.getElementById('app-menu');
   const show = force === undefined ? !m.classList.contains('show') : force;
   m.classList.toggle('show', show);
+  if (show) renderBackupHint();
 }
 
 function menuGo(page) {
@@ -3770,24 +4450,7 @@ function changeCourts(delta) {
   renderRandomPage();
 }
 
-// =================== MATCH PAGE: round-complete dialog ===================
-function showRoundResult() {
-  const rows = state.currentMatches.filter(m => m.winner).map(m => {
-    const winIdx = m.teams[0].join(',') === m.winner.join(',') ? 0 : 1;
-    const winners = m.winner.map(id => state.players.find(p => p.id === id)).filter(Boolean);
-    return `<div class="done-team">
-      <div>${icon('trophy', 'color:var(--gold);font-size:24px')}<span>ทีม ${winIdx ? 'B' : 'A'}<br><small class="muted" style="font-weight:400;">สนาม ${m.court}</small></span></div>
-      ${winners.map(p => `<div>${renderTierAvatar(p, 34)}${escHtml(p.name)}</div>`).join('')}
-    </div>`;
-  }).join('');
-  document.getElementById('result-body').innerHTML = `
-    <div class="done-ico">${icon('check')}</div>
-    <div class="done-title">รอบนี้บันทึกครบแล้ว</div>
-    <div class="done-sub">ผู้ชนะ ${state.currentMatches.length} สนาม</div>
-    ${rows || '<div class="done-sub">ไม่มีผลการแข่งขันในรอบนี้</div>'}`;
-  openModal('modal-result');
-}
-
+// =================== MATCH PAGE: substitution dialog ===================
 function refreshSubAvatars() {
   const outVal = document.getElementById('sub-out-select').value || '';
   const [teamIdx, outId] = outVal.split('|');
@@ -3879,48 +4542,6 @@ function renderEditHistory(id) {
     </div>`;
 }
 
-// =================== STOCK: entry form / history ===================
-let stockEntryType = 'in';
-let stockHistoryExpanded = false;
-
-function setStockEntryType(t) {
-  stockEntryType = t;
-  document.getElementById('entry-in').className = 'seg-btn' + (t === 'in' ? ' active-green' : '');
-  document.getElementById('entry-out').className = 'seg-btn' + (t === 'out' ? ' active-red' : '');
-}
-
-function setEntryQty(n) {
-  document.getElementById('stock-entry-input').value = n;
-}
-
-function submitStockEntry() {
-  const input = document.getElementById('stock-entry-input');
-  const noteEl = document.getElementById('stock-entry-note');
-  const n = parseInt(input.value);
-  if (!n || n <= 0) { alert('กรุณากรอกจำนวนลูก'); return; }
-  const note = noteEl.value.trim();
-  if (stockEntryType === 'in') {
-    state.stockCount += n;
-    appendStockHistory('in', n, note || 'รับเข้าสต๊อก');
-  } else {
-    state.stockCount = Math.max(0, state.stockCount - n);
-    appendStockHistory('out', n, note || 'ใช้ในการเล่น');
-  }
-  input.value = '';
-  noteEl.value = '';
-  save();
-  renderStockPage();
-}
-
-function toggleStockHistory() {
-  stockHistoryExpanded = !stockHistoryExpanded;
-  renderStockHistory();
-}
-
-function brandImgHtml(brand) {
-  return brand.photo ? `<img src="${brand.photo}" alt="">` : icon('shuttle');
-}
-
 // =================== EXPENSES: month navigation / form helpers ===================
 let expenseMonthKey = null;
 
@@ -3943,7 +4564,7 @@ function setExpenseCategory(cat) {
 // =================== SESSION CALC: participants ===================
 function getShuttleUnitPrice() {
   const v = parseFloat(document.getElementById('cost-shuttle-price').value);
-  return isNaN(v) ? (state.stockPricePerBox || 0) / 12 : v;
+  return isNaN(v) ? avgBallPrice() : v;
 }
 
 function addCostPlayer(v) {
@@ -3965,11 +4586,674 @@ function escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+
+
+// QR Code Generator for JavaScript — Copyright (c) 2009 Kazuhiko Arase — MIT license (minified)
+var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],f={},c=function(t,r){o=function(t){for(var r=new Array(t),e=0;e<t;e+=1){r[e]=new Array(t);for(var n=0;n<t;n+=1)r[e][n]=null}return r}(i=4*e+17),l(0,0),l(i-7,0),l(0,i-7),s(),h(),d(t,r),e>=7&&v(t),null==a&&(a=p(e,n,u)),w(a,r)},l=function(t,r){for(var e=-1;e<=7;e+=1)if(!(t+e<=-1||i<=t+e))for(var n=-1;n<=7;n+=1)r+n<=-1||i<=r+n||(o[t+e][r+n]=0<=e&&e<=6&&(0==n||6==n)||0<=n&&n<=6&&(0==e||6==e)||2<=e&&e<=4&&2<=n&&n<=4)},h=function(){for(var t=8;t<i-8;t+=1)null==o[t][6]&&(o[t][6]=t%2==0);for(var r=8;r<i-8;r+=1)null==o[6][r]&&(o[6][r]=r%2==0)},s=function(){for(var t=B.getPatternPosition(e),r=0;r<t.length;r+=1)for(var n=0;n<t.length;n+=1){var i=t[r],a=t[n];if(null==o[i][a])for(var u=-2;u<=2;u+=1)for(var f=-2;f<=2;f+=1)o[i+u][a+f]=-2==u||2==u||-2==f||2==f||0==u&&0==f}},v=function(t){for(var r=B.getBCHTypeNumber(e),n=0;n<18;n+=1){var a=!t&&1==(r>>n&1);o[Math.floor(n/3)][n%3+i-8-3]=a}for(n=0;n<18;n+=1){a=!t&&1==(r>>n&1);o[n%3+i-8-3][Math.floor(n/3)]=a}},d=function(t,r){for(var e=n<<3|r,a=B.getBCHTypeInfo(e),u=0;u<15;u+=1){var f=!t&&1==(a>>u&1);u<6?o[u][8]=f:u<8?o[u+1][8]=f:o[i-15+u][8]=f}for(u=0;u<15;u+=1){f=!t&&1==(a>>u&1);u<8?o[8][i-u-1]=f:u<9?o[8][15-u-1+1]=f:o[8][15-u-1]=f}o[i-8][8]=!t},w=function(t,r){for(var e=-1,n=i-1,a=7,u=0,f=B.getMaskFunction(r),c=i-1;c>0;c-=2)for(6==c&&(c-=1);;){for(var g=0;g<2;g+=1)if(null==o[n][c-g]){var l=!1;u<t.length&&(l=1==(t[u]>>>a&1)),f(n,c-g)&&(l=!l),o[n][c-g]=l,-1==(a-=1)&&(u+=1,a=7)}if((n+=e)<0||i<=n){n-=e,e=-e;break}}},p=function(t,r,e){for(var n=A.getRSBlocks(t,r),o=b(),i=0;i<e.length;i+=1){var a=e[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var u=0;for(i=0;i<n.length;i+=1)u+=n[i].dataCount;if(o.getLengthInBits()>8*u)throw"code length overflow. ("+o.getLengthInBits()+">"+8*u+")";for(o.getLengthInBits()+4<=8*u&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=8*u||(o.put(236,8),o.getLengthInBits()>=8*u));)o.put(17,8);return function(t,r){for(var e=0,n=0,o=0,i=new Array(r.length),a=new Array(r.length),u=0;u<r.length;u+=1){var f=r[u].dataCount,c=r[u].totalCount-f;n=Math.max(n,f),o=Math.max(o,c),i[u]=new Array(f);for(var g=0;g<i[u].length;g+=1)i[u][g]=255&t.getBuffer()[g+e];e+=f;var l=B.getErrorCorrectPolynomial(c),h=k(i[u],l.getLength()-1).mod(l);for(a[u]=new Array(l.getLength()-1),g=0;g<a[u].length;g+=1){var s=g+h.getLength()-a[u].length;a[u][g]=s>=0?h.getAt(s):0}}var v=0;for(g=0;g<r.length;g+=1)v+=r[g].totalCount;var d=new Array(v),w=0;for(g=0;g<n;g+=1)for(u=0;u<r.length;u+=1)g<i[u].length&&(d[w]=i[u][g],w+=1);for(g=0;g<o;g+=1)for(u=0;u<r.length;u+=1)g<a[u].length&&(d[w]=a[u][g],w+=1);return d}(o,n)};f.addData=function(t,r){var e=null;switch(r=r||"Byte"){case"Numeric":e=M(t);break;case"Alphanumeric":e=x(t);break;case"Byte":e=m(t);break;case"Kanji":e=L(t);break;default:throw"mode:"+r}u.push(e),a=null},f.isDark=function(t,r){if(t<0||i<=t||r<0||i<=r)throw t+","+r;return o[t][r]},f.getModuleCount=function(){return i},f.make=function(){if(e<1){for(var t=1;t<40;t++){for(var r=A.getRSBlocks(t,n),o=b(),i=0;i<u.length;i++){var a=u[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var g=0;for(i=0;i<r.length;i++)g+=r[i].dataCount;if(o.getLengthInBits()<=8*g)break}e=t}c(!1,function(){for(var t=0,r=0,e=0;e<8;e+=1){c(!0,e);var n=B.getLostPoint(f);(0==e||t>n)&&(t=n,r=e)}return r}())},f.createTableTag=function(t,r){t=t||2;var e="";e+='<table style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: "+(r=void 0===r?4*t:r)+"px;",e+='">',e+="<tbody>";for(var n=0;n<f.getModuleCount();n+=1){e+="<tr>";for(var o=0;o<f.getModuleCount();o+=1)e+='<td style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: 0px;",e+=" width: "+t+"px;",e+=" height: "+t+"px;",e+=" background-color: ",e+=f.isDark(n,o)?"#000000":"#ffffff",e+=";",e+='"/>';e+="</tr>"}return e+="</tbody>",e+="</table>"},f.createSvgTag=function(t,r,e,n){var o={};"object"==typeof arguments[0]&&(t=(o=arguments[0]).cellSize,r=o.margin,e=o.alt,n=o.title),t=t||2,r=void 0===r?4*t:r,(e="string"==typeof e?{text:e}:e||{}).text=e.text||null,e.id=e.text?e.id||"qrcode-description":null,(n="string"==typeof n?{text:n}:n||{}).text=n.text||null,n.id=n.text?n.id||"qrcode-title":null;var i,a,u,c,g=f.getModuleCount()*t+2*r,l="";for(c="l"+t+",0 0,"+t+" -"+t+",0 0,-"+t+"z ",l+='<svg version="1.1" xmlns="http://www.w3.org/2000/svg"',l+=o.scalable?"":' width="'+g+'px" height="'+g+'px"',l+=' viewBox="0 0 '+g+" "+g+'" ',l+=' preserveAspectRatio="xMinYMin meet"',l+=n.text||e.text?' role="img" aria-labelledby="'+y([n.id,e.id].join(" ").trim())+'"':"",l+=">",l+=n.text?'<title id="'+y(n.id)+'">'+y(n.text)+"</title>":"",l+=e.text?'<description id="'+y(e.id)+'">'+y(e.text)+"</description>":"",l+='<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>',l+='<path d="',a=0;a<f.getModuleCount();a+=1)for(u=a*t+r,i=0;i<f.getModuleCount();i+=1)f.isDark(a,i)&&(l+="M"+(i*t+r)+","+u+c);return l+='" stroke="transparent" fill="black"/>',l+="</svg>"},f.createDataURL=function(t,r){t=t||2,r=void 0===r?4*t:r;var e=f.getModuleCount()*t+2*r,n=r,o=e-r;return I(e,e,function(r,e){if(n<=r&&r<o&&n<=e&&e<o){var i=Math.floor((r-n)/t),a=Math.floor((e-n)/t);return f.isDark(a,i)?0:1}return 1})},f.createImgTag=function(t,r,e){t=t||2,r=void 0===r?4*t:r;var n=f.getModuleCount()*t+2*r,o="";return o+="<img",o+=' src="',o+=f.createDataURL(t,r),o+='"',o+=' width="',o+=n,o+='"',o+=' height="',o+=n,o+='"',e&&(o+=' alt="',o+=y(e),o+='"'),o+="/>"};var y=function(t){for(var r="",e=0;e<t.length;e+=1){var n=t.charAt(e);switch(n){case"<":r+="&lt;";break;case">":r+="&gt;";break;case"&":r+="&amp;";break;case'"':r+="&quot;";break;default:r+=n}}return r};return f.createASCII=function(t,r){if((t=t||1)<2)return function(t){t=void 0===t?2:t;var r,e,n,o,i,a=1*f.getModuleCount()+2*t,u=t,c=a-t,g={"██":"█","█ ":"▀"," █":"▄","  ":" "},l={"██":"▀","█ ":"▀"," █":" ","  ":" "},h="";for(r=0;r<a;r+=2){for(n=Math.floor((r-u)/1),o=Math.floor((r+1-u)/1),e=0;e<a;e+=1)i="█",u<=e&&e<c&&u<=r&&r<c&&f.isDark(n,Math.floor((e-u)/1))&&(i=" "),u<=e&&e<c&&u<=r+1&&r+1<c&&f.isDark(o,Math.floor((e-u)/1))?i+=" ":i+="█",h+=t<1&&r+1>=c?l[i]:g[i];h+="\n"}return a%2&&t>0?h.substring(0,h.length-a-1)+Array(a+1).join("▀"):h.substring(0,h.length-1)}(r);t-=1,r=void 0===r?2*t:r;var e,n,o,i,a=f.getModuleCount()*t+2*r,u=r,c=a-r,g=Array(t+1).join("██"),l=Array(t+1).join("  "),h="",s="";for(e=0;e<a;e+=1){for(o=Math.floor((e-u)/t),s="",n=0;n<a;n+=1)i=1,u<=n&&n<c&&u<=e&&e<c&&f.isDark(o,Math.floor((n-u)/t))&&(i=0),s+=i?g:l;for(o=0;o<t;o+=1)h+=s+"\n"}return h.substring(0,h.length-1)},f.renderTo2dContext=function(t,r){r=r||2;for(var e=f.getModuleCount(),n=0;n<e;n++)for(var o=0;o<e;o++)t.fillStyle=f.isDark(n,o)?"black":"white",t.fillRect(n*r,o*r,r,r)},f};t.stringToBytes=(t.stringToBytesFuncs={default:function(t){for(var r=[],e=0;e<t.length;e+=1){var n=t.charCodeAt(e);r.push(255&n)}return r}}).default,t.createStringToBytes=function(t,r){var e=function(){for(var e=S(t),n=function(){var t=e.read();if(-1==t)throw"eof";return t},o=0,i={};;){var a=e.read();if(-1==a)break;var u=n(),f=n()<<8|n();i[String.fromCharCode(a<<8|u)]=f,o+=1}if(o!=r)throw o+" != "+r;return i}(),n="?".charCodeAt(0);return function(t){for(var r=[],o=0;o<t.length;o+=1){var i=t.charCodeAt(o);if(i<128)r.push(i);else{var a=e[t.charAt(o)];"number"==typeof a?(255&a)==a?r.push(a):(r.push(a>>>8),r.push(255&a)):r.push(n)}}return r}};var r,e,n,o,i,a=1,u=2,f=4,c=8,g={L:1,M:0,Q:3,H:2},l=0,h=1,s=2,v=3,d=4,w=5,p=6,y=7,B=(r=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],e=1335,n=7973,i=function(t){for(var r=0;0!=t;)r+=1,t>>>=1;return r},(o={}).getBCHTypeInfo=function(t){for(var r=t<<10;i(r)-i(e)>=0;)r^=e<<i(r)-i(e);return 21522^(t<<10|r)},o.getBCHTypeNumber=function(t){for(var r=t<<12;i(r)-i(n)>=0;)r^=n<<i(r)-i(n);return t<<12|r},o.getPatternPosition=function(t){return r[t-1]},o.getMaskFunction=function(t){switch(t){case l:return function(t,r){return(t+r)%2==0};case h:return function(t,r){return t%2==0};case s:return function(t,r){return r%3==0};case v:return function(t,r){return(t+r)%3==0};case d:return function(t,r){return(Math.floor(t/2)+Math.floor(r/3))%2==0};case w:return function(t,r){return t*r%2+t*r%3==0};case p:return function(t,r){return(t*r%2+t*r%3)%2==0};case y:return function(t,r){return(t*r%3+(t+r)%2)%2==0};default:throw"bad maskPattern:"+t}},o.getErrorCorrectPolynomial=function(t){for(var r=k([1],0),e=0;e<t;e+=1)r=r.multiply(k([1,C.gexp(e)],0));return r},o.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case a:return 10;case u:return 9;case f:case c:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case a:return 12;case u:return 11;case f:return 16;case c:return 10;default:throw"mode:"+t}else{if(!(r<41))throw"type:"+r;switch(t){case a:return 14;case u:return 13;case f:return 16;case c:return 12;default:throw"mode:"+t}}},o.getLostPoint=function(t){for(var r=t.getModuleCount(),e=0,n=0;n<r;n+=1)for(var o=0;o<r;o+=1){for(var i=0,a=t.isDark(n,o),u=-1;u<=1;u+=1)if(!(n+u<0||r<=n+u))for(var f=-1;f<=1;f+=1)o+f<0||r<=o+f||0==u&&0==f||a==t.isDark(n+u,o+f)&&(i+=1);i>5&&(e+=3+i-5)}for(n=0;n<r-1;n+=1)for(o=0;o<r-1;o+=1){var c=0;t.isDark(n,o)&&(c+=1),t.isDark(n+1,o)&&(c+=1),t.isDark(n,o+1)&&(c+=1),t.isDark(n+1,o+1)&&(c+=1),0!=c&&4!=c||(e+=3)}for(n=0;n<r;n+=1)for(o=0;o<r-6;o+=1)t.isDark(n,o)&&!t.isDark(n,o+1)&&t.isDark(n,o+2)&&t.isDark(n,o+3)&&t.isDark(n,o+4)&&!t.isDark(n,o+5)&&t.isDark(n,o+6)&&(e+=40);for(o=0;o<r;o+=1)for(n=0;n<r-6;n+=1)t.isDark(n,o)&&!t.isDark(n+1,o)&&t.isDark(n+2,o)&&t.isDark(n+3,o)&&t.isDark(n+4,o)&&!t.isDark(n+5,o)&&t.isDark(n+6,o)&&(e+=40);var g=0;for(o=0;o<r;o+=1)for(n=0;n<r;n+=1)t.isDark(n,o)&&(g+=1);return e+=Math.abs(100*g/r/r-50)/5*10},o),C=function(){for(var t=new Array(256),r=new Array(256),e=0;e<8;e+=1)t[e]=1<<e;for(e=8;e<256;e+=1)t[e]=t[e-4]^t[e-5]^t[e-6]^t[e-8];for(e=0;e<255;e+=1)r[t[e]]=e;var n={glog:function(t){if(t<1)throw"glog("+t+")";return r[t]},gexp:function(r){for(;r<0;)r+=255;for(;r>=256;)r-=255;return t[r]}};return n}();function k(t,r){if(void 0===t.length)throw t.length+"/"+r;var e=function(){for(var e=0;e<t.length&&0==t[e];)e+=1;for(var n=new Array(t.length-e+r),o=0;o<t.length-e;o+=1)n[o]=t[o+e];return n}(),n={getAt:function(t){return e[t]},getLength:function(){return e.length},multiply:function(t){for(var r=new Array(n.getLength()+t.getLength()-1),e=0;e<n.getLength();e+=1)for(var o=0;o<t.getLength();o+=1)r[e+o]^=C.gexp(C.glog(n.getAt(e))+C.glog(t.getAt(o)));return k(r,0)},mod:function(t){if(n.getLength()-t.getLength()<0)return n;for(var r=C.glog(n.getAt(0))-C.glog(t.getAt(0)),e=new Array(n.getLength()),o=0;o<n.getLength();o+=1)e[o]=n.getAt(o);for(o=0;o<t.getLength();o+=1)e[o]^=C.gexp(C.glog(t.getAt(o))+r);return k(e,0).mod(t)}};return n}var A=function(){var t=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],r=function(t,r){var e={};return e.totalCount=t,e.dataCount=r,e},e={};return e.getRSBlocks=function(e,n){var o=function(r,e){switch(e){case g.L:return t[4*(r-1)+0];case g.M:return t[4*(r-1)+1];case g.Q:return t[4*(r-1)+2];case g.H:return t[4*(r-1)+3];default:return}}(e,n);if(void 0===o)throw"bad rs block @ typeNumber:"+e+"/errorCorrectionLevel:"+n;for(var i=o.length/3,a=[],u=0;u<i;u+=1)for(var f=o[3*u+0],c=o[3*u+1],l=o[3*u+2],h=0;h<f;h+=1)a.push(r(c,l));return a},e}(),b=function(){var t=[],r=0,e={getBuffer:function(){return t},getAt:function(r){var e=Math.floor(r/8);return 1==(t[e]>>>7-r%8&1)},put:function(t,r){for(var n=0;n<r;n+=1)e.putBit(1==(t>>>r-n-1&1))},getLengthInBits:function(){return r},putBit:function(e){var n=Math.floor(r/8);t.length<=n&&t.push(0),e&&(t[n]|=128>>>r%8),r+=1}};return e},M=function(t){var r=a,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+2<r.length;)t.put(o(r.substring(n,n+3)),10),n+=3;n<r.length&&(r.length-n==1?t.put(o(r.substring(n,n+1)),4):r.length-n==2&&t.put(o(r.substring(n,n+2)),7))}},o=function(t){for(var r=0,e=0;e<t.length;e+=1)r=10*r+i(t.charAt(e));return r},i=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);throw"illegal char :"+t};return n},x=function(t){var r=u,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+1<r.length;)t.put(45*o(r.charAt(n))+o(r.charAt(n+1)),11),n+=2;n<r.length&&t.put(o(r.charAt(n)),6)}},o=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);if("A"<=t&&t<="Z")return t.charCodeAt(0)-"A".charCodeAt(0)+10;switch(t){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+t}};return n},m=function(r){var e=f,n=t.stringToBytes(r),o={getMode:function(){return e},getLength:function(t){return n.length},write:function(t){for(var r=0;r<n.length;r+=1)t.put(n[r],8)}};return o},L=function(r){var e=c,n=t.stringToBytesFuncs.SJIS;if(!n)throw"sjis not supported.";!function(){var t=n("友");if(2!=t.length||38726!=(t[0]<<8|t[1]))throw"sjis not supported."}();var o=n(r),i={getMode:function(){return e},getLength:function(t){return~~(o.length/2)},write:function(t){for(var r=o,e=0;e+1<r.length;){var n=(255&r[e])<<8|255&r[e+1];if(33088<=n&&n<=40956)n-=33088;else{if(!(57408<=n&&n<=60351))throw"illegal char at "+(e+1)+"/"+n;n-=49472}n=192*(n>>>8&255)+(255&n),t.put(n,13),e+=2}if(e<r.length)throw"illegal char at "+(e+1)}};return i},D=function(){var t=[],r={writeByte:function(r){t.push(255&r)},writeShort:function(t){r.writeByte(t),r.writeByte(t>>>8)},writeBytes:function(t,e,n){e=e||0,n=n||t.length;for(var o=0;o<n;o+=1)r.writeByte(t[o+e])},writeString:function(t){for(var e=0;e<t.length;e+=1)r.writeByte(t.charCodeAt(e))},toByteArray:function(){return t},toString:function(){var r="";r+="[";for(var e=0;e<t.length;e+=1)e>0&&(r+=","),r+=t[e];return r+="]"}};return r},S=function(t){var r=t,e=0,n=0,o=0,i={read:function(){for(;o<8;){if(e>=r.length){if(0==o)return-1;throw"unexpected end of file./"+o}var t=r.charAt(e);if(e+=1,"="==t)return o=0,-1;t.match(/^\s$/)||(n=n<<6|a(t.charCodeAt(0)),o+=6)}var i=n>>>o-8&255;return o-=8,i}},a=function(t){if(65<=t&&t<=90)return t-65;if(97<=t&&t<=122)return t-97+26;if(48<=t&&t<=57)return t-48+52;if(43==t)return 62;if(47==t)return 63;throw"c:"+t};return i},I=function(t,r,e){for(var n=function(t,r){var e=t,n=r,o=new Array(t*r),i={setPixel:function(t,r,n){o[r*e+t]=n},write:function(t){t.writeString("GIF87a"),t.writeShort(e),t.writeShort(n),t.writeByte(128),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(255),t.writeByte(255),t.writeByte(255),t.writeString(","),t.writeShort(0),t.writeShort(0),t.writeShort(e),t.writeShort(n),t.writeByte(0);var r=a(2);t.writeByte(2);for(var o=0;r.length-o>255;)t.writeByte(255),t.writeBytes(r,o,255),o+=255;t.writeByte(r.length-o),t.writeBytes(r,o,r.length-o),t.writeByte(0),t.writeString(";")}},a=function(t){for(var r=1<<t,e=1+(1<<t),n=t+1,i=u(),a=0;a<r;a+=1)i.add(String.fromCharCode(a));i.add(String.fromCharCode(r)),i.add(String.fromCharCode(e));var f,c,g,l=D(),h=(f=l,c=0,g=0,{write:function(t,r){if(t>>>r!=0)throw"length over";for(;c+r>=8;)f.writeByte(255&(t<<c|g)),r-=8-c,t>>>=8-c,g=0,c=0;g|=t<<c,c+=r},flush:function(){c>0&&f.writeByte(g)}});h.write(r,n);var s=0,v=String.fromCharCode(o[s]);for(s+=1;s<o.length;){var d=String.fromCharCode(o[s]);s+=1,i.contains(v+d)?v+=d:(h.write(i.indexOf(v),n),i.size()<4095&&(i.size()==1<<n&&(n+=1),i.add(v+d)),v=d)}return h.write(i.indexOf(v),n),h.write(e,n),h.flush(),l.toByteArray()},u=function(){var t={},r=0,e={add:function(n){if(e.contains(n))throw"dup key:"+n;t[n]=r,r+=1},size:function(){return r},indexOf:function(r){return t[r]},contains:function(r){return void 0!==t[r]}};return e};return i}(t,r),o=0;o<r;o+=1)for(var i=0;i<t;i+=1)n.setPixel(i,o,e(i,o));var a=D();n.write(a);for(var u=function(){var t=0,r=0,e=0,n="",o={},i=function(t){n+=String.fromCharCode(a(63&t))},a=function(t){if(t<0);else{if(t<26)return 65+t;if(t<52)return t-26+97;if(t<62)return t-52+48;if(62==t)return 43;if(63==t)return 47}throw"n:"+t};return o.writeByte=function(n){for(t=t<<8|255&n,r+=8,e+=1;r>=6;)i(t>>>r-6),r-=6},o.flush=function(){if(r>0&&(i(t<<6-r),t=0,r=0),e%3!=0)for(var o=3-e%3,a=0;a<o;a+=1)n+="="},o.toString=function(){return n},o}(),f=a.toByteArray(),c=0;c<f.length;c+=1)u.writeByte(f[c]);return u.flush(),"data:image/gif;base64,"+u};return t}();qrcode.stringToBytesFuncs["UTF-8"]=function(t){return function(t){for(var r=[],e=0;e<t.length;e++){var n=t.charCodeAt(e);n<128?r.push(n):n<2048?r.push(192|n>>6,128|63&n):n<55296||n>=57344?r.push(224|n>>12,128|n>>6&63,128|63&n):(e++,n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>>6&63,128|63&n))}return r}(t)},function(t){"function"==typeof define&&define.amd?define([],t):"object"==typeof exports&&(module.exports=t())}(function(){return qrcode});
+
+// =================== LIVE QUEUE: organizer side ===================
+// While sharing is on, every save() sends a small read-only snapshot of the
+// match page (names only — no skill levels) to the group's Firebase Realtime
+// Database. Players open the viewer link and see it update by itself.
+const LIVE_KEYS = { db: 'bmt_liveDb', room: 'bmt_liveRoom', on: 'bmt_liveOn' };
+let liveTimer = null, liveLastSent = '', liveStatus = { state: 'idle', at: 0, msg: '' };
+
+function liveCfg() {
+  return {
+    db: localStorage.getItem(LIVE_KEYS.db) || '',
+    room: localStorage.getItem(LIVE_KEYS.room) || '',
+    on: localStorage.getItem(LIVE_KEYS.on) === '1',
+  };
+}
+
+// Accepts the URL as copied from the Firebase console; returns just the host
+function parseDbHost(input) {
+  let v = String(input || '').trim().toLowerCase();
+  if (!v) return '';
+  if (!/^https?:\/\//.test(v)) v = 'https://' + v;
+  let host = '';
+  try { host = new URL(v).hostname; } catch (e) { return ''; }
+  return /^[a-z0-9-]+(\.[a-z0-9-]+)*\.(firebasedatabase\.app|firebaseio\.com)$/.test(host) ? host : '';
+}
+
+function newRoomId() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
+  const buf = new Uint32Array(20);
+  crypto.getRandomValues(buf);
+  return Array.from(buf, n => chars[n % chars.length]).join('');
+}
+
+function liveViewerUrl(cfg) {
+  const base = location.protocol === 'file:' ? PUBLIC_APP_URL : location.origin + location.pathname;
+  return `${base}?watch=${cfg.room}&db=${cfg.db}`;
+}
+
+function liveEndpoint(cfg) {
+  return `https://${cfg.db}/live/${cfg.room}.json`;
+}
+
+// What viewers get to see: courts in play and the waiting order
+function buildLiveSnapshot() {
+  const ms = state.currentMatches || [];
+  const isRR = !!(ms[0] && ms[0].rrMatch);
+  const mode = (ms[0] && ms[0].mode) || state.mode;
+  const now = Date.now();
+  ms.forEach(m => { if (!m.startedAt) m.startedAt = now; });
+  const names = ids => (ids || []).map(id => getPlayerName(id));
+  const snap = {
+    v: 1, mode, rr: isRR, need: mode === 'doubles' ? 4 : 2,
+    courts: ms.map(m => ({
+      c: m.court, a: names(m.teams[0]), b: names(m.teams[1]), done: !!m.done,
+      w: m.winner ? (m.teams[0].join(',') === m.winner.join(',') ? 0 : 1) : null,
+      s: m.startedAt || null,
+    })),
+  };
+  if (isRR) {
+    const later = [...(state.rrRoundQueue || [])];
+    for (let ri = state.rrRoundIdx + 1; ri < (state.rrRounds || []).length; ri++) later.push(...state.rrRounds[ri]);
+    snap.next = later.map(pair => [names(state.rrTeams[pair[0]]), names(state.rrTeams[pair[1]])]);
+    snap.left = Math.max(0, (state.rrTotalMatches || 0) - (state.rrDoneMatches || 0));
+  } else {
+    // Same order the app uses to pick who goes on next: waited longest first
+    const live = new Set();
+    ms.forEach(m => { if (!m.done) [...m.teams[0], ...m.teams[1]].forEach(id => live.add(id)); });
+    snap.queue = state.players.filter(p => state.activePlayers.has(p.id) && !live.has(p.id)).sort(waitOrder).map(p => p.name);
+  }
+  return snap;
+}
+
+function livePublishSoon(delay) {
+  if (WATCH || !liveCfg().on) return;
+  clearTimeout(liveTimer);
+  liveTimer = setTimeout(() => livePublish(false), delay == null ? 700 : delay);
+}
+
+async function livePublish(force) {
+  const cfg = liveCfg();
+  if (WATCH || !cfg.on || !cfg.db || !cfg.room) return;
+  const d = JSON.stringify(buildLiveSnapshot());
+  if (!force && d === liveLastSent) return; // nothing on the match page changed
+  try {
+    const res = await fetch(liveEndpoint(cfg), { method: 'PUT', body: JSON.stringify({ d, t: Date.now() }) });
+    if (!res.ok) throw new Error(res.status === 401 || res.status === 403 ? 'denied' : 'http');
+    liveLastSent = d;
+    liveStatus = { state: 'ok', at: Date.now(), msg: '' };
+  } catch (e) {
+    liveStatus = {
+      state: 'err', at: Date.now(),
+      msg: e.message === 'denied' ? 'ฐานข้อมูลไม่อนุญาตให้บันทึก — ตรวจ Rules ใน Firebase อีกครั้ง'
+                                  : 'ส่งข้อมูลไม่สำเร็จ (อินเทอร์เน็ตหลุด?) จะลองใหม่อัตโนมัติ',
+    };
+    clearTimeout(liveTimer);
+    liveTimer = setTimeout(() => livePublish(true), 20000);
+  }
+  refreshLiveUi();
+}
+
+window.addEventListener('online', () => { if (!WATCH) livePublish(true); });
+
+function refreshLiveUi() {
+  const sub = document.getElementById('live-menu-sub');
+  if (sub) sub.textContent = liveCfg().on ? (liveStatus.state === 'err' ? 'ส่งข้อมูลไม่สำเร็จ' : 'เปิดอยู่') : '';
+  if (sub) sub.classList.toggle('warn', liveStatus.state === 'err');
+  if (document.getElementById('modal-live').classList.contains('show')) renderLiveModal();
+  if (currentPage === 'match' && !WATCH) {
+    const bar = document.getElementById('live-match-bar');
+    if (bar) bar.outerHTML = liveMatchBar();
+  }
+}
+
+function liveMatchBar() {
+  const cfg = liveCfg();
+  if (!cfg.on) {
+    return `<div id="live-match-bar" class="live-bar off"><button class="link-btn" onclick="openLiveModal()">${icon('broadcast')}ให้คนอื่นดูคิวผ่านมือถือ</button></div>`;
+  }
+  const err = liveStatus.state === 'err';
+  return `<div id="live-match-bar" class="live-bar ${err ? 'err' : 'on'}">
+    <span><i class="live-dot"></i>${err ? 'ส่งคิวให้คนดูไม่สำเร็จ' : 'คนในกลุ่มกำลังดูคิวนี้ได้ผ่านลิงก์'}</span>
+    <button class="btn btn-outline btn-sm" onclick="openLiveModal()">ลิงก์ / QR</button>
+  </div>`;
+}
+
+function openLiveModal() {
+  renderLiveModal();
+  openModal('modal-live');
+}
+
+function renderLiveModal() {
+  const cfg = liveCfg();
+  const el = document.getElementById('live-body');
+  if (!cfg.db) {
+    el.innerHTML = `
+      <p class="live-p">ตั้งค่าครั้งเดียว: วางที่อยู่ Realtime Database จาก Firebase<br><small class="muted">(Firebase › Realtime Database › แท็บ Data › คัดลอกลิงก์ที่ขึ้นต้นด้วย https://)</small></p>
+      <div class="form-group">
+        <input class="input" id="live-db-input" placeholder="https://xxxx-default-rtdb.asia-southeast1.firebasedatabase.app" autocomplete="off" spellcheck="false">
+      </div>
+      <button class="btn btn-lime btn-full" onclick="saveLiveDb()">บันทึกและเริ่มให้ดูคิว</button>`;
+    return;
+  }
+  if (!cfg.on) {
+    el.innerHTML = `
+      <p class="live-p">เมื่อเปิด คนที่มีลิงก์จะเห็นหน้าแข่งขันแบบดูอย่างเดียว: ใครกำลังเล่นสนามไหน และคิวรอลงสนาม<br><small class="muted">ส่งเฉพาะชื่อเล่น ไม่ส่งระดับฝีมือหรือข้อมูลอื่น</small></p>
+      <button class="btn btn-lime btn-full btn-lg" onclick="setLiveOn(true)">${icon('broadcast')}เริ่มให้ดูคิว</button>
+      <button class="link-btn live-small" onclick="changeLiveDb()">เปลี่ยนฐานข้อมูล Firebase</button>`;
+    return;
+  }
+  const url = liveViewerUrl(cfg);
+  let qrSvg = '';
+  try {
+    const q = qrcode(0, 'M');
+    q.addData(url);
+    q.make();
+    qrSvg = q.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+  } catch (e) { qrSvg = ''; }
+  const st = liveStatus.state === 'ok'
+    ? `<span class="live-st ok">✓ ส่งคิวล่าสุดเมื่อ ${new Date(liveStatus.at).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</span>`
+    : liveStatus.state === 'err' ? `<span class="live-st err">${escHtml(liveStatus.msg)}</span>` : '<span class="live-st">กำลังส่งข้อมูล…</span>';
+  el.innerHTML = `
+    <div class="live-qr">${qrSvg}</div>
+    <p class="live-p" style="text-align:center;">ให้คนในกลุ่มสแกน QR หรือเปิดลิงก์นี้<br>${st}</p>
+    <div class="live-link">${escHtml(url)}</div>
+    <div class="modal-btns">
+      <button class="btn btn-outline" onclick="copyLiveLink()">${icon('copy')}คัดลอกลิงก์</button>
+      <button class="btn btn-lime" onclick="shareLiveLink()">${icon('share')}ส่งเข้ากลุ่ม</button>
+    </div>
+    <div class="live-actions">
+      <button class="link-btn" onclick="rotateLiveRoom()">เปลี่ยนลิงก์ใหม่</button>
+      <button class="link-btn" style="color:var(--red);" onclick="setLiveOn(false)">หยุดให้ดูคิว</button>
+    </div>
+    <div class="tiny" style="margin-top:8px;">ลิงก์นี้ใช้ได้ทุกสัปดาห์ บันทึกไว้หรือปักหมุดในกลุ่ม LINE ได้เลย · ถ้าลิงก์หลุดไปถึงคนนอก กด "เปลี่ยนลิงก์ใหม่" ลิงก์เดิมจะใช้ไม่ได้ทันที</div>`;
+}
+
+async function saveLiveDb() {
+  const host = parseDbHost(document.getElementById('live-db-input').value);
+  if (!host) { notify('ที่อยู่ไม่ถูกต้อง\nต้องเป็นลิงก์ Realtime Database ที่ลงท้ายด้วย\n.firebasedatabase.app หรือ .firebaseio.com'); return; }
+  localStorage.setItem(LIVE_KEYS.db, host);
+  await setLiveOn(true);
+}
+
+async function changeLiveDb() {
+  if (!(await askConfirm('เปลี่ยนฐานข้อมูล Firebase?\nลิงก์ดูคิวเดิมจะใช้ไม่ได้'))) return;
+  localStorage.removeItem(LIVE_KEYS.db);
+  renderLiveModal();
+}
+
+async function setLiveOn(on) {
+  const cfg = liveCfg();
+  if (on) {
+    if (!cfg.room) localStorage.setItem(LIVE_KEYS.room, newRoomId());
+    localStorage.setItem(LIVE_KEYS.on, '1');
+    liveStatus = { state: 'idle', at: 0, msg: '' };
+    renderLiveModal();
+    await livePublish(true);
+  } else {
+    if (!(await askConfirm('หยุดให้ดูคิว?\nคนที่เปิดลิงก์อยู่จะเห็นว่าปิดแล้ว (ลิงก์เดิมกลับมาใช้ได้เมื่อเปิดอีกครั้ง)'))) return;
+    localStorage.setItem(LIVE_KEYS.on, '0');
+    clearTimeout(liveTimer);
+    try { await fetch(liveEndpoint(cfg), { method: 'DELETE' }); } catch (e) {}
+    liveLastSent = '';
+    refreshLiveUi();
+    renderLiveModal();
+  }
+  refreshLiveUi();
+}
+
+async function rotateLiveRoom() {
+  if (!(await askConfirm('สร้างลิงก์ใหม่?\nลิงก์และ QR เดิมจะใช้ไม่ได้ ต้องส่งลิงก์ใหม่ให้กลุ่มอีกครั้ง', { okText: 'สร้างลิงก์ใหม่' }))) return;
+  const cfg = liveCfg();
+  try { await fetch(liveEndpoint(cfg), { method: 'DELETE' }); } catch (e) {}
+  localStorage.setItem(LIVE_KEYS.room, newRoomId());
+  liveLastSent = '';
+  renderLiveModal();
+  await livePublish(true);
+}
+
+function copyLiveLink() {
+  const url = liveViewerUrl(liveCfg());
+  (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject())
+    .then(() => notify('คัดลอกลิงก์แล้ว'))
+    .catch(() => notify('คัดลอกอัตโนมัติไม่ได้ กรุณาคัดลอกลิงก์นี้:\n\n' + url));
+}
+
+function shareLiveLink() {
+  shareOrCopy(`🏸 ดูคิวการแข่งขันแบดได้ที่ลิงก์นี้ (อัปเดตอัตโนมัติ)\n${liveViewerUrl(liveCfg())}`, 'คิวการแข่งขัน');
+}
+
+// =================== LIVE QUEUE: viewer page ===================
+let watchData;           // undefined = loading, null = not shared / stopped
+let watchUpdated = 0, watchES = null, watchConn = 'connecting';
+const WATCH_ME_KEY = WATCH ? 'watch_me_' + WATCH.room : '';
+
+function startWatchMode() {
+  document.body.classList.add('watch-mode');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-watch').classList.add('active');
+  currentPage = 'watch';
+  document.title = 'คิวการแข่งขัน · Badminton Match';
+  document.getElementById('appbar-title').className = 'appbar-title';
+  document.getElementById('appbar-title').innerHTML = `${icon('trophy')}<span>คิวการแข่งขัน</span>`;
+  renderWatch();
+  watchConnect();
+  setInterval(renderWatch, 30000); // keep "x นาทีที่แล้ว" fresh
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) watchFetch(); });
+}
+
+function watchUrl() {
+  return `https://${WATCH.db}/live/${WATCH.room}.json`;
+}
+
+function watchApply(val) {
+  if (val && typeof val.d === 'string') {
+    try { watchData = JSON.parse(val.d); watchUpdated = val.t || Date.now(); }
+    catch (e) { watchData = null; }
+  } else {
+    watchData = null;
+  }
+  renderWatch();
+}
+
+function setWatchConn(c) {
+  watchConn = c;
+  const el = document.getElementById('watch-conn');
+  if (el) el.outerHTML = watchConnHtml();
+}
+
+function watchConnHtml() {
+  const map = {
+    ok: ['ok', 'อัปเดตอัตโนมัติ'], poll: ['ok', 'อัปเดตทุก 15 วินาที'],
+    connecting: ['wait', 'กำลังเชื่อมต่อ…'], retry: ['err', 'การเชื่อมต่อหลุด กำลังลองใหม่…'],
+    denied: ['err', 'ลิงก์นี้ใช้ไม่ได้แล้ว ขอลิงก์ใหม่จากผู้จัด'],
+  };
+  const [cls, text] = map[watchConn] || map.connecting;
+  return `<span class="watch-conn ${cls}" id="watch-conn"><i class="live-dot"></i>${text}</span>`;
+}
+
+// Firebase REST streaming: the server pushes "put"/"patch" events whenever the data changes.
+// A slow poll runs alongside as a fallback for networks that block streaming.
+function watchConnect() {
+  if (window.EventSource) {
+    try {
+      watchES = new EventSource(watchUrl());
+      watchES.addEventListener('put', e => {
+        try {
+          const m = JSON.parse(e.data);
+          if (m && m.path === '/') watchApply(m.data); else watchFetch();
+        } catch (err) { watchFetch(); }
+        setWatchConn('ok');
+      });
+      watchES.addEventListener('patch', () => watchFetch());
+      watchES.addEventListener('cancel', () => setWatchConn('denied'));
+      watchES.addEventListener('auth_revoked', () => setWatchConn('denied'));
+      watchES.onopen = () => setWatchConn('ok');
+      watchES.onerror = () => { if (watchConn !== 'denied') setWatchConn('retry'); };
+    } catch (e) { watchES = null; }
+  }
+  watchFetch();
+  setInterval(() => { if (!watchES || watchES.readyState !== 1) watchFetch(); }, 15000);
+}
+
+async function watchFetch() {
+  try {
+    const r = await fetch(watchUrl(), { cache: 'no-store' });
+    if (r.status === 401 || r.status === 403) { setWatchConn('denied'); return; }
+    watchApply(await r.json());
+    if (!watchES || watchES.readyState !== 1) setWatchConn('poll');
+  } catch (e) {
+    if (watchConn !== 'denied') setWatchConn('retry');
+  }
+}
+
+function setWatchMe(name) {
+  try { if (name) localStorage.setItem(WATCH_ME_KEY, name); else localStorage.removeItem(WATCH_ME_KEY); } catch (e) {}
+  renderWatch();
+}
+
+function minutesAgo(t) {
+  const m = Math.floor((Date.now() - t) / 60000);
+  if (m < 1) return 'เมื่อสักครู่';
+  if (m < 60) return `${m} นาทีที่แล้ว`;
+  const h = Math.floor(m / 60);
+  return h < 24 ? `${h} ชั่วโมงที่แล้ว` : new Date(t).toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
+}
+
+// Where am I? → { tone, title, sub }
+function watchMyStatus(d, me) {
+  const playing = d.courts.find(c => !c.done && (c.a.includes(me) || c.b.includes(me)));
+  if (playing) return { tone: 'play', title: `กำลังแข่งอยู่ที่สนาม ${playing.c}`, sub: 'สู้ ๆ 💪' };
+  if (d.rr) {
+    const i = (d.next || []).findIndex(([a, b]) => a.includes(me) || b.includes(me));
+    if (i === 0) return { tone: 'next', title: 'แมทช์ของคุณคือแมทช์ถัดไป', sub: 'เตรียมตัวได้เลย' };
+    if (i > 0) return { tone: 'wait', title: `รออีก ${i} แมทช์`, sub: `แมทช์ของคุณอยู่คิวที่ ${i + 1}` };
+    return { tone: 'idle', title: 'ไม่มีแมทช์ของคุณเหลือในคิว', sub: '' };
+  }
+  const q = d.queue || [];
+  const i = q.indexOf(me);
+  if (i < 0) return { tone: 'idle', title: 'ยังไม่อยู่ในคิว', sub: 'ถ้ามาถึงแล้ว แจ้งผู้จัดให้เช็คชื่อ' };
+  const games = Math.floor(i / d.need);
+  if (games === 0) return { tone: 'next', title: 'ได้ลงเกมถัดไป 🎉', sub: `เตรียมตัวได้เลย · คิวที่ ${i + 1}` };
+  return { tone: 'wait', title: `รออีกประมาณ ${games} เกม`, sub: `คิวที่ ${i + 1} จาก ${q.length} คน` };
+}
+
+function renderWatch() {
+  const el = document.getElementById('watch-content');
+  if (!el) return;
+  const head = `<div class="watch-top">${watchConnHtml()}${watchData && watchUpdated ? `<span class="tiny">อัปเดต ${minutesAgo(watchUpdated)}</span>` : ''}</div>`;
+  if (watchData === undefined) {
+    el.innerHTML = head + `<div class="empty-state" style="padding-top:60px;"><div class="icon">🏸</div><p>กำลังโหลดคิวการแข่งขัน…</p></div>`;
+    return;
+  }
+  if (!watchData) {
+    el.innerHTML = head + `<div class="empty-state" style="padding-top:60px;"><div class="icon">🏸</div><p>ผู้จัดยังไม่ได้เปิดให้ดูคิว<br>หรือปิดไปแล้ว</p><p class="tiny" style="margin-top:8px;">หน้านี้จะแสดงคิวเองเมื่อผู้จัดเปิด</p></div>`;
+    return;
+  }
+  const d = watchData;
+  const e = escHtml;
+  let me = '';
+  try { me = localStorage.getItem(WATCH_ME_KEY) || ''; } catch (err) {}
+  const all = new Set();
+  d.courts.forEach(c => [...c.a, ...c.b].forEach(n => all.add(n)));
+  (d.queue || []).forEach(n => all.add(n));
+  (d.next || []).forEach(([a, b]) => [...a, ...b].forEach(n => all.add(n)));
+  const names = [...all].sort((x, y) => x.localeCompare(y, 'th'));
+  const nm = n => `<span class="${n === me ? 'is-me' : ''}">${e(n)}</span>`;
+  const team = t => t.map(nm).join('<i class="amp">&</i>');
+
+  let html = head;
+  const stale = Date.now() - watchUpdated > 3 * 3600000;
+  if (stale) html += `<div class="note-box" style="margin-bottom:12px;">${icon('info')}<span>ยังไม่มีการแข่งขันใหม่ · ข้อมูลล่าสุดเมื่อ ${minutesAgo(watchUpdated)}</span></div>`;
+
+  // --- me ---
+  html += `<div class="watch-me">
+    <select class="select" onchange="setWatchMe(this.value)" aria-label="เลือกชื่อของคุณ">
+      <option value="">🔎 เลือกชื่อของคุณ เพื่อดูว่าอีกกี่เกมถึงตา</option>
+      ${names.map(n => `<option value="${e(n)}" ${n === me ? 'selected' : ''}>${e(n)}</option>`).join('')}
+      ${me && !all.has(me) ? `<option value="${e(me)}" selected>${e(me)}</option>` : ''}
+    </select>
+    ${me ? (() => { const s = watchMyStatus(d, me); return `<div class="watch-status ${s.tone}"><b>${e(me)} · ${s.title}</b>${s.sub ? `<span>${s.sub}</span>` : ''}</div>`; })() : ''}
+  </div>`;
+
+  // --- courts ---
+  html += `<div class="section-h"><h3>กำลังแข่ง</h3><span class="tiny">${d.mode === 'doubles' ? 'ประเภทคู่' : 'ประเภทเดี่ยว'}${d.rr ? ' · Round Robin' : ''}</span></div>`;
+  if (!d.courts.length) {
+    html += `<div class="card tiny" style="text-align:center;">ยังไม่ได้สุ่มคู่</div>`;
+  } else {
+    html += `<div class="watch-courts">` + d.courts.map(c => {
+      const status = c.done
+        ? `<span class="wc-chip done">จบแล้ว · รอคู่ถัดไป</span>`
+        : `<span class="wc-chip live"><i class="live-dot"></i>กำลังแข่ง${c.s ? ` · ${Math.max(0, Math.floor((Date.now() - c.s) / 60000))} นาที` : ''}</span>`;
+      const side = (t, i) => `<div class="wc-team ${c.done && c.w === i ? 'won' : ''}">${c.done && c.w === i ? icon('trophy') : ''}${team(t)}</div>`;
+      return `<div class="watch-court ${c.done ? 'is-done' : ''}">
+        <div class="wc-head"><b>สนาม ${c.c}</b>${status}</div>
+        ${side(c.a, 0)}<div class="wc-vs">VS</div>${side(c.b, 1)}
+      </div>`;
+    }).join('') + `</div>`;
+  }
+
+  // --- queue ---
+  if (d.rr) {
+    const next = d.next || [];
+    html += `<div class="section-h"><h3>แมทช์ถัดไป</h3><span class="tiny">เหลืออีก ${d.left || 0} แมทช์</span></div>`;
+    html += next.length
+      ? `<div class="card watch-list">` + next.slice(0, 12).map(([a, b], i) =>
+          `<div class="wn-row"><span class="wl-no">${i + 1}</span><span>${team(a)} <i class="muted">vs</i> ${team(b)}</span></div>`).join('') +
+        (next.length > 12 ? `<div class="tiny" style="padding-top:6px;">และอีก ${next.length - 12} แมทช์</div>` : '') + `</div>`
+      : `<div class="card tiny" style="text-align:center;">ไม่มีแมทช์ในคิวแล้ว</div>`;
+  } else {
+    const q = d.queue || [];
+    html += `<div class="section-h"><h3>คิวรอลงสนาม</h3><span class="tiny">${q.length} คน</span></div>`;
+    if (!q.length) {
+      html += `<div class="card tiny" style="text-align:center;">ไม่มีคนรอคิว</div>`;
+    } else {
+      const groups = [];
+      for (let i = 0; i < q.length; i += d.need) groups.push(q.slice(i, i + d.need));
+      const label = i => i === 0 ? 'เกมถัดไป' : i === 1 ? 'เกมต่อจากนั้น' : `อีก ${i} เกม`;
+      html += `<div class="card watch-list">` + groups.map((g, i) =>
+        `<div class="wq-row ${i === 0 ? 'first' : ''}"><span class="wq-label">${label(i)}</span><span class="wq-names">${g.map(nm).join(', ')}</span></div>`).join('') +
+        `<div class="tiny" style="padding-top:8px;">เรียงตามเวลารอ คนที่รอนานกว่าได้ลงก่อน · ผู้จัดอาจปรับคู่ตามความเหมาะสม</div></div>`;
+    }
+  }
+  el.innerHTML = html;
+}
+
+// =================== SHARING (LINE etc.) ===================
+// Phones/tablets open the share sheet (LINE shows up there); computers copy to the clipboard.
+async function shareOrCopy(text, title) {
+  const touch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  if (touch && navigator.share) {
+    try { await navigator.share({ title, text }); return; }
+    catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  try {
+    await navigator.clipboard.writeText(text);
+    notify('คัดลอกข้อความแล้ว\nไปวางในกลุ่ม LINE ได้เลย');
+    return;
+  } catch (e) {}
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) {}
+  ta.remove();
+  notify(ok ? 'คัดลอกข้อความแล้ว\nไปวางในกลุ่ม LINE ได้เลย' : 'คัดลอกอัตโนมัติไม่ได้ กรุณาคัดลอกข้อความด้านล่าง:\n\n' + text);
+}
+
+function thaiDate(dateKey) {
+  return new Date(dateKey + 'T12:00:00').toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+// Today's games, or the most recent day that has any
+function shareDayResults() {
+  const decided = (state.matchHistory || []).filter(m => m.winner);
+  if (!decided.length) { notify('ยังไม่มีผลการแข่งขันให้แชร์'); return; }
+  const today = toDateInput(new Date());
+  const dayOf = m => toDateInput(new Date(m.date));
+  const day = decided.some(m => dayOf(m) === today) ? today : dayOf(decided[0]);
+  const games = decided.filter(m => dayOf(m) === day);
+  const rec = {};
+  games.forEach(m => {
+    const winKey = m.winner.join(',');
+    m.teams.forEach(team => team.forEach(id => {
+      const r = rec[id] || (rec[id] = { w: 0, l: 0, name: (m.names && m.names[id]) || getPlayerName(id) });
+      if (team.join(',') === winKey) r.w++; else r.l++;
+    }));
+  });
+  const rows = Object.values(rec).sort((a, b) => b.w - a.w || a.l - b.l || a.name.localeCompare(b.name, 'th'));
+  const top = rows[0];
+  const lines = [
+    `🏸 สรุปผลแบด ${thaiDate(day)}`,
+    `เล่นทั้งหมด ${games.length} เกม · ผู้เล่น ${rows.length} คน`,
+    top && top.w ? `🏆 ชนะมากสุด: ${top.name} (${top.w} ชนะ)` : '',
+    '',
+    'ผลรายคน (ชนะ-แพ้)',
+    ...rows.map((r, i) => `${i + 1}. ${r.name} ${r.w}-${r.l}`),
+  ].filter((l, i) => l !== '' || i === 3);
+  shareOrCopy(lines.join('\n'), 'สรุปผลแบด');
+}
+
+// =================== SESSION PAYMENTS ===================
+// Per session date: who joined, what each owes, and who has paid.
+function costDateKey() {
+  return document.getElementById('cost-session-date').value || toDateInput(new Date());
+}
+
+// Live numbers from the calculator, or null when nothing to split yet
+function liveCostSnapshot() {
+  const rate = parseFloat(document.getElementById('cost-rate').value) || 0;
+  const hours = parseFloat(document.getElementById('cost-hours').value) || 0;
+  const courts = parseInt(document.getElementById('cost-courts').value) || 1;
+  const shuttles = parseInt(document.getElementById('cost-shuttles').value) || 0;
+  const total = rate * hours * courts + shuttles * getShuttleUnitPrice();
+  const people = {};
+  state.players.forEach(p => { if (costPlayerShare[p.id] === 'full' || costPlayerShare[p.id] === 'half') people[p.id] = costPlayerShare[p.id]; });
+  const shares = Object.values(people).reduce((s, v) => s + (v === 'half' ? 0.5 : 1), 0);
+  if (total <= 0 || !shares) return null;
+  const per = total / shares;
+  return { total, perFull: Math.ceil(per), perHalf: Math.ceil(per * 0.5), people };
+}
+
+function storePaySnapshot() {
+  const live = liveCostSnapshot();
+  if (!live) return;
+  const key = costDateKey();
+  const rec = state.payments[key] || (state.payments[key] = { paid: {} });
+  Object.assign(rec, live, { names: Object.fromEntries(Object.keys(live.people).map(id => [id, getPlayerName(id)])) });
+  // keep the last 120 session dates
+  const keys = Object.keys(state.payments).sort();
+  keys.slice(0, Math.max(0, keys.length - 120)).forEach(k => { delete state.payments[k]; });
+}
+
+function payData() {
+  const key = costDateKey();
+  const rec = state.payments[key];
+  const live = liveCostSnapshot();
+  const base = live || (rec && rec.people ? rec : null);
+  if (!base) return null;
+  const paid = (rec && rec.paid) || {};
+  const rows = Object.entries(base.people).map(([id, share]) => ({
+    id, share,
+    name: state.players.find(p => p.id === id) ? getPlayerName(id) : ((rec && rec.names && rec.names[id]) || getPlayerName(id)),
+    amount: share === 'half' ? base.perHalf : base.perFull,
+    paid: !!paid[id],
+  })).sort((a, b) => a.paid - b.paid || a.name.localeCompare(b.name, 'th'));
+  const owed = rows.filter(r => !r.paid).reduce((s, r) => s + r.amount, 0);
+  return { key, live: !!live, total: base.total, rows, owed, paidCount: rows.filter(r => r.paid).length };
+}
+
+function renderPayBox() {
+  const box = document.getElementById('cost-pay-box');
+  if (!box) return;
+  const d = payData();
+  if (!d) { box.innerHTML = ''; return; }
+  const allPaid = d.paidCount === d.rows.length;
+  box.innerHTML = `<div class="pay-box">
+    <div class="pay-head">
+      <div><b>${icon('wallet')}เก็บเงิน · ${thaiDate(d.key)}</b>
+        <span>จ่ายแล้ว ${d.paidCount}/${d.rows.length} คน${allPaid ? ' · ครบแล้ว 🎉' : ` · ค้างอีก ฿${fmtMoney(d.owed)}`}</span></div>
+      <button class="btn btn-outline btn-sm" onclick="sharePayList()">${icon('share')}ส่งยอดเข้ากลุ่ม</button>
+    </div>
+    ${d.live ? '' : '<div class="tiny" style="margin:-4px 0 8px;">ยอดจากรอบเล่นที่บันทึกไว้ของวันนี้</div>'}
+    ${d.rows.map(r => `<div class="pay-row${r.paid ? ' is-paid' : ''}">
+      <span class="pay-name">${escHtml(r.name)}${r.share === 'half' ? ' <small>(ครึ่งเวลา)</small>' : ''}</span>
+      <span class="pay-amt">฿${fmtMoney(r.amount)}</span>
+      <button class="pay-btn${r.paid ? ' on' : ''}" onclick="togglePaid('${r.id}')" aria-pressed="${r.paid}">${r.paid ? icon('check') + 'จ่ายแล้ว' : 'ยังไม่จ่าย'}</button>
+    </div>`).join('')}
+  </div>`;
+}
+
+function togglePaid(id) {
+  const key = costDateKey();
+  storePaySnapshot();
+  const rec = state.payments[key] || (state.payments[key] = { paid: {} });
+  if (!rec.paid) rec.paid = {};
+  if (rec.paid[id]) delete rec.paid[id]; else rec.paid[id] = true;
+  save();
+  renderPayBox();
+}
+
+function sharePayList() {
+  const d = payData();
+  if (!d) return;
+  const unpaid = d.rows.filter(r => !r.paid), paid = d.rows.filter(r => r.paid);
+  const lines = [
+    `🏸 ค่าเล่นแบด ${thaiDate(d.key)}`,
+    `รวม ฿${fmtMoney(d.total)} · ${d.rows.length} คน`,
+    '',
+    ...(unpaid.length ? ['ยังไม่จ่าย:', ...unpaid.map(r => `• ${r.name} ฿${fmtMoney(r.amount)}${r.share === 'half' ? ' (ครึ่งเวลา)' : ''}`)] : ['✅ จ่ายครบทุกคนแล้ว ขอบคุณครับ']),
+    ...(unpaid.length && paid.length ? ['', `จ่ายแล้ว: ${paid.map(r => r.name).join(', ')}`] : []),
+  ];
+  shareOrCopy(lines.join('\n'), 'ค่าเล่นแบด');
+}
+
+// =================== BACKUP / RESTORE ===================
+// Everything lives in this browser only — a file copy protects against a lost
+// phone, cleared browser data, or moving to another device.
+const BACKUP_APP = 'badminton-match';
+
+function renderBackupHint() {
+  const el = document.getElementById('backup-last');
+  if (!el) return;
+  const last = localStorage.getItem('bmt_lastBackup');
+  if (!last) { el.textContent = state.players.length ? 'ยังไม่เคยสำรอง' : ''; el.classList.toggle('warn', !!state.players.length); return; }
+  const days = Math.floor((Date.now() - new Date(last).getTime()) / 86400000);
+  el.textContent = days <= 0 ? 'สำรองล่าสุด: วันนี้' : `สำรองล่าสุด: ${days} วันก่อน`;
+  el.classList.toggle('warn', days >= 14);
+}
+
+async function exportBackup() {
+  save();
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('bmt_') && k !== 'bmt_lastBackup') data[k] = localStorage.getItem(k);
+  }
+  const payload = { app: BACKUP_APP, version: 1, exportedAt: new Date().toISOString(), data };
+  const name = `badminton-backup-${toDateInput(new Date())}.json`;
+  const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+  const done = () => { try { localStorage.setItem('bmt_lastBackup', new Date().toISOString()); } catch (e) {} };
+
+  // Phones: share the file (save to Files / Drive / send to yourself in LINE)
+  const touch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  if (touch && navigator.canShare && typeof File === 'function') {
+    const file = new File([blob], name, { type: 'application/json' });
+    if (navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: 'สำรองข้อมูล Badminton Match' }); done(); return; }
+      catch (e) { if (e && e.name === 'AbortError') return; }
+    }
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  done();
+  notify(`ดาวน์โหลดไฟล์สำรองแล้ว\n${name}\n\nเก็บไฟล์นี้ไว้ เพื่อกู้คืนข้อมูลในเครื่องนี้หรือเครื่องอื่น`);
+}
+
+function importBackup() {
+  document.getElementById('backup-file').click();
+}
+
+async function handleBackupFile(input) {
+  const file = input.files && input.files[0];
+  input.value = '';
+  if (!file) return;
+  let payload;
+  try { payload = JSON.parse(await file.text()); } catch (e) { payload = null; }
+  if (!payload || payload.app !== BACKUP_APP || !payload.data || typeof payload.data !== 'object') {
+    notify('ไฟล์นี้ไม่ใช่ไฟล์สำรองของ Badminton Match');
+    return;
+  }
+  let players = 0;
+  try { players = JSON.parse(payload.data.bmt_players || '[]').length; } catch (e) {}
+  const when = payload.exportedAt ? new Date(payload.exportedAt).toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' }) : 'ไม่ทราบเวลา';
+  if (!(await askConfirm(`กู้คืนจากไฟล์สำรอง?\nสำรองเมื่อ ${when} · ผู้เล่น ${players} คน\n\nข้อมูลปัจจุบันในเครื่องนี้จะถูกแทนที่ทั้งหมด`, { okText: 'กู้คืน', danger: true }))) return;
+
+  // Keep a copy of what's here now, so a failed restore can be rolled back
+  const before = {};
+  Object.keys(localStorage).filter(k => k.startsWith('bmt_')).forEach(k => { before[k] = localStorage.getItem(k); });
+  try {
+    Object.keys(before).forEach(k => localStorage.removeItem(k));
+    Object.entries(payload.data).forEach(([k, v]) => { if (k.startsWith('bmt_') && typeof v === 'string') localStorage.setItem(k, v); });
+  } catch (e) {
+    Object.keys(localStorage).filter(k => k.startsWith('bmt_')).forEach(k => localStorage.removeItem(k));
+    Object.entries(before).forEach(([k, v]) => { try { localStorage.setItem(k, v); } catch (_) {} });
+    notify('กู้คืนไม่สำเร็จ — พื้นที่เก็บข้อมูลในเครื่องไม่พอ\nข้อมูลเดิมยังอยู่ครบ');
+    return;
+  }
+  location.reload();
+}
+
 // =================== INIT ===================
 load();
 document.getElementById('court-count').value = state.courts || 2;
 hydrateIcons();
-goPage('players');
+if (WATCH) {
+  startWatchMode();
+} else {
+  setMode(state.mode === 'singles' ? 'singles' : 'doubles'); // last-used doubles/singles
+  goPage('players');
+  livePublish(true); // bring the shared queue up to date after reopening the app
+}
 
 // Close the app-bar menu when tapping anywhere else
 document.addEventListener('click', e => {
