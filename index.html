@@ -795,6 +795,83 @@
   .wc-win { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--gold); font-weight: 700; }
   .wc-win .ic { font-size: 14px; }
   .wc-vs { margin: 6px 0; }
+  /* ---------- Cost page: tabs + saved courts ---------- */
+  .cost-tab-content { display: none; }
+  .cost-tab-content.active { display: block; }
+  .input.is-locked { background: var(--surface2); color: var(--text); }
+  .sum-line b { white-space: nowrap; }
+  .venue-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 4px; border: none; border-bottom: 1px solid var(--border);
+    background: none; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+  .venue-row:last-child { border-bottom: none; }
+  .venue-ico { width: 38px; height: 38px; border-radius: 10px; background: var(--green-soft); color: var(--green); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .venue-main { flex: 1; min-width: 0; }
+  .venue-main b { display: block; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .venue-main span { font-size: 12px; color: var(--text2); }
+  .venue-edit { color: var(--text2); font-size: 17px; }
+  @media (min-width: 700px) { #page-cost { max-width: 760px; margin: 0 auto; } }
+  @media (max-width: 380px) { .nav-btn { font-size: 10px; } .nav-btn .ic { font-size: 20px; } }
+  /* ---------- Stock lock ---------- */
+  #page-tools.locked > :not(#stock-lock) { display: none !important; }
+  #page-tools:not(.locked) > #stock-lock { display: none; }
+  .stock-lock { max-width: 320px; margin: 24px auto 0; text-align: center; }
+  .sl-ico { width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 12px; background: var(--lime-soft); display: flex; align-items: center; justify-content: center; font-size: 28px; }
+  .sl-title { font-size: 17px; font-weight: 600; margin-bottom: 18px; }
+  .sl-dots { display: flex; justify-content: center; gap: 14px; margin-bottom: 10px; }
+  .sl-dots i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border2); }
+  .sl-dots i.on { background: var(--text); border-color: var(--text); }
+  .sl-dots.shake { animation: slShake 0.35s; }
+  @keyframes slShake { 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-4px); } }
+  .sl-msg { min-height: 20px; font-size: 13px; color: var(--text2); margin-bottom: 14px; }
+  .sl-msg.err { color: var(--red); }
+  .sl-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .sl-key { height: 62px; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); font-size: 24px; font-weight: 500; cursor: pointer; color: var(--text); }
+  .sl-key:active { background: var(--lime-soft); }
+  .sl-key.del { font-size: 20px; color: var(--text2); background: none; border-color: transparent; }
+  .sl-key:disabled { opacity: 0.4; }
+  .lock-off-note { margin-bottom: 12px; background: var(--gold-soft); }
+  .pin-change { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+  /* ---------- Product prices ---------- */
+  .price-box { background: var(--surface2); border-radius: 12px; padding: 12px; margin-top: 4px; margin-bottom: 14px; }
+  .pb-line { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 14px; }
+  .pb-line small { color: var(--text2); font-size: 11px; }
+  .pb-line b { font-size: 17px; }
+  .pb-profit { font-size: 13px; color: var(--text2); min-height: 18px; }
+  .pb-profit.good { color: #17773f; font-weight: 600; }
+  .pb-profit.bad { color: var(--red); font-weight: 600; }
+  .si-price { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 12px; color: var(--text2); padding-top: 8px; border-top: 1px dashed var(--border); }
+  .si-price b { color: var(--text); }
+  .si-profit { padding: 1px 8px; border-radius: 99px; font-weight: 600; }
+  .si-profit.good { background: var(--green-soft); color: #17773f; }
+  .si-profit.bad { background: var(--red-soft); color: var(--red); }
+  /* ---------- Cost page: shuttle rows ---------- */
+  .sh-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; align-items: center;
+    background: var(--surface2); border-radius: 12px; padding: 10px; margin-bottom: 8px; }
+  .sh-row.removable { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
+  .sh-row .select, .sh-row .input { background-color: var(--surface); min-width: 0; }
+  .sh-item { text-overflow: ellipsis; }
+  .sh-row .sh-sub { grid-column: 1 / -1; text-align: right; min-height: 0; }
+  .sh-row .sh-sub:empty { display: none; }
+  .sh-row .sh-sub { font-size: 14px; color: var(--text2); font-weight: 500; }
+  .sh-inputs { display: flex; gap: 8px; align-items: center; }
+  .sh-inputs .input-suffix { flex: 1; }
+  .sh-sub { min-width: 72px; text-align: right; font-weight: 600; font-size: 15px; white-space: nowrap; }
+  .sh-inputs .input { background: var(--surface); }
+  /* Viewer court card: team A (left) vs team B (right), like the organizer's match page */
+  .wc-body { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px; align-items: stretch; }
+  .watch-court .wc-team { display: flex; flex-direction: column; align-items: stretch; gap: 6px; padding: 8px; border: 1.5px solid var(--border); border-radius: 12px; background: var(--surface); font-size: 15px; }
+  .watch-court .wc-team.won { border-color: var(--gold); background: var(--gold-soft); color: inherit; }
+  .watch-court .wc-team.lost { opacity: 0.7; }
+  .wc-team-label { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--text2); }
+  .wc-team.won .wc-team-label { color: #9a6a00; }
+  .wc-team-label .ic { font-size: 14px; color: var(--gold); }
+  .watch-court .wc-players { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+  .watch-court .wc-player { flex-direction: row; justify-content: flex-start; gap: 8px; min-width: 0; max-width: none; text-align: left; }
+  .watch-court .wp-av { width: 40px; height: 40px; font-size: 17px; }
+  .watch-court .wp-name { font-size: 15px; min-width: 0; flex: 1; }
+  .watch-court .wc-player.me .wp-name { flex: 0 1 auto; }
+  .watch-court .wc-vs { align-self: center; margin: 0; font-size: 13px; }
+  .watch-court.is-done .wp-av { filter: none; opacity: 1; }
+  .watch-court .wc-team.won .wp-av { box-shadow: 0 0 0 2px var(--gold); }
 </style>
 </head>
 <body>
@@ -808,6 +885,7 @@
     <button class="nav-dup" onclick="menuGo('random')"><i data-icon="shuffle"></i>สุ่มคู่</button>
     <button class="nav-dup" onclick="menuGo('match')"><i data-icon="trophy"></i>แข่งขัน</button>
     <button class="nav-dup" onclick="menuGo('stats')"><i data-icon="chart"></i>สถิติ</button>
+    <button class="nav-dup" onclick="menuGo('cost')"><i data-icon="wallet"></i>ค่าเล่น</button>
     <button class="nav-dup" onclick="menuGo('tools')"><i data-icon="box"></i>สต๊อก</button>
     <hr class="nav-dup">
     <button onclick="toggleAppMenu(false);openLiveModal()"><i data-icon="broadcast"></i><span>ให้คนอื่นดูคิวผ่านมือถือ<small class="menu-sub" id="live-menu-sub"></small></span></button>
@@ -973,11 +1051,19 @@
 <div class="page" id="page-watch"><div id="watch-content"></div></div>
 
 <div class="page" id="page-tools">
+  <div class="note-box lock-off-note" id="lock-off-note" style="display:none;"><i data-icon="info"></i><span>ปิดการล็อกรหัสหน้าสต๊อกชั่วคราว (ช่วงทดสอบ)</span></div>
+  <!-- Lock screen: asked every time the stock page is opened -->
+  <div class="stock-lock" id="stock-lock">
+    <div class="sl-ico"><i data-icon="lock"></i></div>
+    <div class="sl-title">ใส่รหัสเพื่อเข้าหน้าสต๊อก</div>
+    <div class="sl-dots" id="sl-dots"></div>
+    <div class="sl-msg" id="sl-msg"></div>
+    <div class="sl-pad" id="sl-pad"></div>
+  </div>
   <div class="stock-tabs">
     <button class="stock-tab active" id="stab-dashboard" onclick="switchStockTab('dashboard')">ภาพรวม</button>
     <button class="stock-tab" id="stab-movement" onclick="switchStockTab('movement')">รับเข้า / เบิกออก</button>
     <button class="stock-tab" id="stab-expenses" onclick="switchStockTab('expenses')">ค่าใช้จ่าย</button>
-    <button class="stock-tab" id="stab-sessioncalc" onclick="switchStockTab('sessioncalc')">หารค่าเล่น</button>
   </div>
 
   <!-- ===== TAB 1: Inventory — one card per brand/model ===== -->
@@ -1081,21 +1167,34 @@
    </div>
   </div>
 
-  <!-- ===== TAB 4: Session Calculator ===== -->
-  <div class="stock-tab-content" id="stock-tab-sessioncalc">
+</div>
+
+<!-- PAGE: Cost splitting + saved courts -->
+<div class="page" id="page-cost">
+  <div class="seg">
+    <button class="seg-btn active" id="ctab-calc" onclick="switchCostTab('calc')">หารค่าเล่น</button>
+    <button class="seg-btn" id="ctab-venues" onclick="switchCostTab('venues')">สนามของเรา</button>
+  </div>
+
+  <!-- ===== Tab: split the cost of a session ===== -->
+  <div class="cost-tab-content active" id="cost-tab-calc">
     <div class="card">
       <div class="form-row" style="align-items:center;margin-bottom:14px;">
         <div style="display:flex;align-items:center;gap:8px;font-size:14px;"><i data-icon="calendar" style="font-size:20px;"></i>วันที่เล่น</div>
         <input class="input" id="cost-session-date" type="date" onchange="calcCost()">
       </div>
+      <div class="form-group">
+        <label class="form-label">สนาม</label>
+        <select class="select" id="cost-venue" onchange="selectCostVenue(this.value)"></select>
+      </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">อัตราค่าสนาม (บาท/ชม.)</label>
-          <input class="input" id="cost-rate" type="number" min="0" placeholder="0" inputmode="numeric" oninput="calcCost()">
+          <label class="form-label">ค่าสนาม (บาท/ชม./สนาม)</label>
+          <input class="input" id="cost-rate" type="number" min="0" step="0.01" placeholder="0" inputmode="decimal" oninput="calcCost()">
         </div>
         <div class="form-group">
           <label class="form-label">จำนวนชั่วโมง</label>
-          <input class="input" id="cost-hours" type="number" min="0" placeholder="0" inputmode="decimal" oninput="calcCost()">
+          <input class="input" id="cost-hours" type="number" min="0" step="0.5" placeholder="0" inputmode="decimal" oninput="calcCost()">
         </div>
       </div>
       <div class="form-row">
@@ -1103,20 +1202,14 @@
           <label class="form-label">จำนวนสนาม</label>
           <input class="input" id="cost-courts" type="number" min="0" placeholder="0" inputmode="numeric" oninput="calcCost()">
         </div>
-        <div class="form-group">
-          <label class="form-label">ลูกแบดที่ใช้ (ลูก)</label>
-          <input class="input" id="cost-shuttles" type="number" min="0" placeholder="0" inputmode="numeric" oninput="calcCost()">
-        </div>
+        <div class="form-group"></div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">ราคาลูกแบด (บาท/ลูก)</label>
-          <input class="input" id="cost-shuttle-price" type="number" min="0" step="0.01" inputmode="decimal" oninput="calcCost()">
-        </div>
-        <div class="form-group" style="display:flex;align-items:flex-end;">
-          <button class="btn btn-soft btn-sm btn-full" style="min-height:42px;" onclick="fillShuttlesFromStock()">ดึงจำนวนที่เบิกวันนั้น</button>
-        </div>
+      <div class="section-h" style="margin:2px 0 8px;">
+        <h3 style="font-size:15px;">ลูกแบดที่ใช้</h3>
+        <button class="link-btn" onclick="fillShuttlesFromStock()">ดึงจากที่เบิกวันนั้น</button>
       </div>
+      <div id="cost-shuttle-rows"></div>
+      <button class="btn btn-soft btn-sm btn-full" id="sh-add-btn" style="margin:2px 0 14px;" onclick="addShuttleRow()"><i data-icon="plus"></i>เพิ่มยี่ห้อ</button>
 
       <div class="sum-box" id="cost-summary"></div>
 
@@ -1133,6 +1226,16 @@
       <button class="btn btn-lime btn-full btn-lg" style="margin-top:14px;" id="cost-save-btn" onclick="saveSessionToExpenses()">บันทึกรอบเล่น</button>
     </div>
   </div>
+
+  <!-- ===== Tab: saved courts (name + price per hour) ===== -->
+  <div class="cost-tab-content" id="cost-tab-venues">
+    <div class="card">
+      <div class="card-title">สนามที่บันทึกไว้</div>
+      <div class="tiny" style="margin:-4px 0 10px;">บันทึกชื่อสนามและค่าสนามไว้ครั้งเดียว ตอนหารค่าเล่นเลือกจากรายการได้เลย</div>
+      <div id="venue-list"></div>
+      <button class="btn btn-lime btn-full" style="margin-top:12px;" onclick="openVenueModal()"><i data-icon="plus"></i>เพิ่มสนาม</button>
+    </div>
+  </div>
 </div>
 </div><!-- /.app -->
 
@@ -1143,6 +1246,7 @@
   <button class="nav-btn" id="nav-random" onclick="goPage('random')"><i data-icon="shuffle"></i>สุ่มคู่</button>
   <button class="nav-btn" id="nav-match" onclick="goPage('match')"><i data-icon="trophy"></i>แข่งขัน</button>
   <button class="nav-btn" id="nav-stats" onclick="goPage('stats')"><i data-icon="chart"></i>สถิติ</button>
+  <button class="nav-btn" id="nav-cost" onclick="goPage('cost')"><i data-icon="wallet"></i>ค่าเล่น</button>
   <button class="nav-btn" id="nav-tools" onclick="goPage('tools')"><i data-icon="box"></i>สต๊อก</button>
 </nav>
 
@@ -1242,12 +1346,20 @@
     <div class="form-row" style="margin-top:14px;">
       <div class="form-group">
         <label class="form-label">จำนวนลูกต่อหลอด <span class="req">*</span></label>
-        <div class="input-suffix"><input class="input" id="input-product-pertube" type="number" min="1" max="99" inputmode="numeric" value="12"><span>ลูก</span></div>
+        <div class="input-suffix"><input class="input" id="input-product-pertube" type="number" min="1" max="99" inputmode="numeric" value="12" oninput="updateProductPricePreview()"><span>ลูก</span></div>
       </div>
       <div class="form-group">
-        <label class="form-label">ราคาต่อหลอด</label>
-        <div class="input-suffix"><input class="input" id="input-product-price" type="number" min="0" inputmode="decimal" placeholder="0"><span>บาท</span></div>
+        <label class="form-label">ราคาซื้อต่อหลอด</label>
+        <div class="input-suffix"><input class="input" id="input-product-price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0" oninput="updateProductPricePreview()"><span>บาท</span></div>
       </div>
+    </div>
+    <div class="price-box">
+      <div class="pb-line"><span>ต้นทุนต่อลูก <small>(ราคาหลอด ÷ จำนวนลูก)</small></span><b id="product-cost-ball">—</b></div>
+      <div class="form-group" style="margin:8px 0 6px;">
+        <label class="form-label">ราคาที่ใช้หารต่อลูก <small>(ราคาที่เก็บจากผู้เล่น)</small></label>
+        <div class="input-suffix"><input class="input" id="input-product-sell" type="number" min="0" step="0.01" inputmode="decimal" placeholder="เช่น 95" oninput="updateProductPricePreview()"><span>บาท/ลูก</span></div>
+      </div>
+      <div class="pb-profit" id="product-profit"></div>
     </div>
     <div id="product-initial">
       <label class="form-label">จำนวนที่มีตอนนี้</label>
@@ -1277,6 +1389,14 @@
       <div class="input-suffix"><input class="input" id="input-stock-alert-threshold" type="number" min="1" max="999" inputmode="numeric"><span>ลูก</span></div>
     </div>
     <div class="tiny" style="margin-top:8px;">ราคาและจำนวนลูกต่อหลอดตั้งแยกได้ที่สินค้าแต่ละรายการ</div>
+    <div class="pin-change">
+      <div class="form-label" style="font-weight:600;">เปลี่ยนรหัสเข้าหน้าสต๊อก</div>
+      <div class="form-row">
+        <input class="input" id="input-new-pin" type="password" inputmode="numeric" maxlength="6" placeholder="รหัสใหม่ 6 หลัก" autocomplete="new-password">
+        <input class="input" id="input-new-pin2" type="password" inputmode="numeric" maxlength="6" placeholder="ใส่อีกครั้ง" autocomplete="new-password">
+      </div>
+      <button class="btn btn-outline btn-sm btn-full" style="margin-top:8px;" onclick="changeStockPin()">เปลี่ยนรหัส</button>
+    </div>
     <div class="modal-btns">
       <button class="btn btn-outline" onclick="closeModal('modal-stock-settings')">ยกเลิก</button>
       <button class="btn btn-lime" onclick="saveStockSettings()">บันทึก</button>
@@ -1412,6 +1532,29 @@
   </div>
 </div>
 
+<!-- Modal: add / edit a saved court -->
+<div class="modal-overlay" id="modal-venue">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="venue-modal-title">เพิ่มสนาม</div>
+      <button class="modal-close" onclick="closeModal('modal-venue')" aria-label="ปิด"><i data-icon="x"></i></button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">ชื่อสนาม <span class="req">*</span></label>
+      <input class="input" id="input-venue-name" maxlength="40" placeholder="เช่น สนามแบดตลาดพลู">
+    </div>
+    <div class="form-group">
+      <label class="form-label">ค่าสนาม ต่อ 1 สนาม ต่อ 1 ชั่วโมง <span class="req">*</span></label>
+      <div class="input-suffix"><input class="input" id="input-venue-rate" type="number" min="0" step="0.01" inputmode="decimal" placeholder="เช่น 120"><span>บาท/ชม.</span></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-outline" onclick="closeModal('modal-venue')">ยกเลิก</button>
+      <button class="btn btn-lime" onclick="saveVenue()">บันทึก</button>
+    </div>
+    <button class="link-btn" id="venue-delete-btn" style="display:none;color:var(--red);margin:12px auto 0;" onclick="deleteVenue()"><i data-icon="trash"></i>&nbsp;ลบสนามนี้</button>
+  </div>
+</div>
+
 <!-- Modal: share the live queue with players -->
 <div class="modal-overlay" id="modal-live">
   <div class="modal">
@@ -1479,6 +1622,8 @@ let state = {
   stockItems: [], // { id, name, photo, perTube, pricePerTube, count }
   archivedMatchCount: 0, // decided games trimmed off matchHistory (kept for totals)
   payments: {},          // 'yyyy-mm-dd' → { playerId: true } who has paid for that session
+  venues: [],            // saved courts: { id, name, rate }  (rate = baht per court per hour)
+  lastVenueId: '',       // preselected next time
   expenses: [], // persistent monthly expense ledger: {id, date, category, label, amount}
   rrTotalMatches: 0,
   matchHistory: [],   // Feature 1
@@ -1567,6 +1712,8 @@ function save() {
     localStorage.setItem('bmt_stockItems', JSON.stringify(state.stockItems));
     localStorage.setItem('bmt_archivedMatchCount', state.archivedMatchCount || 0);
     localStorage.setItem('bmt_payments', JSON.stringify(state.payments || {}));
+    localStorage.setItem('bmt_venues', JSON.stringify(state.venues || []));
+    localStorage.setItem('bmt_lastVenue', state.lastVenueId || '');
     localStorage.setItem('bmt_expenses', JSON.stringify(state.expenses));
     localStorage.setItem('bmt_matchHistory', JSON.stringify(state.matchHistory));
     localStorage.setItem('bmt_stockHistory', JSON.stringify(state.stockHistory));
@@ -1612,6 +1759,8 @@ function load() {
     state.stockBrand = JSON.parse(localStorage.getItem('bmt_stockBrand') || 'null') || { name: '', photo: null };
     state.archivedMatchCount = parseInt(localStorage.getItem('bmt_archivedMatchCount') || '0') || 0;
     state.payments = JSON.parse(localStorage.getItem('bmt_payments') || '{}') || {};
+    state.venues = JSON.parse(localStorage.getItem('bmt_venues') || '[]') || [];
+    state.lastVenueId = localStorage.getItem('bmt_lastVenue') || '';
     state.stockItems = JSON.parse(localStorage.getItem('bmt_stockItems') || 'null');
     if (!Array.isArray(state.stockItems)) {
       // Older versions kept one brand + one ball count: turn that into the first item
@@ -1634,6 +1783,8 @@ function load() {
 // =================== NAVIGATION ===================
 let currentPage = 'players';
 function goPage(page) {
+  if (page !== 'tools') stockUnlocked = false; // leaving the stock page locks it again
+  else if (!STOCK_LOCK_ON) stockUnlocked = true; // lock switched off for testing
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
@@ -1646,7 +1797,8 @@ function goPage(page) {
   if (page === 'match') renderMatchPage();
   if (page === 'stats') renderStats();
   if (page === 'players') renderUserPage();
-  if (page === 'tools') renderStockPage();
+  if (page === 'tools') { if (stockUnlocked) renderStockPage(); else showStockLock(); }
+  if (page === 'cost') renderCostPage();
 }
 
 // =================== PLAYERS ===================
@@ -3568,6 +3720,7 @@ function doReset() {
 let currentStockTab = 'dashboard';
 
 function switchStockTab(tab) {
+  if (tab === 'sessioncalc') { goPage('cost'); return; } // moved to its own page
   currentStockTab = tab;
   document.querySelectorAll('.stock-tab').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.stock-tab-content').forEach(c => c.classList.remove('active'));
@@ -3579,14 +3732,12 @@ function switchStockTab(tab) {
   if (tab === 'dashboard') { renderStockItems(); renderUsageChart(); renderAlerts(); }
   if (tab === 'movement') { renderStockEntryForm(); renderStockHistory(); }
   if (tab === 'expenses') { renderExpensesTab(); }
-  if (tab === 'sessioncalc') { initSessionCalcDate(); renderCostPlayers(); calcCost(); }
 }
 
 function renderStockPage() {
   if (currentStockTab === 'dashboard') { renderStockItems(); renderUsageChart(); renderAlerts(); }
   if (currentStockTab === 'movement') { renderStockEntryForm(); renderStockHistory(); }
   if (currentStockTab === 'expenses') { renderExpensesTab(); }
-  if (currentStockTab === 'sessioncalc') { renderCostPlayers(); calcCost(); }
 }
 
 // ---------- Inventory: one item per brand/model ----------
@@ -3610,6 +3761,22 @@ function tubeBreakdown(count, perTube) {
   if (tubes && rest) return `${tubes} หลอด + ${rest} ลูก`;
   if (tubes) return `${tubes} หลอด`;
   return `${rest} ลูก`;
+}
+
+// 83.333… → "83.33"; 95 → "95"
+function fmtBall(n) {
+  return Number(n || 0).toLocaleString('th-TH', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
+
+function ballCost(it) {
+  return it && it.pricePerTube && it.perTube ? it.pricePerTube / it.perTube : 0;
+}
+
+// What a ball of this product is charged at when splitting the session cost.
+// Only the selling price set on the (locked) stock page — never the cost price,
+// so the cost page can't reveal what a tube really cost.
+function ballSellPrice(it) {
+  return it && it.sellPerBall > 0 ? it.sellPerBall : 0;
 }
 
 function stockItemValue(it) {
@@ -3686,8 +3853,8 @@ function renderStockItems() {
   const tile = (ic, n, label) => `<div class="tile"><div class="tile-top">${ic}<span class="tile-num">${n}</span></div><div class="tile-label">${label}</div></div>`;
   document.getElementById('stock-summary').innerHTML =
     tile(icon('shuttle'), total.toLocaleString(), 'คงเหลือรวม (ลูก)') +
-    tile(icon('box'), fullTubes.toLocaleString(), 'หลอดเต็ม') +
-    tile(icon('dots'), `฿${fmtMoney(value)}`, 'มูลค่าโดยประมาณ');
+    tile(icon('dots'), `฿${fmtMoney(value)}`, 'มูลค่าตามทุน') +
+    tile(icon('wallet'), `฿${fmtMoney(items.reduce((s, it) => s + (it.sellPerBall > 0 && ballCost(it) ? (it.sellPerBall - ballCost(it)) * it.count : 0), 0))}`, 'กำไรถ้าใช้หมด');
   document.getElementById('stock-item-count').textContent = items.length ? `(${items.length} รายการ)` : '';
 
   const list = document.getElementById('stock-item-list');
@@ -3702,6 +3869,13 @@ function renderStockItems() {
     if (!it.count) badge = '<span class="si-badge out">หมด</span>';
     else if (it.count < it.perTube) badge = '<span class="si-badge low">เหลือไม่ถึงหลอด</span>';
     const meta = [`หลอดละ ${it.perTube} ลูก`, it.pricePerTube ? `฿${fmtMoney(it.pricePerTube)}/หลอด` : ''].filter(Boolean).join(' · ');
+    const cost = ballCost(it), sell = it.sellPerBall || 0;
+    const priceLine = `<div class="si-price">
+        ${cost ? `<span>ทุน <b>฿${fmtBall(cost)}</b>/ลูก</span>` : ''}
+        ${sell ? `<span>หาร <b>฿${fmtBall(sell)}</b>/ลูก</span>` : ''}
+        ${!sell ? `<span class="si-profit bad">ยังไม่ตั้งราคาหาร</span>` : ''}
+        ${cost && sell ? `<span class="si-profit ${sell - cost >= 0 ? 'good' : 'bad'}">${sell - cost >= 0 ? 'กำไร' : 'ขาดทุน'} ฿${fmtBall(Math.abs(sell - cost))}/ลูก</span>` : ''}
+      </div>`;
     return `<div class="stock-item ${it.count ? '' : 'empty'}">
       <div class="si-top">
         <div class="si-img">${stockImgHtml(it)}</div>
@@ -3711,6 +3885,7 @@ function renderStockItems() {
       <div class="si-count"><b>${it.count}</b><em>ลูก</em><span>= ${tubeBreakdown(it.count, it.perTube)}</span></div>
       <div class="si-tubes">${tubesHtml(it)}</div>
       ${rest ? `<div class="si-open">หลอดที่เปิดอยู่เหลือ ${rest} ลูก</div>` : ''}
+      ${priceLine}
     </div>`;
   }).join('');
 }
@@ -3793,6 +3968,8 @@ function openProductModal(id) {
   document.getElementById('input-brand-name').value = it ? it.name : '';
   document.getElementById('input-product-pertube').value = it ? it.perTube : 12;
   document.getElementById('input-product-price').value = it && it.pricePerTube ? it.pricePerTube : '';
+  document.getElementById('input-product-sell').value = it && it.sellPerBall ? it.sellPerBall : '';
+  updateProductPricePreview();
   document.getElementById('input-product-tubes').value = '';
   document.getElementById('input-product-balls').value = '';
   // Starting stock only when adding; later changes go through รับเข้า / เบิกออก so they're logged
@@ -3850,17 +4027,35 @@ function clearBrandPhoto() {
   updateBrandPhotoPreview();
 }
 
+// Cost per ball and profit preview inside the product form
+function updateProductPricePreview() {
+  const perTube = parseInt(document.getElementById('input-product-pertube').value) || 0;
+  const price = parseFloat(document.getElementById('input-product-price').value) || 0;
+  const sell = parseFloat(document.getElementById('input-product-sell').value) || 0;
+  const cost = perTube > 0 && price > 0 ? price / perTube : 0;
+  document.getElementById('product-cost-ball').textContent = cost ? `฿${fmtBall(cost)}` : '—';
+  const el = document.getElementById('product-profit');
+  if (!sell) { el.className = 'pb-profit bad'; el.textContent = 'ต้องกรอกราคานี้ ยี่ห้อนี้ถึงจะเลือกในหน้าหารค่าเล่นได้'; return; }
+  if (!cost) { el.className = 'pb-profit'; el.textContent = 'กรอกราคาซื้อต่อหลอด เพื่อดูกำไร'; return; }
+  const p = sell - cost;
+  el.className = 'pb-profit ' + (p >= 0 ? 'good' : 'bad');
+  el.textContent = p >= 0
+    ? `กำไรลูกละ ฿${fmtBall(p)} · หลอดละ ฿${fmtBall(p * perTube)}`
+    : `ขาดทุนลูกละ ฿${fmtBall(-p)} — ราคาหารต่ำกว่าต้นทุน`;
+}
+
 function saveProduct() {
   const name = document.getElementById('input-brand-name').value.trim();
   const perTube = parseInt(document.getElementById('input-product-pertube').value);
   const price = parseFloat(document.getElementById('input-product-price').value) || 0;
+  const sell = parseFloat(document.getElementById('input-product-sell').value) || 0;
   if (!name) { notify('กรุณากรอกชื่อยี่ห้อ / รุ่น'); return; }
   if (!perTube || perTube < 1) { notify('กรุณากรอกจำนวนลูกต่อหลอด'); return; }
   const existing = editingProductId ? findStockItem(editingProductId) : null;
   if (existing) {
-    Object.assign(existing, { name, perTube, pricePerTube: price, photo: pendingBrandPhoto });
+    Object.assign(existing, { name, perTube, pricePerTube: price, sellPerBall: sell, photo: pendingBrandPhoto });
   } else {
-    const it = { id: genId('si'), name, photo: pendingBrandPhoto, perTube, pricePerTube: price, count: 0 };
+    const it = { id: genId('si'), name, photo: pendingBrandPhoto, perTube, pricePerTube: price, sellPerBall: sell, count: 0 };
     state.stockItems.push(it);
     currentStockItemId = it.id; // ready to receive/use right away in the form
     const tubes = Math.max(0, parseInt(document.getElementById('input-product-tubes').value) || 0);
@@ -4162,16 +4357,263 @@ function renderExpensesTab() {
 function initSessionCalcDate() {
   const el = document.getElementById('cost-session-date');
   if (el && !el.value) el.value = toDateInput(new Date());
-  const priceEl = document.getElementById('cost-shuttle-price');
-  const avg = avgBallPrice();
-  if (priceEl && priceEl.value === '' && avg) priceEl.value = +avg.toFixed(2);
+  if (!costShuttleRows.length) costShuttleRows = [newShuttleRow()];
+  renderShuttleRows();
+}
+
+// ---------- Shuttles used in a session: one row per brand ----------
+// row: { item: stock item id (a brand with a selling price), n: balls (text) }
+let costShuttleRows = [];
+
+function pricedShuttleItems() {
+  return (state.stockItems || []).filter(it => ballSellPrice(it) > 0);
+}
+
+// Next brand to offer: one not already chosen, preferring brands still in stock
+function newShuttleRow() {
+  const used = new Set(costShuttleRows.map(r => r.item));
+  const items = pricedShuttleItems().filter(it => !used.has(it.id));
+  const pick = items.find(it => it.count > 0) || items[0];
+  return { item: pick ? pick.id : '', n: '' };
+}
+
+function addShuttleRow() {
+  const row = newShuttleRow();
+  if (!row.item) {
+    notify(pricedShuttleItems().length
+      ? 'เลือกครบทุกยี่ห้อที่ตั้งราคาไว้แล้ว\nเพิ่มยี่ห้อหรือตั้งราคาได้ที่หน้าสต๊อก'
+      : 'ยังไม่มีลูกแบดที่ตั้งราคาหารไว้\nตั้งได้ที่หน้าสต๊อก › แก้ไขสินค้า');
+    return;
+  }
+  costShuttleRows.push(row);
+  renderShuttleRows();
+  calcCost();
+}
+
+function removeShuttleRow(i) {
+  costShuttleRows.splice(i, 1);
+  if (!costShuttleRows.length) costShuttleRows.push(newShuttleRow());
+  renderShuttleRows();
+  calcCost();
+}
+
+function setShuttleRow(i, field, value) {
+  const r = costShuttleRows[i];
+  if (!r) return;
+  r[field] = value;
+  if (field === 'item') renderShuttleRows();
+  else {
+    const sub = document.getElementById('sh-sub-' + i);
+    const n = Math.max(0, parseInt(r.n) || 0);
+    if (sub) sub.textContent = shuttleRowText(findStockItem(r.item), n);
+  }
+  calcCost();
+}
+
+function renderShuttleRows() {
+  const el = document.getElementById('cost-shuttle-rows');
+  if (!el) return;
+  const priced = pricedShuttleItems();
+  const addBtn = document.getElementById('sh-add-btn');
+  if (!priced.length) {
+    el.innerHTML = `<div class="note-box">${icon('info')}<span>ยังไม่มีลูกแบดที่ตั้งราคาหารไว้ · ตั้งได้ที่หน้าสต๊อก › แก้ไขสินค้า</span></div>`;
+    if (addBtn) addBtn.style.display = 'none';
+    return;
+  }
+  // Rows pointing at a brand that no longer has a price fall back to an available one
+  costShuttleRows.forEach(r => { if (!priced.some(it => it.id === r.item)) r.item = (newShuttleRow().item || priced[0].id); });
+  el.innerHTML = costShuttleRows.map((r, i) => {
+    const takenElsewhere = new Set(costShuttleRows.filter((_, k) => k !== i).map(x => x.item));
+    const opts = priced.filter(x => x.id === r.item || !takenElsewhere.has(x.id)).map(x =>
+      `<option value="${x.id}" ${x.id === r.item ? 'selected' : ''}>${escHtml(x.name)}${x.count ? '' : ' (หมด)'}</option>`).join('');
+    const it = findStockItem(r.item);
+    const n = Math.max(0, parseInt(r.n) || 0);
+    return `<div class="sh-row${costShuttleRows.length > 1 ? ' removable' : ''}">
+      <select class="select sh-item" onchange="setShuttleRow(${i}, 'item', this.value)" aria-label="ยี่ห้อลูกแบด">${opts}</select>
+      <div class="input-suffix"><input class="input" type="number" min="0" inputmode="numeric" placeholder="0" value="${escHtml(r.n)}" oninput="setShuttleRow(${i}, 'n', this.value)" aria-label="จำนวนลูก"><span>ลูก</span></div>
+      ${costShuttleRows.length > 1 ? `<button class="row-icon-btn" onclick="removeShuttleRow(${i})" aria-label="เอาออก">${icon('x')}</button>` : ''}
+      <div class="sh-sub" id="sh-sub-${i}">${shuttleRowText(it, n)}</div>
+    </div>`;
+  }).join('');
+  if (addBtn) addBtn.style.display = '';
+}
+
+// "฿100/ลูก" before a count is entered, "5 × ฿100 = ฿500" after
+function shuttleRowText(it, n) {
+  const price = ballSellPrice(it);
+  if (!price) return '';
+  return n ? `${n} × ฿${fmtBall(price)} = ฿${fmtMoney(n * price)}` : `฿${fmtBall(price)}/ลูก`;
+}
+
+// Totals across all brands: { balls, total, lines: [{ name, n, price, sub }] }
+function shuttleTotals() {
+  const lines = [];
+  costShuttleRows.forEach(r => {
+    const n = Math.max(0, parseInt(r.n) || 0);
+    if (!n) return;
+    const it = findStockItem(r.item);
+    const price = ballSellPrice(it);
+    if (!it || !price) return;
+    lines.push({ name: it.name, n, price, sub: n * price });
+  });
+  return { balls: lines.reduce((s, l) => s + l.n, 0), total: lines.reduce((s, l) => s + l.sub, 0), lines };
 }
 
 function resetSessionCalc() {
-  ['cost-rate', 'cost-hours', 'cost-courts', 'cost-shuttles'].forEach(id => {
+  ['cost-rate', 'cost-hours', 'cost-courts'].forEach(id => {
     document.getElementById(id).value = '';
   });
+  costShuttleRows = [];
+  costShuttleRows.push(newShuttleRow());
+  renderShuttleRows();
   document.getElementById('cost-session-date').value = toDateInput(new Date());
+  selectCostVenue(document.getElementById('cost-venue').value); // keep the court's price
+}
+
+// =================== COST PAGE: tabs + saved courts ===================
+let currentCostTab = 'calc';
+let editingVenueId = null;
+
+function renderCostPage() {
+  switchCostTab(currentCostTab);
+}
+
+function switchCostTab(tab) {
+  currentCostTab = tab;
+  ['calc', 'venues'].forEach(t => {
+    document.getElementById('ctab-' + t).classList.toggle('active', t === tab);
+    document.getElementById('cost-tab-' + t).classList.toggle('active', t === tab);
+  });
+  if (tab === 'calc') {
+    initSessionCalcDate();
+    renderVenueSelect();
+    renderCostPlayers();
+    calcCost();
+  } else {
+    renderVenueList();
+  }
+}
+
+// Court prices may have satang (150.50) — show them as entered
+function fmtRate(n) {
+  return Number(n || 0).toLocaleString('th-TH', { maximumFractionDigits: 2 });
+}
+
+function findVenue(id) {
+  return (state.venues || []).find(v => v.id === id);
+}
+
+function renderVenueSelect() {
+  const sel = document.getElementById('cost-venue');
+  const venues = state.venues || [];
+  let cur = sel.dataset.chosen;
+  if (cur === undefined) cur = findVenue(state.lastVenueId) ? state.lastVenueId : (venues.length === 1 ? venues[0].id : '');
+  if (cur && !findVenue(cur)) cur = '';
+  sel.innerHTML =
+    venues.map(v => `<option value="${v.id}">${escHtml(v.name)} · ฿${fmtRate(v.rate)}/ชม.</option>`).join('') +
+    `<option value="">กรอกค่าสนามเอง</option>` +
+    `<option value="__add">+ เพิ่มสนามใหม่…</option>`;
+  sel.value = cur;
+  applyVenueRate(cur);
+}
+
+// Picking a saved court fills in its price and locks the field; "กรอกเอง" unlocks it
+function selectCostVenue(id) {
+  const sel = document.getElementById('cost-venue');
+  if (id === '__add') {
+    sel.value = sel.dataset.chosen || '';
+    switchCostTab('venues');
+    openVenueModal();
+    return;
+  }
+  sel.value = id;
+  if (findVenue(id) && state.lastVenueId !== id) { state.lastVenueId = id; save(); }
+  applyVenueRate(id);
+  calcCost();
+}
+
+function applyVenueRate(id) {
+  const sel = document.getElementById('cost-venue');
+  const rateEl = document.getElementById('cost-rate');
+  const v = findVenue(id);
+  sel.dataset.chosen = v ? v.id : '';
+  if (v) {
+    rateEl.value = v.rate;
+    rateEl.readOnly = true;
+  } else {
+    if (rateEl.readOnly) rateEl.value = '';
+    rateEl.readOnly = false;
+  }
+  rateEl.classList.toggle('is-locked', !!v);
+}
+
+function selectedVenueName() {
+  const v = findVenue(document.getElementById('cost-venue').dataset.chosen);
+  return v ? v.name : '';
+}
+
+function renderVenueList() {
+  const el = document.getElementById('venue-list');
+  const venues = state.venues || [];
+  if (!venues.length) {
+    el.innerHTML = `<div class="empty-state" style="padding:18px 0;"><div class="icon">🏟️</div><p>ยังไม่มีสนามที่บันทึกไว้</p></div>`;
+    return;
+  }
+  el.innerHTML = venues.map(v => `<button class="venue-row" onclick="openVenueModal('${v.id}')">
+      <span class="venue-ico">${icon('court')}</span>
+      <span class="venue-main"><b>${escHtml(v.name)}</b><span>฿${fmtRate(v.rate)} ต่อสนาม ต่อชั่วโมง${v.id === state.lastVenueId ? ' · ใช้ล่าสุด' : ''}</span></span>
+      <span class="venue-edit">${icon('pencil')}</span>
+    </button>`).join('');
+}
+
+function openVenueModal(id) {
+  const v = id ? findVenue(id) : null;
+  editingVenueId = v ? v.id : null;
+  document.getElementById('venue-modal-title').textContent = v ? 'แก้ไขสนาม' : 'เพิ่มสนาม';
+  document.getElementById('input-venue-name').value = v ? v.name : '';
+  document.getElementById('input-venue-rate').value = v ? v.rate : '';
+  document.getElementById('venue-delete-btn').style.display = v ? 'flex' : 'none';
+  openModal('modal-venue');
+  setTimeout(() => document.getElementById('input-venue-name').focus(), 50);
+}
+
+function saveVenue() {
+  const name = document.getElementById('input-venue-name').value.trim();
+  const rate = parseFloat(document.getElementById('input-venue-rate').value);
+  if (!name) { notify('กรุณากรอกชื่อสนาม'); return; }
+  if (isNaN(rate) || rate <= 0) { notify('กรุณากรอกค่าสนามต่อชั่วโมง'); return; }
+  const dup = (state.venues || []).find(v => v.name === name && v.id !== editingVenueId);
+  if (dup) { notify(`มีสนามชื่อ "${name}" อยู่แล้ว`); return; }
+  if (!state.venues) state.venues = [];
+  const v = editingVenueId ? findVenue(editingVenueId) : null;
+  if (v) {
+    Object.assign(v, { name, rate });
+  } else {
+    const nv = { id: genId('v'), name, rate };
+    state.venues.push(nv);
+    state.lastVenueId = nv.id;
+    const sel = document.getElementById('cost-venue');
+    sel.dataset.chosen = nv.id; // a newly added court is ready to use straight away
+  }
+  save();
+  closeModal('modal-venue');
+  renderVenueList();
+  renderVenueSelect();
+  calcCost();
+}
+
+async function deleteVenue() {
+  const v = findVenue(editingVenueId);
+  if (!v) return;
+  if (!(await askConfirm(`ลบ "${v.name}"?\n(ค่าใช้จ่ายที่บันทึกไปแล้วไม่เปลี่ยน)`, { okText: 'ลบ', danger: true }))) return;
+  state.venues = state.venues.filter(x => x.id !== v.id);
+  if (state.lastVenueId === v.id) state.lastVenueId = '';
+  const sel = document.getElementById('cost-venue');
+  if (sel.dataset.chosen === v.id) delete sel.dataset.chosen;
+  save();
+  closeModal('modal-venue');
+  renderVenueList();
+  renderVenueSelect();
   calcCost();
 }
 
@@ -4179,10 +4621,11 @@ async function saveSessionToExpenses() {
   const rate = parseFloat(document.getElementById('cost-rate').value) || 0;
   const hours = parseFloat(document.getElementById('cost-hours').value) || 0;
   const courts = parseInt(document.getElementById('cost-courts').value) || 1;
-  const shuttles = parseInt(document.getElementById('cost-shuttles').value) || 0;
+  const sh = shuttleTotals();
+  const shuttles = sh.balls;
 
   const courtTotal = rate * hours * courts;
-  const shuttleTotal = shuttles * getShuttleUnitPrice();
+  const shuttleTotal = sh.total;
 
   if (courtTotal <= 0 && shuttleTotal <= 0) { notify('ยังไม่มีค่าใช้จ่ายให้บันทึก'); return; }
 
@@ -4196,10 +4639,12 @@ async function saveSessionToExpenses() {
   const dateInput = document.getElementById('cost-session-date').value;
   const date = dateInput ? new Date(dateInput + 'T12:00:00').toISOString() : new Date().toISOString();
   if (courtTotal > 0) {
-    state.expenses.unshift({ id: genId('exp'), date, category: 'court', label: `${hours} ชั่วโมง × ${courts} สนาม`, amount: Math.round(courtTotal), hours, courts });
+    const venue = selectedVenueName();
+    state.expenses.unshift({ id: genId('exp'), date, category: 'court', label: `${venue ? venue + ' · ' : ''}${hours} ชั่วโมง × ${courts} สนาม`, amount: Math.round(courtTotal), hours, courts, ...(venue ? { venue } : {}) });
   }
   if (addShuttle) {
-    state.expenses.unshift({ id: genId('exp'), date, category: 'shuttle', label: `${shuttles} ลูก`, amount: Math.round(shuttleTotal), shuttles });
+    const brands = sh.lines.map(l => `${l.name} ${l.n}`).join(', ');
+    state.expenses.unshift({ id: genId('exp'), date, category: 'shuttle', label: `${shuttles} ลูก${brands ? ` (${brands})` : ''}`, amount: Math.round(shuttleTotal), shuttles });
   }
   storePaySnapshot(); // keep who owes what for this date after the form is cleared
   save();
@@ -4263,11 +4708,24 @@ function fillFromActivePlayers() {
   calcCost();
 }
 
+// One row per brand, from what was taken out of stock on the session date
 function fillShuttlesFromStock() {
   const dateKey = document.getElementById('cost-session-date').value || toDateInput(new Date());
-  const used = ballsUsedOn(dateKey);
-  if (!used) { notify('ยังไม่มีการเบิกลูกแบดในวันที่เลือก\nบันทึกเบิกออกได้ที่แท็บ "รับเข้า / เบิกออก"'); return; }
-  document.getElementById('cost-shuttles').value = used;
+  const byItem = {};
+  state.stockHistory
+    .filter(r => r.type === 'out' && !r.adjust && !String(r.note || '').startsWith('🔧') && toDateInput(new Date(r.date)) === dateKey)
+    .forEach(r => {
+      let key = r.itemId && findStockItem(r.itemId) ? r.itemId : '';
+      if (!key && (state.stockItems || []).length === 1) key = state.stockItems[0].id;
+      if (key) byItem[key] = (byItem[key] || 0) + r.amount;
+    });
+  const unpriced = Object.keys(byItem).filter(k => !ballSellPrice(findStockItem(k))).map(k => findStockItem(k).name);
+  const keys = Object.keys(byItem).filter(k => ballSellPrice(findStockItem(k)));
+  if (unpriced.length) notify(`${unpriced.join(', ')} ยังไม่ได้ตั้งราคาหาร จึงไม่ได้ดึงมา\nตั้งได้ที่หน้าสต๊อก › แก้ไขสินค้า`);
+  if (!keys.length) { notify('ยังไม่มีการเบิกลูกแบดในวันที่เลือก\nบันทึกเบิกออกได้ที่หน้าสต๊อก › "รับเข้า / เบิกออก"'); return; }
+  if (!keys.length) return;
+  costShuttleRows = keys.map(k => ({ item: k, n: String(byItem[k]) }));
+  renderShuttleRows();
   calcCost();
 }
 
@@ -4275,17 +4733,17 @@ function calcCost() {
   const rate = parseFloat(document.getElementById('cost-rate').value) || 0;
   const hours = parseFloat(document.getElementById('cost-hours').value) || 0;
   const courts = parseInt(document.getElementById('cost-courts').value) || 1;
-  const shuttles = parseInt(document.getElementById('cost-shuttles').value) || 0;
-  const unit = getShuttleUnitPrice();
+  const sh = shuttleTotals();
 
   const courtTotal = rate * hours * courts;
-  const shuttleTotal = shuttles * unit;
+  const shuttleTotal = sh.total;
   const grandTotal = courtTotal + shuttleTotal;
 
   document.getElementById('cost-summary').innerHTML = `
     <h4>สรุปค่าใช้จ่าย</h4>
-    <div class="sum-line"><span>ค่าสนาม: ${rate} × ${hours} ชม. × ${courts} สนาม</span><b>฿ ${fmtMoney(courtTotal)}</b></div>
-    <div class="sum-line"><span>ค่าลูกแบด: ${shuttles} × ${+unit.toFixed(2)}</span><b>฿ ${fmtMoney(shuttleTotal)}</b></div>
+    <div class="sum-line"><span>ค่าสนาม${selectedVenueName() ? ` (${escHtml(selectedVenueName())})` : ''}: ${fmtRate(rate)} × ${hours} ชม. × ${courts} สนาม</span><b>฿ ${fmtMoney(courtTotal)}</b></div>
+    ${sh.lines.length ? sh.lines.map(l => `<div class="sum-line"><span>ค่าลูก ${escHtml(l.name)}: ${l.n} × ${fmtBall(l.price)}</span><b>฿ ${fmtMoney(l.sub)}</b></div>`).join('')
+      : `<div class="sum-line"><span>ค่าลูกแบด</span><b>฿ 0</b></div>`}
     <div class="sum-total"><span>รวมทั้งหมด</span><span>฿ ${fmtMoney(grandTotal)}</span></div>`;
 
   const full = state.players.filter(p => costPlayerShare[p.id] === 'full').length;
@@ -4323,6 +4781,7 @@ const ICONS = {
   share: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/>',
   download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
   upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
+  lock: '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
   wallet: '<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
   check: '<path d="M20 6 9 17l-5-5"/>',
   'check-circle': '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
@@ -4411,10 +4870,16 @@ function renderAppBar() {
     titleEl.className = 'appbar-title';
     titleEl.innerHTML = `${icon('chart')}<span>สถิติ</span>`;
     actEl.innerHTML = menuBtn;
+  } else if (currentPage === 'cost') {
+    titleEl.className = 'appbar-title';
+    titleEl.innerHTML = `${icon('wallet')}<span>ค่าเล่น</span>`;
+    actEl.innerHTML = menuBtn;
   } else if (currentPage === 'tools') {
     titleEl.className = 'appbar-title big';
     titleEl.innerHTML = '<span>สต๊อก</span>';
-    actEl.innerHTML = `<button class="icon-btn" onclick="openStockSettingsModal()" aria-label="ตั้งค่า">${icon('settings')}</button>`;
+    actEl.innerHTML = stockUnlocked
+      ? `<button class="icon-btn" onclick="openStockSettingsModal()" aria-label="ตั้งค่า">${icon('settings')}</button>`
+      : menuBtn;
   } else {
     titleEl.className = 'appbar-title';
     titleEl.innerHTML = `${icon('users')}<span>Badminton Match</span>`;
@@ -4577,10 +5042,6 @@ function setExpenseCategory(cat) {
 }
 
 // =================== SESSION CALC: participants ===================
-function getShuttleUnitPrice() {
-  const v = parseFloat(document.getElementById('cost-shuttle-price').value);
-  return isNaN(v) ? avgBallPrice() : v;
-}
 
 function addCostPlayer(v) {
   if (!v) return;
@@ -5057,10 +5518,13 @@ function renderWatch() {
       const status = c.done
         ? `<span class="wc-chip done">จบแล้ว · รอคู่ถัดไป</span>`
         : `<span class="wc-chip live"><i class="live-dot"></i>กำลังแข่ง${c.s ? ` · ${Math.max(0, Math.floor((Date.now() - c.s) / 60000))} นาที` : ''}</span>`;
-      const side = (t, i) => `<div class="wc-team ${c.done && c.w === i ? 'won' : ''}">${c.done && c.w === i ? `<span class="wc-win">${icon('trophy')}ชนะ</span>` : ''}<div class="wc-players">${courtTeam(t)}</div></div>`;
+      const side = (t, i) => `<div class="wc-team ${c.done && c.w === i ? 'won' : ''}${c.done && c.w === 1 - i ? ' lost' : ''}">
+          <div class="wc-team-label">${c.done && c.w === i ? `${icon('trophy')}ชนะ` : `ทีม ${i ? 'B' : 'A'}`}</div>
+          <div class="wc-players">${courtTeam(t)}</div>
+        </div>`;
       return `<div class="watch-court ${c.done ? 'is-done' : ''}">
         <div class="wc-head"><b>สนาม ${c.c}</b>${status}</div>
-        ${side(c.a, 0)}<div class="wc-vs">VS</div>${side(c.b, 1)}
+        <div class="wc-body">${side(c.a, 0)}<div class="wc-vs">VS</div>${side(c.b, 1)}</div>
       </div>`;
     }).join('') + `</div>`;
   }
@@ -5089,6 +5553,129 @@ function renderWatch() {
     }
   }
   el.innerHTML = html;
+}
+
+// SHA-256 (hex) for short strings — used only to compare the stock PIN without storing it in plain text
+function sha256Hex(str) {
+  const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  const bytes = Array.from(new TextEncoder().encode(String(str)));
+  const bitLen = bytes.length * 8;
+  bytes.push(0x80);
+  while (bytes.length % 64 !== 56) bytes.push(0);
+  for (let i = 7; i >= 0; i--) bytes.push(i >= 4 ? 0 : (bitLen >>> (i * 8)) & 0xff);
+  const H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+  const w = new Array(64);
+  for (let off = 0; off < bytes.length; off += 64) {
+    for (let i = 0; i < 16; i++) w[i] = (bytes[off+4*i] << 24) | (bytes[off+4*i+1] << 16) | (bytes[off+4*i+2] << 8) | bytes[off+4*i+3];
+    for (let i = 16; i < 64; i++) {
+      const s0 = rotr(w[i-15], 7) ^ rotr(w[i-15], 18) ^ (w[i-15] >>> 3);
+      const s1 = rotr(w[i-2], 17) ^ rotr(w[i-2], 19) ^ (w[i-2] >>> 10);
+      w[i] = (w[i-16] + s0 + w[i-7] + s1) | 0;
+    }
+    let [a, b, c, d, e, f, g, h] = H;
+    for (let i = 0; i < 64; i++) {
+      const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+      const t1 = (h + S1 + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;
+      const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+      const t2 = (S0 + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+      h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+    }
+    H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
+    H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+  }
+  return H.map(x => (x >>> 0).toString(16).padStart(8, '0')).join('');
+}
+
+// =================== STOCK PAGE LOCK ===================
+// Keeps costs and profit away from whoever is holding the organizer's phone.
+// Only a hash of the PIN is in the code (the repo is public); it can be changed
+// in the stock settings. This is a deterrent on a shared device, not real
+// security — the data itself still lives in this browser.
+const STOCK_PIN_DEFAULT_HASH = 'dfb124a6493b1f2d7b9f09e90e04d0fce16b2e157ad485cbf2720e0c065430eb'; // 272727
+const STOCK_PIN_LEN = 6;
+// TEMPORARY (testing): false = the stock page opens without the PIN.
+// Set back to true to turn the lock on again — the saved PIN is unchanged.
+const STOCK_LOCK_ON = true;
+let stockUnlocked = false;
+let stockPinEntry = '';
+let stockPinFails = 0, stockPinWaitUntil = 0, stockPinTimer = null;
+
+function stockPinHash(pin) { return sha256Hex('bmt-stock:' + pin); }
+function currentStockPinHash() { return localStorage.getItem('bmt_stockPin') || STOCK_PIN_DEFAULT_HASH; }
+
+function showStockLock() {
+  stockPinEntry = '';
+  document.getElementById('page-tools').classList.add('locked');
+  const pad = document.getElementById('sl-pad');
+  if (!pad.children.length) {
+    pad.innerHTML = ['1','2','3','4','5','6','7','8','9','','0','⌫'].map(k =>
+      k === '' ? '<span></span>'
+      : `<button class="sl-key${k === '⌫' ? ' del' : ''}" onclick="stockPinKey('${k}')" aria-label="${k === '⌫' ? 'ลบ' : k}">${k}</button>`).join('');
+  }
+  renderStockLock('');
+}
+
+function renderStockLock(msg) {
+  document.getElementById('sl-dots').innerHTML = Array.from({ length: STOCK_PIN_LEN }, (_, i) =>
+    `<i class="${i < stockPinEntry.length ? 'on' : ''}"></i>`).join('');
+  const wait = Math.ceil((stockPinWaitUntil - Date.now()) / 1000);
+  document.getElementById('sl-msg').textContent = wait > 0 ? `ใส่ผิดหลายครั้ง ลองใหม่ใน ${wait} วินาที` : (msg || '');
+  document.getElementById('sl-msg').classList.toggle('err', wait > 0 || !!msg);
+  document.querySelectorAll('.sl-key').forEach(b => { b.disabled = wait > 0; });
+}
+
+function stockPinKey(k) {
+  if (stockUnlocked || Date.now() < stockPinWaitUntil) return;
+  if (k === '⌫') { stockPinEntry = stockPinEntry.slice(0, -1); renderStockLock(''); return; }
+  if (!/^[0-9]$/.test(k) || stockPinEntry.length >= STOCK_PIN_LEN) return;
+  stockPinEntry += k;
+  renderStockLock('');
+  if (stockPinEntry.length === STOCK_PIN_LEN) setTimeout(checkStockPin, 120);
+}
+
+function checkStockPin() {
+  const ok = stockPinHash(stockPinEntry) === currentStockPinHash();
+  stockPinEntry = '';
+  if (ok) {
+    stockPinFails = 0;
+    stockUnlocked = true;
+    document.getElementById('page-tools').classList.remove('locked');
+    renderAppBar();
+    renderStockPage();
+    return;
+  }
+  stockPinFails++;
+  const dots = document.getElementById('sl-dots');
+  dots.classList.remove('shake'); void dots.offsetWidth; dots.classList.add('shake');
+  if (stockPinFails >= 5) {
+    stockPinFails = 0;
+    stockPinWaitUntil = Date.now() + 30000;
+    clearInterval(stockPinTimer);
+    stockPinTimer = setInterval(() => {
+      renderStockLock('');
+      if (Date.now() >= stockPinWaitUntil) clearInterval(stockPinTimer);
+    }, 1000);
+  }
+  renderStockLock('รหัสไม่ถูกต้อง');
+}
+
+// Typing on a computer keyboard works too
+document.addEventListener('keydown', e => {
+  if (currentPage !== 'tools' || stockUnlocked || document.querySelector('.modal-overlay.show')) return;
+  if (/^[0-9]$/.test(e.key)) stockPinKey(e.key);
+  else if (e.key === 'Backspace') stockPinKey('⌫');
+});
+
+async function changeStockPin() {
+  const a = document.getElementById('input-new-pin').value.trim();
+  const b = document.getElementById('input-new-pin2').value.trim();
+  if (!/^[0-9]{6}$/.test(a)) { notify('รหัสต้องเป็นตัวเลข 6 หลัก'); return; }
+  if (a !== b) { notify('รหัสทั้งสองช่องไม่ตรงกัน'); return; }
+  localStorage.setItem('bmt_stockPin', stockPinHash(a));
+  document.getElementById('input-new-pin').value = '';
+  document.getElementById('input-new-pin2').value = '';
+  notify('เปลี่ยนรหัสหน้าสต๊อกแล้ว\nครั้งหน้าใช้รหัสใหม่');
 }
 
 // =================== SHARING (LINE etc.) ===================
@@ -5157,14 +5744,13 @@ function liveCostSnapshot() {
   const rate = parseFloat(document.getElementById('cost-rate').value) || 0;
   const hours = parseFloat(document.getElementById('cost-hours').value) || 0;
   const courts = parseInt(document.getElementById('cost-courts').value) || 1;
-  const shuttles = parseInt(document.getElementById('cost-shuttles').value) || 0;
-  const total = rate * hours * courts + shuttles * getShuttleUnitPrice();
+  const total = rate * hours * courts + shuttleTotals().total;
   const people = {};
   state.players.forEach(p => { if (costPlayerShare[p.id] === 'full' || costPlayerShare[p.id] === 'half') people[p.id] = costPlayerShare[p.id]; });
   const shares = Object.values(people).reduce((s, v) => s + (v === 'half' ? 0.5 : 1), 0);
   if (total <= 0 || !shares) return null;
   const per = total / shares;
-  return { total, perFull: Math.ceil(per), perHalf: Math.ceil(per * 0.5), people };
+  return { total, perFull: Math.ceil(per), perHalf: Math.ceil(per * 0.5), people, venue: selectedVenueName() };
 }
 
 function storePaySnapshot() {
@@ -5192,7 +5778,7 @@ function payData() {
     paid: !!paid[id],
   })).sort((a, b) => a.paid - b.paid || a.name.localeCompare(b.name, 'th'));
   const owed = rows.filter(r => !r.paid).reduce((s, r) => s + r.amount, 0);
-  return { key, live: !!live, total: base.total, rows, owed, paidCount: rows.filter(r => r.paid).length };
+  return { key, live: !!live, total: base.total, venue: base.venue || '', rows, owed, paidCount: rows.filter(r => r.paid).length };
 }
 
 function renderPayBox() {
@@ -5231,7 +5817,7 @@ function sharePayList() {
   if (!d) return;
   const unpaid = d.rows.filter(r => !r.paid), paid = d.rows.filter(r => r.paid);
   const lines = [
-    `🏸 ค่าเล่นแบด ${thaiDate(d.key)}`,
+    `🏸 ค่าเล่นแบด ${thaiDate(d.key)}${d.venue ? ' · ' + d.venue : ''}`,
     `รวม ฿${fmtMoney(d.total)} · ${d.rows.length} คน`,
     '',
     ...(unpaid.length ? ['ยังไม่จ่าย:', ...unpaid.map(r => `• ${r.name} ฿${fmtMoney(r.amount)}${r.share === 'half' ? ' (ครึ่งเวลา)' : ''}`)] : ['✅ จ่ายครบทุกคนแล้ว ขอบคุณครับ']),
@@ -5323,6 +5909,7 @@ async function handleBackupFile(input) {
 load();
 document.getElementById('court-count').value = state.courts || 2;
 hydrateIcons();
+if (!STOCK_LOCK_ON) document.getElementById('lock-off-note').style.display = '';
 if (WATCH) {
   startWatchMode();
 } else {
