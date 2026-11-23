@@ -8,6 +8,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Badminton">
 <meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
 <title>Badminton Match</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -583,6 +586,16 @@
   .modal-btns .btn { min-height: 42px; }
   .modal-btns .btn-outline { font-weight: 500; }
   .dialog-message { font-size: 16px; line-height: 1.6; white-space: pre-line; text-align: center; padding: 8px 4px 0; }
+  .dialog-message.rich { white-space: normal; text-align: left; max-height: 62vh; overflow-y: auto; }
+  .dialog-message.rich h4 { margin: 0 0 8px; font-size: 17px; text-align: center; }
+  .dialog-message.rich .sum-box { margin: 0 0 10px; }
+  .dialog-message.rich .warn-note { background: var(--orange-soft); color: #9a4a08; border-radius: 10px; padding: 8px 10px; font-size: 13px; margin-top: 8px; }
+  .dialog-message.rich .confirm-people { font-size: 13px; color: var(--text2); margin-top: 6px; }
+  .dialog-message.rich ol { margin: 6px 0 0; padding-left: 22px; font-size: 15px; }
+  .dialog-message.rich li { margin-bottom: 4px; }
+  .forecast { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--text2); }
+  .forecast b { color: var(--text); }
+  .forecast.low b { color: var(--red); }
   #dialog-btns.single { grid-template-columns: 1fr; }
   .photo-row { display: flex; gap: 16px; align-items: flex-start; }
   .photo-pick { position: relative; flex-shrink: 0; width: 112px; height: 112px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 700; color: var(--text2); cursor: pointer; }
@@ -690,6 +703,44 @@
   .pay-head b { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; }
   .pay-head span { display: block; font-size: 12px; color: var(--text2); margin-top: 2px; }
   .pay-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--border); }
+  /* ค่าเล่น: one row per participant — share, amount and paid together */
+  .pay-sum { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 10px; background: var(--surface2); border-radius: 10px; padding: 10px 12px; margin-bottom: 6px; }
+  .pay-sum b { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; }
+  .pay-sum span { font-size: 12px; color: var(--text2); }
+  .pay-sum-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mrow { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto auto 30px; grid-template-areas: "av name amt ctl del"; align-items: center; gap: 4px 10px; padding: 7px 0; border-bottom: 1px solid var(--border); }
+  .mrow:last-child { border-bottom: none; }
+  .mrow > .avatar { grid-area: av; }
+  .mrow-name { grid-area: name; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mrow-amt { grid-area: amt; font-weight: 600; text-align: right; min-width: 44px; }
+  .mrow-ctl { grid-area: ctl; display: flex; align-items: center; gap: 8px; }
+  .mrow-del { grid-area: del; }
+  .mrow.is-paid .mrow-name, .mrow.is-paid .mrow-amt { color: var(--text3); }
+  @media (max-width: 520px) {
+    .mrow { grid-template-columns: 28px minmax(0, 1fr) auto 30px; grid-template-areas: "av name amt del" ". ctl ctl ctl"; }
+    .mrow-ctl { justify-content: space-between; }
+  }
+
+  /* ค่าใช้จ่าย page: one card per saved session */
+  #page-expense { max-width: 880px; margin: 0 auto; }
+  .sess-card { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); padding: 12px 14px; margin-bottom: 10px; box-shadow: var(--shadow); cursor: pointer; }
+  .sess-card:hover { background: var(--surface2); }
+  .sess-date { width: 46px; flex-shrink: 0; border-radius: 10px; background: var(--lime-soft); text-align: center; padding: 6px 0; line-height: 1.1; }
+  .sess-date b { display: block; font-size: 20px; font-weight: 700; }
+  .sess-date span { font-size: 11px; color: var(--text2); }
+  .sess-main { flex: 1; min-width: 0; }
+  .sess-main b { display: block; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sess-main span { font-size: 12px; color: var(--text2); }
+  .sess-right { text-align: right; flex-shrink: 0; }
+  .sess-right b { display: block; font-size: 17px; font-weight: 700; }
+  .sess-chip { display: inline-block; margin-top: 3px; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+  .sess-chip.ok { background: var(--green-soft); color: #17773f; }
+  .sess-chip.due { background: var(--red-soft); color: var(--red); }
+  .sess-chev { color: var(--text3); font-size: 18px; display: flex; }
+  .sess-split { display: flex; gap: 10px; }
+  .sess-split > div { flex: 1; background: var(--surface2); border-radius: 10px; padding: 10px 12px; font-size: 13px; }
+  .sess-split b { font-size: 18px; font-weight: 700; margin-right: 2px; }
+  .sess-split span { display: block; font-size: 12px; color: var(--text2); }
   .pay-name { flex: 1; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pay-name small { color: var(--text2); }
   .pay-amt { font-size: 14px; font-weight: 600; flex-shrink: 0; }
@@ -715,7 +766,7 @@
     .nav-brand .ic { font-size: 24px; padding: 7px; border-radius: 10px; background: var(--lime); box-sizing: content-box; }
     .nav-btn { flex: 0 0 auto; justify-content: flex-start; padding: 12px 14px; }
     .nav-btn:not(.active):hover { background: var(--surface2); }
-    #stats-sub-dashboard, #stock-tab-movement.active, #stock-tab-expenses.active {
+    #stats-sub-dashboard, #stock-tab-movement.active {
       display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 20px; align-items: start;
     }
     #stats-dashboard-summary, #stats-sub-dashboard > .share-day-btn { grid-column: 1 / -1; }
@@ -886,12 +937,14 @@
     <button class="nav-dup" onclick="menuGo('match')"><i data-icon="trophy"></i>แข่งขัน</button>
     <button class="nav-dup" onclick="menuGo('stats')"><i data-icon="chart"></i>สถิติ</button>
     <button class="nav-dup" onclick="menuGo('cost')"><i data-icon="wallet"></i>ค่าเล่น</button>
+    <button class="nav-dup" onclick="menuGo('expense')"><i data-icon="receipt"></i>ค่าใช้จ่าย</button>
     <button class="nav-dup" onclick="menuGo('tools')"><i data-icon="box"></i>สต๊อก</button>
     <hr class="nav-dup">
     <button onclick="toggleAppMenu(false);openLiveModal()"><i data-icon="broadcast"></i><span>ให้คนอื่นดูคิวผ่านมือถือ<small class="menu-sub" id="live-menu-sub"></small></span></button>
     <button onclick="toggleAppMenu(false);exportBackup()"><i data-icon="download"></i><span>สำรองข้อมูลเป็นไฟล์<small class="menu-sub" id="backup-last"></small></span></button>
     <button onclick="toggleAppMenu(false);importBackup()"><i data-icon="upload"></i>กู้คืนจากไฟล์สำรอง</button>
     <input type="file" id="backup-file" accept=".json,application/json" style="display:none" onchange="handleBackupFile(this)">
+    <button id="menu-install" onclick="toggleAppMenu(false);showInstallHelp()"><i data-icon="plus"></i>ติดตั้งเป็นแอปบนหน้าจอโฮม</button>
     <hr>
     <button class="danger" onclick="toggleAppMenu(false);confirmReset()"><i data-icon="trash"></i>รีเซ็ตข้อมูล</button>
   </div>
@@ -1062,9 +1115,7 @@
   </div>
   <div class="stock-tabs">
     <button class="stock-tab active" id="stab-dashboard" onclick="switchStockTab('dashboard')">ภาพรวม</button>
-    <button class="stock-tab" id="stab-movement" onclick="switchStockTab('movement')">รับเข้า / เบิกออก</button>
-    <button class="stock-tab" id="stab-expenses" onclick="switchStockTab('expenses')">ค่าใช้จ่าย</button>
-  </div>
+    <button class="stock-tab" id="stab-movement" onclick="switchStockTab('movement')">รับเข้า / เบิกออก</button>  </div>
 
   <!-- ===== TAB 1: Inventory — one card per brand/model ===== -->
   <div class="stock-tab-content active" id="stock-tab-dashboard">
@@ -1137,36 +1188,6 @@
    </div>
   </div>
 
-  <!-- ===== TAB 3: Expenses — persistent monthly ledger ===== -->
-  <div class="stock-tab-content" id="stock-tab-expenses">
-   <div class="col">
-    <div class="month-nav">
-      <button onclick="shiftExpenseMonth(-1)" aria-label="เดือนก่อน"><i data-icon="chevron-left"></i></button>
-      <div id="expense-month-label"></div>
-      <button onclick="shiftExpenseMonth(1)" aria-label="เดือนถัดไป"><i data-icon="chevron-right"></i></button>
-    </div>
-
-    <div class="card">
-      <div class="exp-total-label">ค่าใช้จ่ายทั้งหมด</div>
-      <div class="exp-total" id="expense-total">฿ 0</div>
-      <div class="exp-cats">
-        <div class="exp-cat court"><div class="cat-ico court"><i data-icon="court"></i></div><div>สนาม</div><b id="expense-cat-court">฿ 0</b><small id="expense-pct-court">0%</small></div>
-        <div class="exp-cat shuttle"><div class="cat-ico shuttle"><i data-icon="shuttle"></i></div><div>ลูกแบด</div><b id="expense-cat-shuttle">฿ 0</b><small id="expense-pct-shuttle">0%</small></div>
-        <div class="exp-cat other"><div class="cat-ico other"><i data-icon="dots"></i></div><div>อื่น ๆ</div><b id="expense-cat-other">฿ 0</b><small id="expense-pct-other">0%</small></div>
-      </div>
-    </div>
-
-    <button class="btn btn-lime btn-full btn-lg" onclick="openExpenseModal()"><i data-icon="plus"></i>เพิ่มค่าใช้จ่าย</button>
-
-   </div>
-   <div class="col">
-    <div class="section-h" style="margin-top:0;"><h3>รายการค่าใช้จ่าย</h3></div>
-    <div class="card" style="padding:4px 12px;">
-      <div id="expense-list"></div>
-    </div>
-   </div>
-  </div>
-
 </div>
 
 <!-- PAGE: Cost splitting + saved courts -->
@@ -1205,8 +1226,7 @@
         <div class="form-group"></div>
       </div>
       <div class="section-h" style="margin:2px 0 8px;">
-        <h3 style="font-size:15px;">ลูกแบดที่ใช้</h3>
-        <button class="link-btn" onclick="fillShuttlesFromStock()">ดึงจากที่เบิกวันนั้น</button>
+        <h3 style="font-size:15px;">ลูกแบดที่ใช้ <small>(ตัดสต๊อกให้อัตโนมัติเมื่อบันทึก)</small></h3>
       </div>
       <div id="cost-shuttle-rows"></div>
       <button class="btn btn-soft btn-sm btn-full" id="sh-add-btn" style="margin:2px 0 14px;" onclick="addShuttleRow()"><i data-icon="plus"></i>เพิ่มยี่ห้อ</button>
@@ -1217,11 +1237,11 @@
       <div class="share-tiles" id="cost-share-tiles"></div>
 
       <div class="section-h" style="margin:4px 0 6px;">
-        <h3 style="font-size:15px;">รายชื่อผู้ร่วมเล่น</h3>
+        <h3 style="font-size:15px;">ผู้ร่วมเล่น · เก็บเงิน <small id="cost-people-count"></small></h3>
         <select class="select add-select" id="cost-add-player" onchange="addCostPlayer(this.value)"></select>
       </div>
-      <div id="cost-players-list"></div>
       <div id="cost-pay-box"></div>
+      <div id="cost-players-list"></div>
 
       <button class="btn btn-lime btn-full btn-lg" style="margin-top:14px;" id="cost-save-btn" onclick="saveSessionToExpenses()">บันทึกรอบเล่น</button>
     </div>
@@ -1237,6 +1257,23 @@
     </div>
   </div>
 </div>
+
+<!-- PAGE: What each saved session cost and how it was split (no cost price / profit) -->
+<div class="page" id="page-expense">
+  <div class="month-nav">
+    <button onclick="shiftSessionMonth(-1)" aria-label="เดือนก่อน"><i data-icon="chevron-left"></i></button>
+    <div id="sess-month-label"></div>
+    <button onclick="shiftSessionMonth(1)" aria-label="เดือนถัดไป"><i data-icon="chevron-right"></i></button>
+  </div>
+  <div class="card">
+    <div class="exp-total-label">ค่าเล่นที่หารกันทั้งเดือน</div>
+    <div class="exp-total" id="sess-month-total">฿ 0</div>
+    <div class="tiles t3" id="sess-month-tiles" style="margin-bottom:0;"></div>
+    <button class="btn btn-lime btn-full" id="sess-month-summary-btn" style="margin-top:12px;" onclick="openMonthSummary()"><i data-icon="share"></i>สรุปเดือนนี้เป็นรูป ส่งเข้ากลุ่ม</button>
+  </div>
+  <div class="section-h"><h3>รอบเล่น</h3><small class="muted">กดเพื่อดูรายละเอียด</small></div>
+  <div id="sess-list"></div>
+</div>
 </div><!-- /.app -->
 
 <!-- Bottom Nav -->
@@ -1247,6 +1284,7 @@
   <button class="nav-btn" id="nav-match" onclick="goPage('match')"><i data-icon="trophy"></i>แข่งขัน</button>
   <button class="nav-btn" id="nav-stats" onclick="goPage('stats')"><i data-icon="chart"></i>สถิติ</button>
   <button class="nav-btn" id="nav-cost" onclick="goPage('cost')"><i data-icon="wallet"></i>ค่าเล่น</button>
+  <button class="nav-btn" id="nav-expense" onclick="goPage('expense')"><i data-icon="receipt"></i>ค่าใช้จ่าย</button>
   <button class="nav-btn" id="nav-tools" onclick="goPage('tools')"><i data-icon="box"></i>สต๊อก</button>
 </nav>
 
@@ -1436,62 +1474,6 @@
   </div>
 </div>
 
-<!-- Modal: Add/Edit Expense -->
-<div class="modal-overlay" id="modal-expense">
-  <div class="modal">
-    <div class="modal-head">
-      <div class="modal-title" id="modal-expense-title">เพิ่ม / แก้ไขค่าใช้จ่าย</div>
-      <button class="modal-close" onclick="closeModal('modal-expense')" aria-label="ปิด"><i data-icon="x"></i></button>
-    </div>
-    <label class="form-label">หมวดหมู่ค่าใช้จ่าย <span class="req">*</span></label>
-    <div class="radio-row">
-      <label><input type="radio" name="expense-cat" value="court" checked onchange="updateExpenseFormFields()">ค่าสนาม</label>
-      <label><input type="radio" name="expense-cat" value="shuttle" onchange="updateExpenseFormFields()">ลูกแบด</label>
-      <label><input type="radio" name="expense-cat" value="other" onchange="updateExpenseFormFields()">อื่นๆ</label>
-    </div>
-    <div class="grey-box">
-      <div class="form-row r3">
-        <!-- Court: structured "hours x courts" instead of free text -->
-        <div class="form-group expense-fields-court">
-          <label class="form-label">จำนวนชั่วโมง <span class="req">*</span></label>
-          <div class="input-suffix"><input class="input" id="input-expense-hours" type="number" min="0" inputmode="decimal" placeholder="0"><span>ชั่วโมง</span></div>
-        </div>
-        <div class="form-group expense-fields-court">
-          <label class="form-label">จำนวนสนาม <span class="req">*</span></label>
-          <div class="input-suffix"><input class="input" id="input-expense-courts" type="number" min="1" inputmode="numeric" placeholder="1"><span>สนาม</span></div>
-        </div>
-        <!-- Shuttle: structured quantity -->
-        <div class="form-group expense-fields-shuttle" style="grid-column:span 2;">
-          <label class="form-label">จำนวนลูก <span class="req">*</span></label>
-          <div class="input-suffix"><input class="input" id="input-expense-shuttles" type="number" min="1" inputmode="numeric" placeholder="0"><span>ลูก</span></div>
-        </div>
-        <!-- Other: free text -->
-        <div class="form-group expense-fields-other" style="grid-column:span 2;">
-          <label class="form-label">รายละเอียด <span class="req">*</span></label>
-          <input class="input" id="input-expense-label" placeholder="เช่น ค่าน้ำดื่ม..." maxlength="60">
-        </div>
-        <div class="form-group">
-          <label class="form-label">จำนวนเงิน <span class="req">*</span></label>
-          <div class="input-suffix"><input class="input" id="input-expense-amount" type="number" min="0" inputmode="numeric" placeholder="0"><span>บาท</span></div>
-        </div>
-      </div>
-    </div>
-    <div class="form-row" style="align-items:end;">
-      <div class="form-group" style="margin-bottom:0;">
-        <label class="form-label">วันที่ <span class="req">*</span></label>
-        <input class="input" id="input-expense-date" type="date">
-      </div>
-      <div class="note-box" style="margin:0;font-size:10.5px;padding:8px;"><i data-icon="info"></i><span>ถ้าเลือกหมวด "ลูกแบด" จะระบุจำนวนลูก ถ้าเลือก "อื่นๆ" จะระบุรายละเอียดแทน</span></div>
-    </div>
-    <input type="hidden" id="edit-expense-id">
-    <div class="modal-btns">
-      <button class="btn btn-outline" onclick="closeModal('modal-expense')">ยกเลิก</button>
-      <button class="btn btn-lime" onclick="saveExpense()">บันทึก</button>
-    </div>
-    <button class="link-btn" id="expense-delete-btn" style="display:none;color:var(--red);margin:12px auto 0;" onclick="deleteExpense(document.getElementById('edit-expense-id').value)"><i data-icon="trash"></i>&nbsp;ลบรายการนี้</button>
-  </div>
-</div>
-
 <!-- Modal: Edit Match History Result -->
 <div class="modal-overlay" id="modal-edit-history">
   <div class="modal">
@@ -1563,6 +1545,31 @@
       <button class="modal-close" onclick="closeModal('modal-live')" aria-label="ปิด"><i data-icon="x"></i></button>
     </div>
     <div id="live-body"></div>
+  </div>
+</div>
+
+<!-- Modal: one saved session in detail -->
+<div class="modal-overlay" id="modal-month-summary">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">สรุปประจำเดือน</div>
+      <button class="modal-close" onclick="closeModal('modal-month-summary')" aria-label="ปิด"><i data-icon="x"></i></button>
+    </div>
+    <img id="month-summary-img" alt="สรุปประจำเดือน" style="width:100%;border-radius:12px;border:1px solid var(--border);display:block;">
+    <div class="modal-btns">
+      <button class="btn btn-outline" onclick="downloadMonthSummary()"><i data-icon="download"></i>บันทึกรูป</button>
+      <button class="btn btn-lime" onclick="shareMonthSummary()"><i data-icon="share"></i>แชร์</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-session">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="sess-detail-title">รายละเอียดรอบเล่น</div>
+      <button class="modal-close" onclick="closeModal('modal-session')" aria-label="ปิด"><i data-icon="x"></i></button>
+    </div>
+    <div id="sess-detail"></div>
   </div>
 </div>
 
@@ -1759,6 +1766,7 @@ function load() {
     state.stockBrand = JSON.parse(localStorage.getItem('bmt_stockBrand') || 'null') || { name: '', photo: null };
     state.archivedMatchCount = parseInt(localStorage.getItem('bmt_archivedMatchCount') || '0') || 0;
     state.payments = JSON.parse(localStorage.getItem('bmt_payments') || '{}') || {};
+    Object.values(state.payments).forEach(repairSessionTotal);
     state.venues = JSON.parse(localStorage.getItem('bmt_venues') || '[]') || [];
     state.lastVenueId = localStorage.getItem('bmt_lastVenue') || '';
     state.stockItems = JSON.parse(localStorage.getItem('bmt_stockItems') || 'null');
@@ -1799,6 +1807,7 @@ function goPage(page) {
   if (page === 'players') renderUserPage();
   if (page === 'tools') { if (stockUnlocked) renderStockPage(); else showStockLock(); }
   if (page === 'cost') renderCostPage();
+  if (page === 'expense') renderExpensePage();
 }
 
 // =================== PLAYERS ===================
@@ -3645,9 +3654,11 @@ function closeModal(id) {
 // In-app replacements for confirm()/alert(). Native dialogs look out of place,
 // and some embedded browsers block them silently — the button then seems dead.
 let dialogResolve = null;
-function showDialog(message, { okText = 'ตกลง', cancelText = null, danger = false } = {}) {
+function showDialog(message, { okText = 'ตกลง', cancelText = null, danger = false, html = null } = {}) {
   if (dialogResolve) dialogResolve(false);
-  document.getElementById('dialog-message').textContent = message;
+  const msg = document.getElementById('dialog-message');
+  if (html) { msg.innerHTML = html; msg.classList.add('rich'); }
+  else { msg.textContent = message; msg.classList.remove('rich'); }
   const ok = document.getElementById('dialog-ok');
   ok.textContent = okText;
   ok.className = 'btn ' + (danger ? 'btn-danger' : 'btn-lime');
@@ -3721,6 +3732,7 @@ let currentStockTab = 'dashboard';
 
 function switchStockTab(tab) {
   if (tab === 'sessioncalc') { goPage('cost'); return; } // moved to its own page
+  if (tab === 'expenses') { goPage('expense'); return; } // moved to its own page
   currentStockTab = tab;
   document.querySelectorAll('.stock-tab').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.stock-tab-content').forEach(c => c.classList.remove('active'));
@@ -3731,13 +3743,11 @@ function switchStockTab(tab) {
   if (sidebarBtn) sidebarBtn.classList.add('active');
   if (tab === 'dashboard') { renderStockItems(); renderUsageChart(); renderAlerts(); }
   if (tab === 'movement') { renderStockEntryForm(); renderStockHistory(); }
-  if (tab === 'expenses') { renderExpensesTab(); }
 }
 
 function renderStockPage() {
   if (currentStockTab === 'dashboard') { renderStockItems(); renderUsageChart(); renderAlerts(); }
   if (currentStockTab === 'movement') { renderStockEntryForm(); renderStockHistory(); }
-  if (currentStockTab === 'expenses') { renderExpensesTab(); }
 }
 
 // ---------- Inventory: one item per brand/model ----------
@@ -3820,14 +3830,6 @@ function changeItemStock(item, delta, note, adjust) {
   return real;
 }
 
-// Balls actually taken out for play on a given yyyy-mm-dd (recount corrections excluded;
-// older records have no flag, so their 🔧 note marks them)
-function ballsUsedOn(dateKey) {
-  return state.stockHistory
-    .filter(r => r.type === 'out' && !r.adjust && !String(r.note || '').startsWith('🔧') && toDateInput(new Date(r.date)) === dateKey)
-    .reduce((s, r) => s + r.amount, 0);
-}
-
 function stockImgHtml(item) {
   return item && item.photo ? `<img src="${item.photo}" alt="">` : icon('shuttle');
 }
@@ -3885,6 +3887,7 @@ function renderStockItems() {
       <div class="si-count"><b>${it.count}</b><em>ลูก</em><span>= ${tubeBreakdown(it.count, it.perTube)}</span></div>
       <div class="si-tubes">${tubesHtml(it)}</div>
       ${rest ? `<div class="si-open">หลอดที่เปิดอยู่เหลือ ${rest} ลูก</div>` : ''}
+      ${(f => f ? `<div class="forecast${f.roundsLeft <= FORECAST_LOW_ROUNDS ? ' low' : ''}">${icon('calendar')}ใช้ ~${fmtBall(Math.round(f.perSession * 10) / 10)} ลูก/รอบ · พอเล่นอีก <b>${f.roundsLeft} รอบ</b></div>` : '')(stockForecast(it.id))}
       ${priceLine}
     </div>`;
   }).join('');
@@ -4113,19 +4116,53 @@ function renderUsageChart() {
   el.innerHTML = `<div class="chart"><div class="chart-grid">${grid}</div><div class="chart-bars">${cols}</div></div>`;
 }
 
+// ---------- How many more sessions the shelf covers ----------
+// Based on the balls used in the last few saved sessions (ค่าเล่น → บันทึก).
+const FORECAST_SESSIONS = 8;
+function recentBallUse() {
+  return sessionRecords().slice(0, FORECAST_SESSIONS)
+    .map(({ r }) => (r.shuttles && r.shuttles.length ? r.shuttles : (r.stockOut || [])))
+    .filter(lines => lines.some(l => l.n > 0));
+}
+// { perSession, roundsLeft } overall, or for one product when itemId is given; null = not enough data
+function stockForecast(itemId) {
+  const uses = recentBallUse();
+  if (!uses.length) return null;
+  let used, have;
+  if (itemId) {
+    const it = findStockItem(itemId);
+    const rounds = uses.filter(lines => lines.some(l => l.itemId === itemId && l.n > 0));
+    if (!it || !rounds.length) return null;
+    used = rounds.reduce((s, lines) => s + lines.filter(l => l.itemId === itemId).reduce((a, l) => a + l.n, 0), 0) / rounds.length;
+    have = it.count;
+  } else {
+    used = uses.reduce((s, lines) => s + lines.reduce((a, l) => a + (l.n || 0), 0), 0) / uses.length;
+    have = stockTotal();
+  }
+  if (!(used > 0)) return null;
+  return { perSession: used, roundsLeft: Math.floor(have / used), sessions: uses.length };
+}
+const FORECAST_LOW_ROUNDS = 2;
+
 function renderAlerts() {
   const el = document.getElementById('stock-alert-messages');
   if (!el) return;
   const n = stockTotal();
   const thr = state.stockAlertThreshold || 24;
-  const low = n <= thr;
+  const fc = stockForecast();
+  const fcLow = fc && fc.roundsLeft <= FORECAST_LOW_ROUNDS;
+  const low = n <= thr || fcLow;
   const empty = state.stockItems.filter(it => !it.count).map(it => it.name);
+  const fcLine = fc
+    ? `<span class="forecast${fcLow ? ' low' : ''}" style="margin-top:2px;">ใช้เฉลี่ย ${fmtBall(Math.round(fc.perSession * 10) / 10)} ลูก/รอบ → พอเล่นอีก <b>${fc.roundsLeft} รอบ</b></span>`
+    : '<span style="display:block;margin-top:2px;">บันทึกรอบเล่นที่เมนู "ค่าเล่น" เพื่อดูว่าลูกพอเล่นอีกกี่รอบ</span>';
   // Read-only summary; the threshold is changed from the ⚙️ button in the app bar
   el.innerHTML = `<div class="alert-card" style="cursor:default;">
     ${icon('bell', low ? 'color:var(--red)' : '')}
     <div>
       <b>การแจ้งเตือนสต๊อกต่ำ</b>
-      <span>แจ้งเตือนเมื่อสต๊อกรวมเหลือต่ำกว่า ${thr} ลูก</span>
+      <span>แจ้งเตือนเมื่อสต๊อกรวมเหลือต่ำกว่า ${thr} ลูก หรือพอเล่นไม่เกิน ${FORECAST_LOW_ROUNDS} รอบ</span>
+      ${fcLine}
       ${low ? `<span style="display:block;color:var(--red);font-weight:600;margin-top:2px;">${n === 0 ? 'สต๊อกหมดแล้ว! กรุณาสั่งซื้อลูกแบด' : `ตอนนี้เหลือรวม ${n} ลูก — ควรสั่งเพิ่ม`}</span>` : ''}
       ${empty.length ? `<span style="display:block;margin-top:2px;">หมดแล้ว: ${escHtml(empty.join(', '))}</span>` : ''}
     </div>
@@ -4238,121 +4275,6 @@ function monthLabel(key) {
   return `${names[parseInt(m) - 1]} ${parseInt(y) + 543}`;
 }
 
-// Show only the fields relevant to the selected category — court/shuttle get
-// structured quantity inputs so the ledger reads "2 ชั่วโมง × 2 สนาม" instead
-// of whatever free text happened to get typed in.
-function updateExpenseFormFields() {
-  const cat = getExpenseCategory();
-  ['court', 'shuttle', 'other'].forEach(c => {
-    document.querySelectorAll('.expense-fields-' + c).forEach(el => { el.style.display = cat === c ? '' : 'none'; });
-  });
-}
-
-function openExpenseModal(id) {
-  const e = id ? state.expenses.find(x => x.id === id) : null;
-  document.getElementById('modal-expense-title').textContent = e ? 'แก้ไขค่าใช้จ่าย' : 'เพิ่มค่าใช้จ่าย';
-  setExpenseCategory(e ? e.category : 'court');
-  // Older records only kept the text label, so fall back to parsing it
-  const label = e ? String(e.label || '') : '';
-  const courtMatch = label.match(/([\d.]+) ชั่วโมง × (\d+) สนาม/);
-  const shuttleMatch = label.match(/(\d+) ลูก/);
-  document.getElementById('input-expense-hours').value = e ? (e.hours ?? (courtMatch ? courtMatch[1] : '')) : '';
-  document.getElementById('input-expense-courts').value = e ? (e.courts ?? (courtMatch ? courtMatch[2] : '')) : '';
-  document.getElementById('input-expense-shuttles').value = e ? (e.shuttles ?? (shuttleMatch ? shuttleMatch[1] : '')) : '';
-  document.getElementById('input-expense-label').value = e && e.category === 'other' ? label : '';
-  document.getElementById('input-expense-amount').value = e ? e.amount : '';
-  document.getElementById('input-expense-date').value = toDateInput(e ? new Date(e.date) : new Date());
-  document.getElementById('edit-expense-id').value = e ? e.id : '';
-  document.getElementById('expense-delete-btn').style.display = e ? 'flex' : 'none';
-  updateExpenseFormFields();
-  openModal('modal-expense');
-}
-
-function saveExpense() {
-  const category = getExpenseCategory();
-  const amount = parseFloat(document.getElementById('input-expense-amount').value);
-  const dateInput = document.getElementById('input-expense-date').value;
-  const editId = document.getElementById('edit-expense-id').value;
-
-  let detail;
-  const extra = {};
-  if (category === 'court') {
-    const hours = parseFloat(document.getElementById('input-expense-hours').value) || 0;
-    const courts = parseInt(document.getElementById('input-expense-courts').value) || 1;
-    if (hours <= 0) { notify('กรุณากรอกจำนวนชั่วโมง'); return; }
-    detail = `${hours} ชั่วโมง × ${courts} สนาม`;
-    Object.assign(extra, { hours, courts });
-  } else if (category === 'shuttle') {
-    const shuttles = parseInt(document.getElementById('input-expense-shuttles').value) || 0;
-    if (shuttles <= 0) { notify('กรุณากรอกจำนวนลูก'); return; }
-    detail = `${shuttles} ลูก`;
-    extra.shuttles = shuttles;
-  } else {
-    detail = document.getElementById('input-expense-label').value.trim();
-    if (!detail) { notify('กรุณากรอกรายละเอียด'); return; }
-  }
-  if (!amount || amount <= 0) { notify('กรุณากรอกจำนวนเงิน'); return; }
-
-  const date = dateInput ? new Date(dateInput + 'T12:00:00').toISOString() : new Date().toISOString();
-  const existing = editId ? state.expenses.find(x => x.id === editId) : null;
-  if (existing) {
-    delete existing.hours; delete existing.courts; delete existing.shuttles;
-    Object.assign(existing, { date, category, label: detail, amount }, extra);
-  } else {
-    state.expenses.unshift({ id: genId('exp'), date, category, label: detail, amount, ...extra });
-  }
-  expenseMonthKey = monthKey(date);
-  save();
-  closeModal('modal-expense');
-  renderExpensesTab();
-}
-
-async function deleteExpense(id) {
-  if (!(await askConfirm('ลบรายการค่าใช้จ่ายนี้?', { okText: 'ลบ', danger: true }))) return;
-  state.expenses = state.expenses.filter(e => e.id !== id);
-  save();
-  closeModal('modal-expense');
-  renderExpensesTab();
-}
-
-function renderExpensesTab() {
-  const selectedKey = expenseMonthKey || monthKey(new Date().toISOString());
-  document.getElementById('expense-month-label').textContent = monthLabel(selectedKey);
-
-  const monthExpenses = state.expenses.filter(e => monthKey(e.date) === selectedKey);
-  const totals = { court: 0, shuttle: 0, other: 0 };
-  monthExpenses.forEach(e => { totals[e.category] = (totals[e.category] || 0) + e.amount; });
-  const grandTotal = totals.court + totals.shuttle + totals.other;
-
-  document.getElementById('expense-total').textContent = `฿ ${fmtMoney(grandTotal)}`;
-  ['court', 'shuttle', 'other'].forEach(c => {
-    document.getElementById('expense-cat-' + c).textContent = `฿ ${fmtMoney(totals[c])}`;
-    document.getElementById('expense-pct-' + c).textContent = grandTotal ? `${(totals[c] / grandTotal * 100).toFixed(1)}%` : '0%';
-  });
-
-  const catMeta = {
-    court: { icon: 'court', title: 'ค่าเช่าสนาม' },
-    shuttle: { icon: 'shuttle', title: 'ซื้อลูกแบด' },
-    other: { icon: 'dots', title: null },
-  };
-  const listEl = document.getElementById('expense-list');
-  if (!monthExpenses.length) {
-    listEl.innerHTML = '<div class="tiny" style="text-align:center;padding:18px;font-size:13px;">ยังไม่มีค่าใช้จ่ายในเดือนนี้</div>';
-    return;
-  }
-  listEl.innerHTML = [...monthExpenses].sort((a, b) => new Date(b.date) - new Date(a.date)).map(e => {
-    const meta = catMeta[e.category] || catMeta.other;
-    const title = meta.title || e.label;
-    const sub = meta.title ? `${escHtml(e.label)} · ${thaiDate(e.date)}` : thaiDate(e.date);
-    return `<div class="exp-row">
-      <span class="cat-ico ${e.category}">${icon(meta.icon)}</span>
-      <div class="exp-main"><b>${escHtml(title)}</b><span>${sub}</span></div>
-      <span class="exp-amt">฿ ${fmtMoney(e.amount)}</span>
-      <button class="row-icon-btn" onclick="openExpenseModal('${e.id}')" aria-label="แก้ไข">${icon('pencil')}</button>
-    </div>`;
-  }).join('');
-}
-
 // =================== SESSION CALCULATOR ===================
 function initSessionCalcDate() {
   const el = document.getElementById('cost-session-date');
@@ -4454,7 +4376,7 @@ function shuttleTotals() {
     const it = findStockItem(r.item);
     const price = ballSellPrice(it);
     if (!it || !price) return;
-    lines.push({ name: it.name, n, price, sub: n * price });
+    lines.push({ itemId: it.id, name: it.name, n, price, sub: n * price });
   });
   return { balls: lines.reduce((s, l) => s + l.n, 0), total: lines.reduce((s, l) => s + l.sub, 0), lines };
 }
@@ -4617,39 +4539,88 @@ async function deleteVenue() {
   calcCost();
 }
 
+// Saving a session: keep the split (shown under เมนู ค่าใช้จ่าย) and take the
+// balls used straight out of stock — they were used on court, so no separate เบิกออก.
 async function saveSessionToExpenses() {
   const rate = parseFloat(document.getElementById('cost-rate').value) || 0;
   const hours = parseFloat(document.getElementById('cost-hours').value) || 0;
   const courts = parseInt(document.getElementById('cost-courts').value) || 1;
   const sh = shuttleTotals();
-  const shuttles = sh.balls;
-
   const courtTotal = rate * hours * courts;
-  const shuttleTotal = sh.total;
 
-  if (courtTotal <= 0 && shuttleTotal <= 0) { notify('ยังไม่มีค่าใช้จ่ายให้บันทึก'); return; }
+  if (courtTotal <= 0 && sh.total <= 0) { notify('ยังไม่มีค่าใช้จ่ายให้บันทึก'); return; }
+  if (!liveCostSnapshot()) { notify('ยังไม่มีผู้ร่วมเล่นให้หาร\nเพิ่มรายชื่อผู้ร่วมเล่นก่อน'); return; }
 
-  // Shuttles are often logged as an expense when bought — ask, so they aren't counted twice
-  let addShuttle = shuttleTotal > 0;
-  if (addShuttle) {
-    addShuttle = await askConfirm(`บันทึกค่าลูกแบด ฿${fmtMoney(shuttleTotal)} ลงค่าใช้จ่ายด้วยไหม?\n\nถ้าบันทึกค่าลูกแบดไว้แล้วตอนซื้อ ให้เลือก "ไม่ต้อง" จะได้ไม่นับซ้ำ`,
-      { okText: 'บันทึกด้วย', cancelText: 'ไม่ต้อง' });
-    if (!addShuttle && courtTotal <= 0) return;
-  }
-  const dateInput = document.getElementById('cost-session-date').value;
-  const date = dateInput ? new Date(dateInput + 'T12:00:00').toISOString() : new Date().toISOString();
-  if (courtTotal > 0) {
-    const venue = selectedVenueName();
-    state.expenses.unshift({ id: genId('exp'), date, category: 'court', label: `${venue ? venue + ' · ' : ''}${hours} ชั่วโมง × ${courts} สนาม`, amount: Math.round(courtTotal), hours, courts, ...(venue ? { venue } : {}) });
-  }
-  if (addShuttle) {
-    const brands = sh.lines.map(l => `${l.name} ${l.n}`).join(', ');
-    state.expenses.unshift({ id: genId('exp'), date, category: 'shuttle', label: `${shuttles} ลูก${brands ? ` (${brands})` : ''}`, amount: Math.round(shuttleTotal), shuttles });
-  }
-  storePaySnapshot(); // keep who owes what for this date after the form is cleared
+  const key = costDateKey();
+  const prev = state.payments[key];
+  const replacing = !!(prev && prev.saved);
+  const people = {};
+  state.players.forEach(p => { if (costPlayerShare[p.id] === 'full' || costPlayerShare[p.id] === 'half') people[p.id] = costPlayerShare[p.id]; });
+  const split = splitTotal(courtTotal + sh.total, people);
+  if (!split) { notify('ยังไม่มีผู้ร่วมเล่นให้หาร\nเพิ่มรายชื่อผู้ร่วมเล่นก่อน'); return; }
+
+  // Balls on the shelf once a replaced session's balls are put back
+  const onHand = l => {
+    const it = findStockItem(l.itemId);
+    if (!it) return null;
+    const back = replacing ? (prev.stockOut || []).filter(d => d.itemId === l.itemId).reduce((s, d) => s + d.n, 0) : 0;
+    return it.count + back;
+  };
+  const short = sh.lines.filter(l => { const have = onHand(l); return have !== null && l.n > have; });
+
+  // One summary to check before anything is saved or cut from stock
+  const full = Object.values(people).filter(s => s === 'full').length, half = Object.keys(people).length - full;
+  const lines = [];
+  if (courtTotal > 0) lines.push([`ค่าสนาม${selectedVenueName() ? ` · ${escHtml(selectedVenueName())}` : ''}`, `${fmtRate(rate)} × ${hours} ชม. × ${courts} สนาม`, courtTotal]);
+  sh.lines.forEach(l => lines.push([`ค่าลูก ${escHtml(l.name)}`, `${l.n} ลูก × ${fmtBall(l.price)}`, l.sub]));
+  const prevBack = replacing ? (prev.stockOut || []).reduce((s, d) => s + d.n, 0) : 0;
+  const html = `<h4>ตรวจสอบก่อนบันทึก · ${thaiDate(key)}</h4>
+    <div class="sum-box">
+      ${lines.map(([t, sub, amt]) => `<div class="sum-line"><span>${t}<br><small class="muted">${sub}</small></span><b>฿ ${fmtMoney(amt)}</b></div>`).join('')}
+      <div class="sum-total"><span>รวมทั้งหมด</span><span>฿ ${fmtMoney(split.total)}</span></div>
+    </div>
+    <div class="sess-split">
+      <div><b>${full}</b> คน เต็มเวลา<span>คนละ ฿${fmtMoney(split.perFull)}</span></div>
+      ${half ? `<div><b>${half}</b> คน ครึ่งเวลา<span>คนละ ฿${fmtMoney(split.perHalf)}</span></div>` : ''}
+    </div>
+    ${sh.lines.length ? `<div class="confirm-people">จะตัดสต๊อก: ${sh.lines.map(l => `${escHtml(l.name)} ${l.n} ลูก`).join(', ')}</div>` : ''}
+    ${replacing ? `<div class="warn-note">วันนี้บันทึกไว้แล้ว (฿${fmtMoney(prev.total)}) — จะแทนที่ด้วยรอบนี้${prevBack ? ` และคืนลูก ${prevBack} ลูกจากรอบก่อนเข้าสต๊อก` : ''} สถานะจ่ายเงินเดิมยังอยู่</div>` : ''}
+    ${short.length ? `<div class="warn-note">สต๊อกไม่พอ: ${short.map(l => `${escHtml(l.name)} มี ${onHand(l)} ลูก (ใช้ ${l.n})`).join(', ')} — จะตัดเท่าที่มี</div>` : ''}`;
+  if (!(await showDialog('', { html, okText: replacing ? 'แทนที่และบันทึก' : 'บันทึก', cancelText: 'แก้ไข' }))) return;
+
+  if (replacing) returnSessionStock(prev, key);
+
+  const stockOut = sh.lines.map(l => {
+    const it = findStockItem(l.itemId);
+    const n = it ? -changeItemStock(it, -l.n, `ใช้ในการเล่น ${thaiDate(key)}`) : 0;
+    return { itemId: l.itemId, name: l.name, n };
+  }).filter(d => d.n > 0);
+
+  // Split from the very numbers listed above — total and cost lines can't drift apart
+  storePaySnapshot(); // who joined + names for this date, kept after the form is cleared
+  const rec = state.payments[key] || (state.payments[key] = { paid: {} });
+  Object.assign(rec, split, {
+    people, venue: selectedVenueName(),
+    names: Object.fromEntries(Object.keys(people).map(id => [id, getPlayerName(id)])),
+    saved: true, savedAt: new Date().toISOString(),
+    rate, hours, courts, courtTotal, shuttles: sh.lines, stockOut,
+  });
   save();
-  notify('บันทึกรอบเล่นลงค่าใช้จ่ายแล้ว\nติดตามคนที่ยังไม่จ่ายได้ที่ "เก็บเงิน" ของวันนั้น');
+  const cut = stockOut.map(d => `• ${d.name} ${d.n} ลูก`).join('\n');
+  const fc = stockForecast();
+  const fcMsg = fc && fc.roundsLeft <= FORECAST_LOW_ROUNDS
+    ? `\n\n⚠️ ลูกแบดเหลือ ${stockTotal()} ลูก พอเล่นอีกประมาณ ${fc.roundsLeft} รอบ — ควรสั่งเพิ่ม` : '';
+  notify(`บันทึกรอบเล่นแล้ว${cut ? `\n\nตัดสต๊อกให้แล้ว:\n${cut}` : ''}${fcMsg}\n\nดูย้อนหลังได้ที่เมนู "ค่าใช้จ่าย"`);
   resetSessionCalc();
+}
+
+// Put back the balls a saved session took out of stock (when it's replaced or deleted)
+function returnSessionStock(rec, key) {
+  (rec.stockOut || []).forEach(d => {
+    const it = findStockItem(d.itemId);
+    if (it && d.n) changeItemStock(it, d.n, `คืนจากรอบเล่น ${thaiDate(key)}`, true);
+  });
+  rec.stockOut = [];
 }
 
 // =================== COST CALCULATOR ===================
@@ -4671,26 +4642,80 @@ function renderCostPlayers() {
   addSel.value = '';
   addSel.disabled = !notJoined.length;
 
-  if (!state.players.length) {
-    list.innerHTML = '<div class="tiny" style="font-size:13px;">ยังไม่มีผู้เล่น · ไปเพิ่มที่หน้าผู้เล่นก่อน</div>';
+  const summaryEl = document.getElementById('cost-pay-box');
+  document.getElementById('cost-people-count').textContent = joined.length ? `(${joined.length} คน)` : '';
+  if (!state.players.length || !joined.length) {
+    list.innerHTML = state.players.length
+      ? '<div class="tiny" style="font-size:13px;padding:8px 0;">ยังไม่มีผู้ร่วมเล่น · กด "+ เพิ่มผู้เล่น"</div>'
+      : '<div class="tiny" style="font-size:13px;">ยังไม่มีผู้เล่น · ไปเพิ่มที่หน้าผู้เล่นก่อน</div>';
+    summaryEl.innerHTML = '';
     return;
   }
-  if (!joined.length) {
-    list.innerHTML = '<div class="tiny" style="font-size:13px;padding:8px 0;">ยังไม่มีผู้ร่วมเล่น · กด "+ เพิ่มผู้เล่น"</div>';
-    return;
-  }
-  list.innerHTML = joined.map(p => {
-    const share = costPlayerShare[p.id];
-    return `<div class="share-row">
-      ${renderTierAvatar(p, 26)}
-      <span class="list-name">${escHtml(p.name)}</span>
-      <div class="share-toggle">
-        <button class="${share === 'full' ? 'on' : ''}" onclick="setCostShare('${p.id}','full')">เต็มเวลา</button>
-        <button class="${share === 'half' ? 'on' : ''}" onclick="setCostShare('${p.id}','half')">ครึ่งเวลา</button>
+
+  // One list for both: who joined (full / half time) and what each owes / has paid.
+  // Amounts come from the form while it has numbers, otherwise from the session
+  // already saved for this date (the form is cleared after saving).
+  const key = costDateKey();
+  const base = costSplitBase();
+  const paid = ((state.payments[key] || {}).paid) || {};
+  const amountOf = (id, share) => {
+    if (!base) return 0;
+    if (!base.live) share = base.people[id];
+    return share === 'half' ? base.perHalf : share === 'full' ? base.perFull : 0;
+  };
+  const rows = joined.map(p => ({ p, share: costPlayerShare[p.id], amount: amountOf(p.id, costPlayerShare[p.id]), paid: !!paid[p.id] }))
+    .sort((a, b) => a.paid - b.paid);
+  const canPay = rows.some(r => r.amount > 0);
+
+  list.innerHTML = rows.map(({ p, share, amount, paid: isPaid }) => `<div class="mrow${isPaid ? ' is-paid' : ''}">
+      ${renderTierAvatar(p, 28)}
+      <span class="mrow-name">${escHtml(p.name)}</span>
+      <span class="mrow-amt">${amount ? '฿' + fmtMoney(amount) : '–'}</span>
+      <div class="mrow-ctl">
+        <div class="share-toggle">
+          <button class="${share === 'full' ? 'on' : ''}" onclick="setCostShare('${p.id}','full')">เต็มเวลา</button>
+          <button class="${share === 'half' ? 'on' : ''}" onclick="setCostShare('${p.id}','half')">ครึ่งเวลา</button>
+        </div>
+        ${canPay ? `<button class="pay-btn${isPaid ? ' on' : ''}" onclick="togglePaid('${p.id}')" aria-pressed="${isPaid}">${isPaid ? icon('check') + 'จ่ายแล้ว' : 'ยังไม่จ่าย'}</button>` : ''}
       </div>
-      <button class="row-icon-btn" onclick="setCostShare('${p.id}','none')" aria-label="เอาออก">${icon('x')}</button>
+      <button class="row-icon-btn mrow-del" onclick="setCostShare('${p.id}','none')" aria-label="เอาออก">${icon('x')}</button>
+    </div>`).join('');
+
+  if (!canPay) { summaryEl.innerHTML = ''; return; }
+  const paidN = rows.filter(r => r.paid).length;
+  const owed = rows.filter(r => !r.paid).reduce((s, r) => s + r.amount, 0);
+  summaryEl.innerHTML = `<div class="pay-sum">
+      <div>
+        <b>${icon('wallet')}${thaiDate(key)} · จ่ายแล้ว ${paidN}/${rows.length} คน</b>
+        <span>${paidN === rows.length ? 'ครบแล้ว 🎉' : `ค้างอีก ฿${fmtMoney(owed)}`}${base.live ? '' : ' · ยอดจากรอบเล่นที่บันทึกไว้'}</span>
+      </div>
+      <div class="pay-sum-btns">
+        ${paidN === rows.length
+          ? `<button class="btn btn-outline btn-sm" onclick="setAllPaid(false)">${icon('undo')}ยกเลิกจ่ายครบ</button>`
+          : `<button class="btn btn-green btn-sm" onclick="setAllPaid(true)">${icon('check')}จ่ายครบทุกคน</button>`}
+        <button class="btn btn-outline btn-sm" onclick="sharePayList()">${icon('share')}ส่งยอดเข้ากลุ่ม</button>
+      </div>
     </div>`;
-  }).join('');
+}
+
+// Mark everyone in the list as paid in one go (or clear it again)
+async function setAllPaid(on) {
+  if (!on && !(await askConfirm('ยกเลิกสถานะ "จ่ายแล้ว" ของทุกคน?', { okText: 'ยกเลิกทั้งหมด', danger: true }))) return;
+  const key = costDateKey();
+  storePaySnapshot();
+  const rec = state.payments[key] || (state.payments[key] = { paid: {} });
+  rec.paid = {};
+  if (on) state.players.forEach(p => { if (costPlayerShare[p.id] === 'full' || costPlayerShare[p.id] === 'half') rec.paid[p.id] = true; });
+  save();
+  renderCostPlayers();
+}
+
+// The split in effect: live numbers from the form, else the saved session for this date
+function costSplitBase() {
+  const live = liveCostSnapshot();
+  if (live) return Object.assign({ live: true }, live);
+  const rec = state.payments[costDateKey()];
+  return rec && rec.people && rec.total > 0 ? Object.assign({ live: false }, rec) : null;
 }
 
 function setCostShare(id, share) {
@@ -4705,27 +4730,6 @@ function fillFromActivePlayers() {
     costPlayerShare[p.id] = state.activePlayers.has(p.id) ? 'full' : 'none';
   });
   renderCostPlayers();
-  calcCost();
-}
-
-// One row per brand, from what was taken out of stock on the session date
-function fillShuttlesFromStock() {
-  const dateKey = document.getElementById('cost-session-date').value || toDateInput(new Date());
-  const byItem = {};
-  state.stockHistory
-    .filter(r => r.type === 'out' && !r.adjust && !String(r.note || '').startsWith('🔧') && toDateInput(new Date(r.date)) === dateKey)
-    .forEach(r => {
-      let key = r.itemId && findStockItem(r.itemId) ? r.itemId : '';
-      if (!key && (state.stockItems || []).length === 1) key = state.stockItems[0].id;
-      if (key) byItem[key] = (byItem[key] || 0) + r.amount;
-    });
-  const unpriced = Object.keys(byItem).filter(k => !ballSellPrice(findStockItem(k))).map(k => findStockItem(k).name);
-  const keys = Object.keys(byItem).filter(k => ballSellPrice(findStockItem(k)));
-  if (unpriced.length) notify(`${unpriced.join(', ')} ยังไม่ได้ตั้งราคาหาร จึงไม่ได้ดึงมา\nตั้งได้ที่หน้าสต๊อก › แก้ไขสินค้า`);
-  if (!keys.length) { notify('ยังไม่มีการเบิกลูกแบดในวันที่เลือก\nบันทึกเบิกออกได้ที่หน้าสต๊อก › "รับเข้า / เบิกออก"'); return; }
-  if (!keys.length) return;
-  costShuttleRows = keys.map(k => ({ item: k, n: String(byItem[k]) }));
-  renderShuttleRows();
   calcCost();
 }
 
@@ -4749,7 +4753,9 @@ function calcCost() {
   const full = state.players.filter(p => costPlayerShare[p.id] === 'full').length;
   const half = state.players.filter(p => costPlayerShare[p.id] === 'half').length;
   const shares = full + half * 0.5;
-  const perShare = shares > 0 ? grandTotal / shares : 0;
+  // After saving, the form is empty — show the saved split for this date instead of ฿0
+  const base = grandTotal > 0 ? null : costSplitBase();
+  const perShare = base ? base.perFull : (shares > 0 ? grandTotal / shares : 0);
   const shareTile = (title, sub, count, amt) => `<div class="share-tile">
       <b>${title}</b><small>${sub}</small>
       <div class="share-count"><div>${count}</div><span>คน</span></div>
@@ -4757,7 +4763,7 @@ function calcCost() {
     </div>`;
   document.getElementById('cost-share-tiles').innerHTML =
     shareTile('เต็มเวลา', '(เล่นตลอด)', full, Math.ceil(perShare)) +
-    shareTile('ครึ่งเวลา', '(เล่นบางช่วง)', half, Math.ceil(perShare * 0.5));
+    shareTile('ครึ่งเวลา', '(เล่นบางช่วง)', half, base ? base.perHalf : Math.ceil(perShare * 0.5));
 
   document.getElementById('cost-save-btn').textContent = `บันทึกรอบเล่น (รวม ฿ ${fmtMoney(grandTotal)})`;
   renderPayBox();
@@ -4782,6 +4788,7 @@ const ICONS = {
   download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
   upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
   lock: '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  receipt: '<path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/>',
   wallet: '<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
   check: '<path d="M20 6 9 17l-5-5"/>',
   'check-circle': '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
@@ -4840,8 +4847,9 @@ const TH_MONTHS_SHORT = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.
 function hhmm(d) {
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 }
+// Accepts a full ISO timestamp or a plain "yyyy-mm-dd" day key (read as local noon)
 function thaiDate(iso) {
-  const d = new Date(iso);
+  const d = /^\d{4}-\d{2}-\d{2}$/.test(iso) ? new Date(iso + 'T12:00:00') : new Date(iso);
   return `${d.getDate()} ${TH_MONTHS_SHORT[d.getMonth()]} ${d.getFullYear() + 543}`;
 }
 function isSameDay(a, b) {
@@ -4873,6 +4881,10 @@ function renderAppBar() {
   } else if (currentPage === 'cost') {
     titleEl.className = 'appbar-title';
     titleEl.innerHTML = `${icon('wallet')}<span>ค่าเล่น</span>`;
+    actEl.innerHTML = menuBtn;
+  } else if (currentPage === 'expense') {
+    titleEl.className = 'appbar-title';
+    titleEl.innerHTML = `${icon('receipt')}<span>ค่าใช้จ่าย</span>`;
     actEl.innerHTML = menuBtn;
   } else if (currentPage === 'tools') {
     titleEl.className = 'appbar-title big';
@@ -5020,25 +5032,6 @@ function renderEditHistory(id) {
       <button class="btn btn-outline" onclick="closeModal('modal-edit-history')">ยกเลิก</button>
       <button class="btn btn-lime" onclick="setHistoryWinner('${id}', editHistoryChoice)">บันทึกผลการแข่งขัน</button>
     </div>`;
-}
-
-// =================== EXPENSES: month navigation / form helpers ===================
-let expenseMonthKey = null;
-
-function shiftExpenseMonth(delta) {
-  const [y, m] = (expenseMonthKey || monthKey(new Date().toISOString())).split('-').map(Number);
-  const d = new Date(y, m - 1 + delta, 1);
-  expenseMonthKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-  renderExpensesTab();
-}
-
-function getExpenseCategory() {
-  const el = document.querySelector('input[name="expense-cat"]:checked');
-  return el ? el.value : 'court';
-}
-
-function setExpenseCategory(cat) {
-  document.querySelectorAll('input[name="expense-cat"]').forEach(r => { r.checked = r.value === cat; });
 }
 
 // =================== SESSION CALC: participants ===================
@@ -5700,10 +5693,6 @@ async function shareOrCopy(text, title) {
   notify(ok ? 'คัดลอกข้อความแล้ว\nไปวางในกลุ่ม LINE ได้เลย' : 'คัดลอกอัตโนมัติไม่ได้ กรุณาคัดลอกข้อความด้านล่าง:\n\n' + text);
 }
 
-function thaiDate(dateKey) {
-  return new Date(dateKey + 'T12:00:00').toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
-}
-
 // Today's games, or the most recent day that has any
 function shareDayResults() {
   const decided = (state.matchHistory || []).filter(m => m.winner);
@@ -5744,13 +5733,30 @@ function liveCostSnapshot() {
   const rate = parseFloat(document.getElementById('cost-rate').value) || 0;
   const hours = parseFloat(document.getElementById('cost-hours').value) || 0;
   const courts = parseInt(document.getElementById('cost-courts').value) || 1;
-  const total = rate * hours * courts + shuttleTotals().total;
   const people = {};
   state.players.forEach(p => { if (costPlayerShare[p.id] === 'full' || costPlayerShare[p.id] === 'half') people[p.id] = costPlayerShare[p.id]; });
-  const shares = Object.values(people).reduce((s, v) => s + (v === 'half' ? 0.5 : 1), 0);
-  if (total <= 0 || !shares) return null;
+  const split = splitTotal(rate * hours * courts + shuttleTotals().total, people);
+  return split && Object.assign(split, { people, venue: selectedVenueName() });
+}
+
+// Per-person amounts for a total shared by { playerId: 'full' | 'half' }
+function splitTotal(total, people) {
+  const shares = Object.values(people || {}).reduce((s, v) => s + (v === 'half' ? 0.5 : 1), 0);
+  if (!(total > 0) || !shares) return null;
   const per = total / shares;
-  return { total, perFull: Math.ceil(per), perHalf: Math.ceil(per * 0.5), people, venue: selectedVenueName() };
+  return { total, perFull: Math.ceil(per), perHalf: Math.ceil(per * 0.5) };
+}
+
+// A saved session's total must equal its own cost lines (court + every shuttle line).
+// Fixes records saved by an earlier version that stored the court price only.
+function repairSessionTotal(r) {
+  if (!r || !r.saved || !(r.courtTotal >= 0) || !Array.isArray(r.shuttles)) return false;
+  const total = r.courtTotal + r.shuttles.reduce((s, l) => s + (l.sub || 0), 0);
+  if (Math.abs(total - r.total) < 0.01) return false;
+  const split = splitTotal(total, r.people);
+  if (!split) return false;
+  Object.assign(r, split);
+  return true;
 }
 
 function storePaySnapshot() {
@@ -5781,25 +5787,9 @@ function payData() {
   return { key, live: !!live, total: base.total, venue: base.venue || '', rows, owed, paidCount: rows.filter(r => r.paid).length };
 }
 
+// Paid status lives in the merged participant list now
 function renderPayBox() {
-  const box = document.getElementById('cost-pay-box');
-  if (!box) return;
-  const d = payData();
-  if (!d) { box.innerHTML = ''; return; }
-  const allPaid = d.paidCount === d.rows.length;
-  box.innerHTML = `<div class="pay-box">
-    <div class="pay-head">
-      <div><b>${icon('wallet')}เก็บเงิน · ${thaiDate(d.key)}</b>
-        <span>จ่ายแล้ว ${d.paidCount}/${d.rows.length} คน${allPaid ? ' · ครบแล้ว 🎉' : ` · ค้างอีก ฿${fmtMoney(d.owed)}`}</span></div>
-      <button class="btn btn-outline btn-sm" onclick="sharePayList()">${icon('share')}ส่งยอดเข้ากลุ่ม</button>
-    </div>
-    ${d.live ? '' : '<div class="tiny" style="margin:-4px 0 8px;">ยอดจากรอบเล่นที่บันทึกไว้ของวันนี้</div>'}
-    ${d.rows.map(r => `<div class="pay-row${r.paid ? ' is-paid' : ''}">
-      <span class="pay-name">${escHtml(r.name)}${r.share === 'half' ? ' <small>(ครึ่งเวลา)</small>' : ''}</span>
-      <span class="pay-amt">฿${fmtMoney(r.amount)}</span>
-      <button class="pay-btn${r.paid ? ' on' : ''}" onclick="togglePaid('${r.id}')" aria-pressed="${r.paid}">${r.paid ? icon('check') + 'จ่ายแล้ว' : 'ยังไม่จ่าย'}</button>
-    </div>`).join('')}
-  </div>`;
+  renderCostPlayers();
 }
 
 function togglePaid(id) {
@@ -5826,10 +5816,349 @@ function sharePayList() {
   shareOrCopy(lines.join('\n'), 'ค่าเล่นแบด');
 }
 
+// =================== ค่าใช้จ่าย: saved sessions and how they were split ===================
+// Reads the per-date records in state.payments. Only what players were charged is
+// shown (court price + the shuttle price used for splitting) — never cost or profit.
+let sessMonthKey = null;
+
+function sessionRecords() {
+  return Object.entries(state.payments || {})
+    .filter(([, r]) => r && r.people && Object.keys(r.people).length && r.total > 0)
+    .map(([key, r]) => ({ key, r }))
+    .sort((a, b) => b.key.localeCompare(a.key));
+}
+
+function sessionRows(key, r) {
+  const paid = r.paid || {};
+  return Object.entries(r.people).map(([id, share]) => ({
+    id, share,
+    name: (r.names && r.names[id]) || getPlayerName(id),
+    amount: share === 'half' ? r.perHalf : r.perFull,
+    paid: !!paid[id],
+  })).sort((a, b) => a.paid - b.paid || a.name.localeCompare(b.name, 'th'));
+}
+
+function shiftSessionMonth(delta) {
+  const [y, m] = (sessMonthKey || toDateInput(new Date()).slice(0, 7)).split('-').map(Number);
+  const d = new Date(y, m - 1 + delta, 1);
+  sessMonthKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  renderExpensePage();
+}
+
+function renderExpensePage() {
+  const month = sessMonthKey || toDateInput(new Date()).slice(0, 7);
+  document.getElementById('sess-month-label').textContent = monthLabel(month);
+  const list = sessionRecords().filter(s => s.key.startsWith(month));
+  const total = list.reduce((s, x) => s + x.r.total, 0);
+  const people = list.reduce((s, x) => s + Object.keys(x.r.people).length, 0);
+  const owed = list.reduce((s, x) => s + sessionRows(x.key, x.r).filter(p => !p.paid).reduce((a, p) => a + p.amount, 0), 0);
+  document.getElementById('sess-month-total').textContent = `฿ ${fmtMoney(total)}`;
+  const tile = (ic, n, label) => `<div class="tile"><div class="tile-top">${ic}<span class="tile-num">${n}</span></div><div class="tile-label">${label}</div></div>`;
+  document.getElementById('sess-month-tiles').innerHTML =
+    tile(icon('calendar'), list.length, 'รอบเล่น') +
+    tile(icon('users'), people, 'คนร่วมหาร (ครั้ง)') +
+    tile(icon('wallet', owed ? 'color:var(--red)' : ''), `฿${fmtMoney(owed)}`, 'ยังค้างจ่าย');
+
+  document.getElementById('sess-month-summary-btn').style.display = list.length ? '' : 'none';
+  const el = document.getElementById('sess-list');
+  if (!list.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">🧾</div><p>ยังไม่มีรอบเล่นในเดือนนี้<br>บันทึกได้ที่เมนู "ค่าเล่น"</p></div>`;
+    return;
+  }
+  el.innerHTML = list.map(({ key, r }) => {
+    const rows = sessionRows(key, r);
+    const unpaid = rows.filter(p => !p.paid).length;
+    const d = new Date(key + 'T12:00:00');
+    return `<button class="sess-card" onclick="openSessionDetail('${key}')">
+      <span class="sess-date"><b>${d.getDate()}</b><span>${TH_MONTHS_SHORT[d.getMonth()]}</span></span>
+      <span class="sess-main"><b>${escHtml(r.venue || 'รอบเล่น')}</b><span>${rows.length} คน · คนละ ฿${fmtMoney(r.perFull)}${rows.some(p => p.share === 'half') ? ` (ครึ่งเวลา ฿${fmtMoney(r.perHalf)})` : ''}</span></span>
+      <span class="sess-right"><b>฿${fmtMoney(r.total)}</b><span class="sess-chip ${unpaid ? 'due' : 'ok'}">${unpaid ? `ค้าง ${unpaid} คน` : 'จ่ายครบ'}</span></span>
+      <span class="sess-chev">${icon('chevron-right')}</span>
+    </button>`;
+  }).join('');
+}
+
+function openSessionDetail(key) {
+  const r = (state.payments || {})[key];
+  if (!r) return;
+  const rows = sessionRows(key, r);
+  const paidCount = rows.filter(p => p.paid).length;
+  const full = rows.filter(p => p.share === 'full').length, half = rows.length - full;
+  document.getElementById('sess-detail-title').textContent = `รอบเล่น ${thaiDate(key)}`;
+  const costLines = [];
+  if (r.courtTotal > 0) costLines.push([`ค่าสนาม${r.venue ? ` · ${escHtml(r.venue)}` : ''}`, `${fmtRate(r.rate)} × ${r.hours} ชม. × ${r.courts} สนาม`, r.courtTotal]);
+  (r.shuttles || []).forEach(l => costLines.push([`ค่าลูก ${escHtml(l.name)}`, `${l.n} ลูก × ${fmtBall(l.price)}`, l.sub]));
+  document.getElementById('sess-detail').innerHTML = `
+    <div class="sum-box" style="margin-top:0;">
+      <h4>ค่าใช้จ่ายรอบนี้</h4>
+      ${costLines.length ? costLines.map(([t, sub, amt]) => `<div class="sum-line"><span>${t}<br><small class="muted">${sub}</small></span><b>฿ ${fmtMoney(amt)}</b></div>`).join('')
+        : '<div class="tiny" style="font-size:12px;">รอบนี้บันทึกไว้ก่อนมีรายละเอียดแยก จึงมีแค่ยอดรวม</div>'}
+      <div class="sum-total"><span>รวมทั้งหมด</span><span>฿ ${fmtMoney(r.total)}</span></div>
+    </div>
+    <div class="sess-split">
+      <div><b>${full}</b> คน เต็มเวลา<span>คนละ ฿${fmtMoney(r.perFull)}</span></div>
+      ${half ? `<div><b>${half}</b> คน ครึ่งเวลา<span>คนละ ฿${fmtMoney(r.perHalf)}</span></div>` : ''}
+    </div>
+    <div class="section-h" style="margin:14px 0 6px;">
+      <h3 style="font-size:15px;">เก็บเงิน <small>จ่ายแล้ว ${paidCount}/${rows.length} คน</small></h3>
+      ${paidCount === rows.length
+        ? `<button class="btn btn-outline btn-sm" onclick="setSessionAllPaid('${key}', false)">${icon('undo')}ยกเลิกจ่ายครบ</button>`
+        : `<button class="btn btn-green btn-sm" onclick="setSessionAllPaid('${key}', true)">${icon('check')}จ่ายครบทุกคน</button>`}
+    </div>
+    ${rows.map(p => `<div class="pay-row${p.paid ? ' is-paid' : ''}">
+      <span class="pay-name">${escHtml(p.name)}${p.share === 'half' ? ' <small>(ครึ่งเวลา)</small>' : ''}</span>
+      <span class="pay-amt">฿${fmtMoney(p.amount)}</span>
+      <button class="pay-btn${p.paid ? ' on' : ''}" onclick="toggleSessionPaid('${key}', '${p.id}')" aria-pressed="${p.paid}">${p.paid ? icon('check') + 'จ่ายแล้ว' : 'ยังไม่จ่าย'}</button>
+    </div>`).join('')}
+    <div class="modal-btns">
+      <button class="btn btn-outline" onclick="deleteSession('${key}')">${icon('trash')}ลบรอบเล่น</button>
+      <button class="btn btn-lime" onclick="shareSessionPayList('${key}')">${icon('share')}ส่งยอดเข้ากลุ่ม</button>
+    </div>`;
+  openModal('modal-session');
+}
+
+function toggleSessionPaid(key, id) {
+  const r = state.payments[key];
+  if (!r) return;
+  if (!r.paid) r.paid = {};
+  if (r.paid[id]) delete r.paid[id]; else r.paid[id] = true;
+  save();
+  openSessionDetail(key);
+  renderExpensePage();
+}
+
+async function setSessionAllPaid(key, on) {
+  const r = state.payments[key];
+  if (!r) return;
+  if (!on && !(await askConfirm('ยกเลิกสถานะ "จ่ายแล้ว" ของทุกคน?', { okText: 'ยกเลิกทั้งหมด', danger: true }))) return;
+  r.paid = on ? Object.fromEntries(Object.keys(r.people).map(id => [id, true])) : {};
+  save();
+  openSessionDetail(key);
+  renderExpensePage();
+}
+
+function shareSessionPayList(key) {
+  const r = state.payments[key];
+  if (!r) return;
+  const rows = sessionRows(key, r);
+  const unpaid = rows.filter(p => !p.paid), paid = rows.filter(p => p.paid);
+  const lines = [
+    `🏸 ค่าเล่นแบด ${thaiDate(key)}${r.venue ? ' · ' + r.venue : ''}`,
+    `รวม ฿${fmtMoney(r.total)} · ${rows.length} คน`,
+    '',
+    ...(unpaid.length ? ['ยังไม่จ่าย:', ...unpaid.map(p => `• ${p.name} ฿${fmtMoney(p.amount)}${p.share === 'half' ? ' (ครึ่งเวลา)' : ''}`)] : ['✅ จ่ายครบทุกคนแล้ว ขอบคุณครับ']),
+    ...(unpaid.length && paid.length ? ['', `จ่ายแล้ว: ${paid.map(p => p.name).join(', ')}`] : []),
+  ];
+  shareOrCopy(lines.join('\n'), 'ค่าเล่นแบด');
+}
+
+async function deleteSession(key) {
+  const r = state.payments[key];
+  if (!r) return;
+  const back = (r.stockOut || []).reduce((s, d) => s + d.n, 0);
+  if (!(await askConfirm(`ลบรอบเล่นวันที่ ${thaiDate(key)}?${back ? `\nลูกแบด ${back} ลูกที่ตัดไปจะคืนเข้าสต๊อก` : ''}`, { okText: 'ลบ', danger: true }))) return;
+  returnSessionStock(r, key);
+  delete state.payments[key];
+  save();
+  closeModal('modal-session');
+  renderExpensePage();
+}
+
+// ---------- Month summary as one picture (for the LINE group) ----------
+let monthSummaryBlob = null, monthSummaryName = '';
+
+function monthSummaryData(month) {
+  const list = sessionRecords().filter(s => s.key.startsWith(month)).reverse(); // oldest first
+  const attend = {}, owe = {};
+  list.forEach(({ key, r }) => sessionRows(key, r).forEach(p => {
+    const k = p.id;
+    attend[k] = attend[k] || { name: p.name, n: 0 };
+    attend[k].n++;
+    if (!p.paid) { owe[k] = owe[k] || { name: p.name, amt: 0, n: 0 }; owe[k].amt += p.amount; owe[k].n++; }
+  }));
+  return {
+    list,
+    total: list.reduce((s, x) => s + x.r.total, 0),
+    top: Object.values(attend).sort((a, b) => b.n - a.n || a.name.localeCompare(b.name, 'th')).slice(0, 5),
+    owe: Object.values(owe).sort((a, b) => b.amt - a.amt || a.name.localeCompare(b.name, 'th')),
+  };
+}
+
+async function drawMonthSummary(month) {
+  const d = monthSummaryData(month);
+  const W = 1080, PAD = 64, F = "'Prompt', 'Noto Sans Thai', sans-serif";
+  const C = { navy: '#13254a', lime: '#d6f23e', bg: '#eef2f1', card: '#ffffff', text2: '#5d6a80', line: '#e5e9ee', red: '#e5484d', green: '#22a35a' };
+  try { await Promise.all(['400', '600', '700'].map(w => document.fonts.load(`${w} 30px Prompt`, 'กข฿'))); } catch (e) {}
+
+  const ROW = 64;
+  const sessH = 80 + d.list.length * ROW;
+  const topH = d.top.length ? 80 + d.top.length * 56 : 0;
+  const oweH = 80 + (d.owe.length ? d.owe.length * 56 : 56);
+  const H = 360 + sessH + 32 + topH + (topH ? 32 : 0) + oweH + 110;
+
+  const cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const g = cv.getContext('2d');
+  const font = (w, s) => { g.font = `${w} ${s}px ${F}`; };
+  const text = (t, x, y, { w = 400, s = 30, c = C.navy, a = 'left' } = {}) => { font(w, s); g.fillStyle = c; g.textAlign = a; g.fillText(t, x, y); };
+  const fit = (t, max, w, s) => { font(w, s); if (g.measureText(t).width <= max) return t; while (t.length > 1 && g.measureText(t + '…').width > max) t = t.slice(0, -1); return t + '…'; };
+  const card = (y, h) => {
+    g.fillStyle = C.card;
+    if (!g.roundRect) { g.fillRect(PAD - 24, y, W - 2 * (PAD - 24), h); return; } // older iPadOS
+    g.beginPath(); g.roundRect(PAD - 24, y, W - 2 * (PAD - 24), h, 28); g.fill();
+  };
+  const money = n => '฿' + fmtMoney(n);
+
+  g.fillStyle = C.bg; g.fillRect(0, 0, W, H);
+  // Header
+  g.fillStyle = C.navy; g.fillRect(0, 0, W, 300);
+  text('🏸 สรุปค่าเล่นแบด', PAD, 92, { w: 600, s: 40, c: C.lime });
+  text(monthLabel(month), PAD, 150, { w: 400, s: 32, c: '#ffffff' });
+  text(money(d.total), PAD, 246, { w: 700, s: 76, c: '#ffffff' });
+  text(`${d.list.length} รอบ`, W - PAD, 246, { w: 600, s: 36, c: C.lime, a: 'right' });
+
+  let y = 332;
+  // Sessions
+  card(y, sessH);
+  text('รอบเล่น', PAD + 8, y + 56, { w: 600, s: 32 });
+  y += 80;
+  d.list.forEach(({ key, r }, i) => {
+    const dt = new Date(key + 'T12:00:00');
+    const n = Object.keys(r.people).length;
+    if (i) { g.fillStyle = C.line; g.fillRect(PAD + 8, y, W - 2 * PAD - 16, 2); }
+    text(`${dt.getDate()} ${TH_MONTHS_SHORT[dt.getMonth()]}`, PAD + 8, y + 42, { w: 600, s: 28 });
+    text(fit(`${r.venue || 'รอบเล่น'} · ${n} คน · คนละ ${money(r.perFull)}`, 560, 400, 26), PAD + 140, y + 42, { s: 26, c: C.text2 });
+    text(money(r.total), W - PAD - 8, y + 42, { w: 600, s: 28, a: 'right' });
+    y += ROW;
+  });
+  y += 32;
+  // Who came most
+  if (topH) {
+    card(y, topH);
+    text('มาเล่นบ่อยที่สุด', PAD + 8, y + 56, { w: 600, s: 32 });
+    y += 80;
+    d.top.forEach((p, i) => {
+      text(`${i + 1}.`, PAD + 8, y + 38, { w: 600, s: 28, c: C.text2 });
+      text(fit(p.name, 640, 400, 28), PAD + 60, y + 38, { s: 28 });
+      text(`${p.n} รอบ`, W - PAD - 8, y + 38, { w: 600, s: 28, a: 'right' });
+      y += 56;
+    });
+    y += 32;
+  }
+  // Who still owes
+  card(y, oweH);
+  text(d.owe.length ? 'ยังค้างจ่าย' : 'การจ่ายเงิน', PAD + 8, y + 56, { w: 600, s: 32, c: d.owe.length ? C.red : C.navy });
+  y += 80;
+  if (!d.owe.length) {
+    text('✅ จ่ายครบทุกคนแล้ว ขอบคุณครับ', PAD + 8, y + 38, { w: 600, s: 28, c: C.green });
+  } else {
+    d.owe.forEach(p => {
+      text(fit(p.name, 560, 400, 28), PAD + 8, y + 38, { s: 28 });
+      text(`${p.n} รอบ`, W - PAD - 200, y + 38, { s: 26, c: C.text2, a: 'right' });
+      text(money(p.amt), W - PAD - 8, y + 38, { w: 600, s: 28, c: C.red, a: 'right' });
+      y += 56;
+    });
+  }
+  text(`สร้างเมื่อ ${thaiDate(toDateInput(new Date()))} · Badminton Match`, W / 2, H - 44, { s: 22, c: C.text2, a: 'center' });
+  return new Promise(res => cv.toBlob(res, 'image/png'));
+}
+
+async function openMonthSummary() {
+  const month = sessMonthKey || toDateInput(new Date()).slice(0, 7);
+  monthSummaryBlob = await drawMonthSummary(month);
+  monthSummaryName = `badminton-${month}.png`;
+  const img = document.getElementById('month-summary-img');
+  if (img.src) URL.revokeObjectURL(img.src);
+  img.src = URL.createObjectURL(monthSummaryBlob);
+  openModal('modal-month-summary');
+}
+
+function downloadMonthSummary() {
+  if (!monthSummaryBlob) return;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(monthSummaryBlob); a.download = monthSummaryName;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
+async function shareMonthSummary() {
+  if (!monthSummaryBlob) return;
+  const file = new File([monthSummaryBlob], monthSummaryName, { type: 'image/png' });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: 'สรุปค่าเล่นแบด' }); return; }
+    catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  downloadMonthSummary(); // no share sheet here (e.g. desktop) — save the picture instead
+}
+
 // =================== BACKUP / RESTORE ===================
 // Everything lives in this browser only — a file copy protects against a lost
 // phone, cleared browser data, or moving to another device.
 const BACKUP_APP = 'badminton-match';
+// Per-device reminders — not part of the club's data
+const BACKUP_SKIP_KEYS = ['bmt_lastBackup', 'bmt_backupNagDay', 'bmt_installTipShown'];
+const BACKUP_REMIND_DAYS = 7;
+
+function daysSinceBackup() {
+  const last = localStorage.getItem('bmt_lastBackup');
+  return last ? Math.floor((Date.now() - new Date(last).getTime()) / 86400000) : Infinity;
+}
+
+function hasClubData() {
+  return state.players.length > 0 || sessionRecords().length > 0 || state.stockItems.length > 0;
+}
+
+// Once a day at most: nudge to save a backup file when the last one is a week old
+async function maybeRemindBackup() {
+  if (!hasClubData()) return false;
+  const days = daysSinceBackup();
+  if (days < BACKUP_REMIND_DAYS) return false;
+  const today = toDateInput(new Date());
+  if (localStorage.getItem('bmt_backupNagDay') === today) return false;
+  try { localStorage.setItem('bmt_backupNagDay', today); } catch (e) {}
+  const msg = days === Infinity
+    ? 'ยังไม่เคยสำรองข้อมูลเลย\n\nข้อมูลทั้งหมดอยู่ในเครื่องนี้เครื่องเดียว ถ้าล้างข้อมูล Safari หรือเครื่องหาย ข้อมูลจะหายหมด'
+    : `ไม่ได้สำรองข้อมูลมา ${days} วันแล้ว\n\nสำรองไว้กันข้อมูลหาย ใช้เวลาไม่ถึงนาที`;
+  if (await askConfirm(msg, { okText: 'สำรองตอนนี้', cancelText: 'ไว้ทีหลัง' })) exportBackup();
+  return true;
+}
+
+// ---------- Install as an app (PWA) ----------
+function isStandaloneApp() {
+  return navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+}
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+let deferredInstall = null; // Chrome/Android offers its own install prompt
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredInstall = e; });
+
+async function showInstallHelp() {
+  if (isStandaloneApp()) { notify('เปิดเป็นแอปอยู่แล้ว 👍'); return; }
+  if (deferredInstall) {
+    deferredInstall.prompt();
+    deferredInstall = null;
+    return;
+  }
+  const steps = isIOS()
+    ? `<ol><li>เปิดหน้านี้ด้วย <b>Safari</b></li><li>กดปุ่ม <b>แชร์</b> (สี่เหลี่ยมมีลูกศรชี้ขึ้น) ด้านบนหรือด้านล่างจอ</li><li>เลือก <b>"เพิ่มไปยังหน้าจอโฮม"</b> แล้วกด <b>เพิ่ม</b></li></ol>`
+    : `<ol><li>เปิดเมนูของเบราว์เซอร์ (⋮)</li><li>เลือก <b>"ติดตั้งแอป"</b> หรือ <b>"เพิ่มไปยังหน้าจอหลัก"</b></li></ol>`;
+  await showDialog('', { html: `<h4>ติดตั้งเป็นแอป</h4>
+    <div>ไอคอนจะอยู่บนหน้าจอโฮม เปิดแล้วเต็มจอเหมือนแอปทั่วไป และเปิดได้แม้ไม่มีเน็ต</div>${steps}
+    <div class="confirm-people">ข้อมูลในแอปที่ติดตั้งแยกจากใน Safari — ถ้ามีข้อมูลใน Safari อยู่แล้ว ให้ "สำรองข้อมูลเป็นไฟล์" ก่อน แล้วไป "กู้คืนจากไฟล์สำรอง" ในแอป</div>` });
+}
+
+// First visit on iPad/iPhone in Safari: show how to install, once
+function maybeShowInstallTip() {
+  if (isStandaloneApp() || !isIOS() || localStorage.getItem('bmt_installTipShown')) return;
+  try { localStorage.setItem('bmt_installTipShown', '1'); } catch (e) {}
+  showInstallHelp();
+}
+
+function registerOffline() {
+  if (!('serviceWorker' in navigator) || !/^https?:$/.test(location.protocol)) return;
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
 
 function renderBackupHint() {
   const el = document.getElementById('backup-last');
@@ -5846,7 +6175,7 @@ async function exportBackup() {
   const data = {};
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
-    if (k && k.startsWith('bmt_') && k !== 'bmt_lastBackup') data[k] = localStorage.getItem(k);
+    if (k && k.startsWith('bmt_') && !BACKUP_SKIP_KEYS.includes(k)) data[k] = localStorage.getItem(k);
   }
   const payload = { app: BACKUP_APP, version: 1, exportedAt: new Date().toISOString(), data };
   const name = `badminton-backup-${toDateInput(new Date())}.json`;
@@ -5896,6 +6225,9 @@ async function handleBackupFile(input) {
   try {
     Object.keys(before).forEach(k => localStorage.removeItem(k));
     Object.entries(payload.data).forEach(([k, v]) => { if (k.startsWith('bmt_') && typeof v === 'string') localStorage.setItem(k, v); });
+    // the file just restored is itself a backup of this data
+    localStorage.setItem('bmt_lastBackup', payload.exportedAt || new Date().toISOString());
+    localStorage.setItem('bmt_installTipShown', '1');
   } catch (e) {
     Object.keys(localStorage).filter(k => k.startsWith('bmt_')).forEach(k => localStorage.removeItem(k));
     Object.entries(before).forEach(([k, v]) => { try { localStorage.setItem(k, v); } catch (_) {} });
@@ -5916,6 +6248,9 @@ if (WATCH) {
   setMode(state.mode === 'singles' ? 'singles' : 'doubles'); // last-used doubles/singles
   goPage('players');
   livePublish(true); // bring the shared queue up to date after reopening the app
+  registerOffline();
+  if (isStandaloneApp()) document.getElementById('menu-install').style.display = 'none';
+  setTimeout(async () => { if (!(await maybeRemindBackup())) maybeShowInstallTip(); }, 900);
 }
 
 // Close the app-bar menu when tapping anywhere else
