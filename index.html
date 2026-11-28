@@ -250,6 +250,8 @@
     background: #e9eef6; color: var(--text); font-size: 11px; font-weight: 600; line-height: 1.6;
   }
   .skill-line { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
+  .lock-tag { display: inline-flex; align-items: center; gap: 3px; margin-top: 4px; padding: 1px 8px; border-radius: 99px; background: var(--lime-soft, #f3fbd0); border: 1px solid var(--lime-border); font-size: 11px; font-weight: 600; color: var(--text); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lock-info { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: -4px 0 12px; font-size: 13px; color: var(--text2); }
   .skill-badge { display: inline-flex; align-items: center; padding: 1px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; background: #e9eef6; color: var(--text); }
   .avatar {
     border-radius: 50%; overflow: hidden; flex-shrink: 0;
@@ -409,6 +411,86 @@
   .rank-player { display: flex; align-items: center; gap: 10px; min-width: 0; }
   .rank-player b { display: block; font-weight: 600; }
   .rank-player small { font-size: 12px; color: var(--text2); }
+
+  /* Ranking podium (2 · 1 · 3) + list from #4 */
+  .podium-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 18px 10px 0; margin-bottom: 14px; color: var(--text); overflow: hidden; box-shadow: var(--shadow); }
+  .podium { display: grid; grid-template-columns: 1fr 1.15fr 1fr; align-items: end; gap: 8px; max-width: 520px; margin: 0 auto; }
+  .pod { display: flex; flex-direction: column; align-items: center; min-width: 0; cursor: pointer; }
+  .pod.empty { cursor: default; visibility: hidden; }
+  .pod-crown { font-size: 26px; line-height: 1; margin-bottom: 2px; color: var(--gold); }
+  .pod-av { position: relative; border-radius: 50%; padding: 3px; background: var(--c); box-shadow: 0 2px 8px rgba(19,37,74,0.12); }
+  .pod-av .avatar { border: 2px solid #fff; }
+  .pod-name { margin-top: 8px; font-weight: 600; font-size: 14px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 2px; }
+  .pod.p1 .pod-name { font-size: 16px; }
+  .pod-main { font-size: 20px; font-weight: 700; color: var(--green); line-height: 1.2; white-space: nowrap; }
+  .pod.p1 .pod-main { font-size: 26px; }
+  .pod-main small { font-size: 11px; font-weight: 500; color: var(--text2); margin-left: 2px; }
+  .pod-main .lbl { font-size: 11px; font-weight: 500; color: var(--text2); margin-right: 3px; }
+  .pod-wl { font-size: 12px; color: var(--text2); margin-top: 1px; }
+  .pod-wl .w { color: var(--green); font-weight: 600; }
+  .pod-wl .l { color: var(--red); font-weight: 600; }
+  .pod-sub { font-size: 11px; color: var(--text2); background: var(--surface2); border-radius: 99px; padding: 2px 9px; margin-top: 5px; white-space: nowrap; }
+  .pod-base { width: 100%; margin-top: 10px; border-radius: 12px 12px 0 0; background: linear-gradient(180deg, var(--c), var(--c2)); display: flex; justify-content: center; padding-top: 8px; font-size: 30px; font-weight: 800; color: rgba(0,0,0,0.35); }
+  .pod.p1 .pod-base { height: 96px; font-size: 40px; }
+  .pod.p2 .pod-base { height: 70px; }
+  .pod.p3 .pod-base { height: 52px; }
+  .pod.p1 { --c: #f8c537; --c2: #e0a100; }
+  .pod.p2 { --c: #d5dbe4; --c2: #a9b3c2; }
+  .pod.p3 { --c: #eba56b; --c2: #c97a3a; }
+
+  .rank-list { display: flex; flex-direction: column; gap: 8px; }
+  .rank-row { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; box-shadow: var(--shadow); cursor: pointer; }
+  .rank-no { font-size: 17px; font-weight: 700; color: var(--text2); text-align: center; }
+  .rank-row .rank-player b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rank-nums { display: flex; gap: 14px; text-align: center; }
+  .rank-nums div { min-width: 44px; }
+  .rank-nums b { display: block; font-size: 15px; font-weight: 600; }
+  .rank-nums div > span { font-size: 10.5px; color: var(--text3); }
+  .rank-nums .hl b { color: var(--green); font-size: 17px; }
+  .rank-nums .w { color: var(--green); }
+  .rank-nums .l { color: var(--red); }
+  .rank-group { font-size: 13px; font-weight: 600; color: var(--text2); margin: 16px 2px 8px; }
+  .rank-period { max-width: 380px; margin: -4px auto 12px; }
+  .title-roll { display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
+  .title-row { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 10px 12px; box-shadow: var(--shadow); }
+  .title-row.current { border: 1.5px dashed var(--gold); background: var(--gold-soft); }
+  .title-when { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text2); margin-bottom: 8px; }
+  .title-when b { font-weight: 600; color: var(--text); }
+  .title-champ { display: flex; align-items: center; gap: 12px; }
+  .title-champ b { display: block; font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .title-champ small { font-size: 12px; color: var(--text2); }
+  .title-champ small b { display: inline; font-size: 12px; }
+  .title-champ .w { color: var(--green); }
+  .title-av { position: relative; flex-shrink: 0; border-radius: 50%; padding: 2px; background: linear-gradient(180deg, #f8c537, #e0a100); }
+  .title-av .avatar { border: 2px solid #fff; }
+  .title-medal { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); font-size: 16px; line-height: 1; color: var(--gold); }
+  .title-runners { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text2); }
+  .title-runners small { color: var(--text3); }
+  .ws-card { position: relative; margin-top: 10px; }
+  .ws-card.mine { border: 1.5px solid var(--lime-border); }
+  .ws-card .h2h-row { margin-top: 8px; }
+  .ws-back { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--surface2); color: var(--text2); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .watch-alert-btn { margin-top: 8px; width: 100%; padding: 10px 12px; border-radius: 12px; border: 1.5px dashed var(--border2); background: var(--surface); color: var(--text2); font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; }
+  .watch-alert-btn.on { border-style: solid; border-color: var(--green-border); background: var(--green-soft); color: #17773f; }
+  .watch-status.flash { animation: watchFlash 0.8s ease-in-out infinite alternate; }
+  @keyframes watchFlash { from { box-shadow: 0 0 0 0 rgba(34,163,90,0.0); } to { box-shadow: 0 0 0 6px rgba(34,163,90,0.45); background: #c9f0d8; } }
+  .rank-row.me { border-color: var(--lime-border); background: var(--lime-soft); }
+  .pod.me .pod-name { background: var(--lime); border-radius: 99px; padding: 0 8px; }
+  .h2h-wl { display: inline-flex; align-items: baseline; gap: 2px; font-size: 14px; white-space: nowrap; }
+  .h2h-wl .w { color: var(--green); }
+  .h2h-wl .l { color: var(--red); }
+  .h2h-wl small { margin-left: 6px; font-size: 12px; color: var(--text2); min-width: 32px; text-align: right; }
+  .card-title small { font-weight: 400; font-size: 11px; }
+  @media (max-width: 420px) {
+    .rank-row { grid-template-columns: 22px minmax(0, 1fr) auto; gap: 8px; padding: 9px 10px; }
+    .rank-row .rank-player { gap: 8px; }
+    .rank-row .rank-player .avatar { width: 34px !important; height: 34px !important; font-size: 14px !important; }
+    .rank-nums { gap: 6px; }
+    .rank-nums div { min-width: 0; }
+    .rank-nums b { font-size: 14px; }
+    .rank-nums .hl b { font-size: 15px; }
+    .rank-nums div > span { font-size: 10px; }
+  }
 
   .picker-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; scrollbar-width: none; }
   .picker-row::-webkit-scrollbar { display: none; }
@@ -1025,6 +1107,7 @@
 
   <div class="field-title">สรุปการสุ่ม</div>
   <div class="tiles t3" id="random-summary"></div>
+  <div id="lock-info"></div>
   <div id="player-needed-alert"></div>
 
   <button class="btn btn-lime btn-full btn-lg" id="randomize-btn" onclick="doRandomize()">
@@ -1072,6 +1155,11 @@
     <div class="seg pill">
       <button class="seg-btn active" id="rank-tab-wr" onclick="switchRankTab('wr')">Win Rate</button>
       <button class="seg-btn" id="rank-tab-elo" onclick="switchRankTab('elo')">ELO</button>
+    </div>
+    <div class="seg pill sm rank-period">
+      <button class="seg-btn active" id="rank-period-all" onclick="switchRankPeriod('all')">ตลอดกาล</button>
+      <button class="seg-btn" id="rank-period-year" onclick="switchRankPeriod('year')">ปีนี้</button>
+      <button class="seg-btn" id="rank-period-month" onclick="switchRankPeriod('month')">เดือนนี้</button>
     </div>
     <div class="note-box" id="rank-note"></div>
     <div id="stats-ranking-list"></div>
@@ -1324,6 +1412,11 @@
         </div>
       </div>
     </div>
+    <div class="form-group" style="margin:14px 0 0;">
+      <label class="form-label">ล็อกคู่กับ <small class="muted">(ประเภทคู่ · ไม่บังคับ)</small></label>
+      <select class="select" id="input-lock"></select>
+      <div class="tiny" style="margin-top:4px;font-size:12px;">ล็อกแล้วจะลงสนามเป็นทีมเดียวกันเสมอ และพักพร้อมกัน คนอื่นยังสุ่มตามปกติ</div>
+    </div>
     <input type="hidden" id="edit-player-id">
     <div class="modal-btns">
       <button class="btn btn-outline" onclick="closeModal('modal-player')">ยกเลิก</button>
@@ -1548,6 +1641,17 @@
   </div>
 </div>
 
+<!-- Modal: share the ranking with players (separate link from the queue) -->
+<div class="modal-overlay" id="modal-stats-share">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">ให้คนอื่นดูหน้าอันดับ</div>
+      <button class="modal-close" onclick="closeModal('modal-stats-share')" aria-label="ปิด"><i data-icon="x"></i></button>
+    </div>
+    <div id="stats-share-body"></div>
+  </div>
+</div>
+
 <!-- Modal: one saved session in detail -->
 <div class="modal-overlay" id="modal-month-summary">
   <div class="modal">
@@ -1594,7 +1698,7 @@ const WATCH = (() => {
   const room = q.get('watch'), db = (q.get('db') || '').toLowerCase();
   if (!room || !/^[A-Za-z0-9]{16,40}$/.test(room)) return null;
   if (!/^[a-z0-9-]+(\.[a-z0-9-]+)*\.(firebasedatabase\.app|firebaseio\.com)$/.test(db)) return null;
-  return { room, db };
+  return { room, db, stats: q.get('v') === 'stats' }; // &v=stats → ranking link
 })();
 // Where the app is published — used for viewer links when it's opened from a local file
 const PUBLIC_APP_URL = 'https://jidunkung-design.github.io/badminton/';
@@ -1628,6 +1732,8 @@ let state = {
   stockBrand: { name: '', photo: null }, // legacy single brand — migrated into stockItems
   stockItems: [], // { id, name, photo, perTube, pricePerTube, count }
   archivedMatchCount: 0, // decided games trimmed off matchHistory (kept for totals)
+  gameArchive: [],       // compact copies of those trimmed games {d, a, b, w} — newest first; feeds yearly ranking
+  titles: {},            // player of the month / year: { 'm:2026-11': {top:[...], final}, 'y:2026': {...} }
   payments: {},          // 'yyyy-mm-dd' → { playerId: true } who has paid for that session
   venues: [],            // saved courts: { id, name, rate }  (rate = baht per court per hour)
   lastVenueId: '',       // preselected next time
@@ -1692,6 +1798,7 @@ function save() {
   if (WATCH) return; // viewer page: read-only, never touch this browser's own data
   try {
     localStorage.setItem('bmt_players', JSON.stringify(state.players));
+    localStorage.setItem('bmt_lockedPairs', JSON.stringify(state.lockedPairs || []));
     localStorage.setItem('bmt_stats', JSON.stringify(state.stats));
     localStorage.setItem('bmt_currentMatches', JSON.stringify(state.currentMatches));
     localStorage.setItem('bmt_pairHistory', JSON.stringify(state.pairHistory));
@@ -1723,9 +1830,12 @@ function save() {
     localStorage.setItem('bmt_lastVenue', state.lastVenueId || '');
     localStorage.setItem('bmt_expenses', JSON.stringify(state.expenses));
     localStorage.setItem('bmt_matchHistory', JSON.stringify(state.matchHistory));
+    localStorage.setItem('bmt_gameArchive', JSON.stringify(state.gameArchive || []));
+    localStorage.setItem('bmt_titles', JSON.stringify(state.titles || {}));
     localStorage.setItem('bmt_stockHistory', JSON.stringify(state.stockHistory));
     saveWarned = false;
     livePublishSoon();
+    statsPublishSoon();
   } catch(e) {
     // Usually the browser's storage quota (large player photos). Say so once instead of losing data silently.
     if (!saveWarned) {
@@ -1739,6 +1849,8 @@ let saveWarned = false;
 function load() {
   try {
     state.players = JSON.parse(localStorage.getItem('bmt_players') || '[]');
+    state.lockedPairs = JSON.parse(localStorage.getItem('bmt_lockedPairs') || '[]') || [];
+    cleanLocks();
     state.stats = JSON.parse(localStorage.getItem('bmt_stats') || '{}');
     state.currentMatches = JSON.parse(localStorage.getItem('bmt_currentMatches') || '[]');
     state.pairHistory = JSON.parse(localStorage.getItem('bmt_pairHistory') || '[]');
@@ -1784,6 +1896,8 @@ function load() {
     state.stockCount = state.stockItems.reduce((s, it) => s + (it.count || 0), 0);
     state.expenses = JSON.parse(localStorage.getItem('bmt_expenses') || '[]');
     state.matchHistory = JSON.parse(localStorage.getItem('bmt_matchHistory') || '[]');
+    state.gameArchive = JSON.parse(localStorage.getItem('bmt_gameArchive') || '[]') || [];
+    state.titles = JSON.parse(localStorage.getItem('bmt_titles') || '{}') || {};
     state.stockHistory = JSON.parse(localStorage.getItem('bmt_stockHistory') || '[]');
   } catch(e) {}
 }
@@ -1865,6 +1979,7 @@ function renderCheckinList() {
       <div class="pcard-info">
         <div class="pcard-name">${escHtml(p.name)}</div>
         <div class="skill-line">ฝีมือ ${skillPill(p)}</div>
+        ${lockTagHtml(p.id)}
       </div>
       <div class="pcard-check"><span class="check-dot ${on ? 'on' : ''}">${on ? icon('check', 'stroke-width:3') : ''}</span></div>
       <button class="pcard-edit" onclick="event.stopPropagation();openEditPlayer('${p.id}')" aria-label="แก้ไข">${icon('pencil')}</button>
@@ -1902,7 +2017,7 @@ function renderTodayList() {
       return `<div class="list-row">
         <span class="list-idx">${i + 1}</span>
         ${renderTierAvatar(p, 30)}
-        <span class="list-name">${escHtml(p.name)}</span>
+        <span class="list-name">${escHtml(p.name)}${lockPartner(p.id) ? ' <small title="ล็อกคู่">🔗</small>' : ''}</span>
         <span class="skill-line">ฝีมือ ${skillPill(p)}</span>
         <span class="status-pill ${on ? 'on' : 'wait'}">${on ? 'ลงสนาม' : (anyRunning ? 'รอพัก' : 'พร้อมเล่น')}</span>
       </div>`;
@@ -1969,7 +2084,124 @@ function clearPhoto() {
   updatePhotoPreview();
 }
 
+// =================== LOCKED PAIRS ===================
+// Two players who always play doubles as one team (e.g. a newcomer and their friend).
+// state.lockedPairs = [[idA, idB], ...]; each player is in at most one pair.
+// A lock only counts when both players are checked in, and never in singles.
+function cleanLocks() {
+  const ids = new Set(state.players.map(p => p.id));
+  const seen = new Set();
+  state.lockedPairs = (state.lockedPairs || []).filter(pr => {
+    if (!Array.isArray(pr) || pr.length !== 2) return false;
+    const [a, b] = pr;
+    if (a === b || !ids.has(a) || !ids.has(b) || seen.has(a) || seen.has(b)) return false;
+    seen.add(a); seen.add(b);
+    return true;
+  });
+}
+
+function lockPartner(id) {
+  const pr = (state.lockedPairs || []).find(x => x[0] === id || x[1] === id);
+  return pr ? (pr[0] === id ? pr[1] : pr[0]) : null;
+}
+
+// Lock id with partnerId (null = unlock). Either player's old lock is dropped.
+function setLock(id, partnerId) {
+  state.lockedPairs = (state.lockedPairs || []).filter(([a, b]) => ![a, b].some(x => x === id || (partnerId && x === partnerId)));
+  if (partnerId && partnerId !== id) state.lockedPairs.push([id, partnerId]);
+}
+
+// Locked pairs where both players are in idSet
+function activeLocks(idSet) {
+  return (state.lockedPairs || []).filter(([a, b]) => idSet.has(a) && idSet.has(b));
+}
+
+function isLockedTeam(team) {
+  return team.length === 2 && lockPartner(team[0]) === team[1];
+}
+
+// Group players into units: a locked pair (both in the list) or one player
+function lockUnits(players) {
+  const byId = new Map(players.map(p => [p.id, p]));
+  const used = new Set();
+  const units = [];
+  players.forEach(p => {
+    if (used.has(p.id)) return;
+    const q = lockPartner(p.id);
+    if (q && byId.has(q) && !used.has(q)) { units.push([p, byId.get(q)]); used.add(p.id); used.add(q); }
+    else { units.push([p]); used.add(p.id); }
+  });
+  return units;
+}
+
+// A unit waits as long as its member who played most recently
+function unitWait(u) {
+  return { lp: Math.max(...u.map(p => lastPlayed(p.id))), pt: Math.max(...u.map(p => playsToday(p.id))) };
+}
+function unitWaitOrder(a, b) {
+  const x = unitWait(a), y = unitWait(b);
+  return x.lp - y.lp || x.pt - y.pt;
+}
+
+// From units already in play order, take exactly `need` players.
+// A pair that doesn't fit is skipped; if one seat is left with only pairs to go,
+// the last single taken gives way to the next pair. Returns units or null.
+function takeUnits(ordered, need) {
+  const taken = [];
+  let left = need;
+  for (const u of ordered) {
+    if (!left) break;
+    if (u.length <= left) { taken.push(u); left -= u.length; }
+  }
+  if (left === 1) {
+    const lastSingle = taken.map((u, i) => (u.length === 1 ? i : -1)).filter(i => i >= 0).pop();
+    const nextPair = ordered.find(u => u.length === 2 && !taken.includes(u));
+    if (lastSingle !== undefined && nextPair) { taken.splice(lastSingle, 1); taken.push(nextPair); left = 0; }
+  }
+  if (left !== 0) return null;
+  // Catch-up: a pair often can't fit the one seat left, so it falls behind in games.
+  // If the next pair has played fewer games today than the two singles with the
+  // most games among those picked, it takes their two seats.
+  const pair = ordered.find(u => u.length === 2 && !taken.includes(u));
+  const singles = taken.filter(u => u.length === 1)
+    .sort((a, b) => playsToday(b[0].id) - playsToday(a[0].id) || lastPlayed(b[0].id) - lastPlayed(a[0].id));
+  if (pair && singles.length >= 2) {
+    const pairGames = Math.max(...pair.map(p => playsToday(p.id)));
+    if (singles.slice(0, 2).every(u => playsToday(u[0].id) > pairGames)) {
+      return [...taken.filter(u => u !== singles[0] && u !== singles[1]), pair];
+    }
+  }
+  return taken;
+}
+
+function renderLockSelect(id) {
+  const sel = document.getElementById('input-lock');
+  const cur = id ? lockPartner(id) : null;
+  const others = state.players.filter(p => p.id !== id).sort((a, b) => a.name.localeCompare(b.name, 'th'));
+  sel.innerHTML = `<option value="">— ไม่ล็อก —</option>` + others.map(p => {
+    const theirs = lockPartner(p.id);
+    const note = theirs && theirs !== id ? ` (ตอนนี้ล็อกกับ ${getPlayerName(theirs)})` : '';
+    return `<option value="${p.id}"${p.id === cur ? ' selected' : ''}>${escHtml(p.name)}${escHtml(note)}</option>`;
+  }).join('');
+}
+
+function lockTagHtml(id) {
+  const q = lockPartner(id);
+  return q ? `<span class="lock-tag">🔗 คู่กับ ${escHtml(getPlayerName(q))}</span>` : '';
+}
+
+function renderLockInfo() {
+  const el = document.getElementById('lock-info');
+  if (!el) return;
+  const active = new Set([...state.activePlayers]);
+  const locks = activeLocks(active);
+  if (!locks.length) { el.innerHTML = ''; return; }
+  const names = locks.map(([a, b]) => `<span class="lock-tag" style="margin:0;">🔗 ${escHtml(getPlayerName(a))} + ${escHtml(getPlayerName(b))}</span>`).join('');
+  el.innerHTML = `<div class="lock-info">${modeState === 'doubles' ? 'ล็อกคู่:' : 'โหมดเดี่ยวไม่ใช้การล็อกคู่:'} ${names}</div>`;
+}
+
 function openAddPlayer() {
+  renderLockSelect(null);
   document.getElementById('modal-player-title').textContent = 'เพิ่มผู้เล่น';
   document.getElementById('input-name').value = '';
   document.getElementById('input-skill').value = '3';
@@ -1985,6 +2217,7 @@ function openAddPlayer() {
 function openEditPlayer(id) {
   const p = state.players.find(x => x.id === id);
   if (!p) return;
+  renderLockSelect(id);
   document.getElementById('modal-player-title').textContent = 'แก้ไขผู้เล่น';
   document.getElementById('input-name').value = p.name;
   document.getElementById('input-skill').value = p.skill;
@@ -2001,13 +2234,16 @@ function savePlayer() {
   const skill = parseInt(document.getElementById('input-skill').value);
   const editId = document.getElementById('edit-player-id').value;
   if (!name) { notify('กรุณากรอกชื่อ'); return; }
+  const lockWith = document.getElementById('input-lock').value || null;
   if (editId) {
     const p = state.players.find(x => x.id === editId);
     if (p) { p.name = name; p.skill = skill; p.photo = pendingPhoto; }
+    if (p && lockWith !== lockPartner(editId)) setLock(editId, lockWith);
   } else {
     const id = 'p' + Date.now() + Math.random().toString(36).slice(2);
     state.players.push({ id, name, skill, photo: pendingPhoto });
     state.activePlayers.add(id);
+    if (lockWith) setLock(id, lockWith);
   }
   save();
   renderPlayers();
@@ -2017,9 +2253,11 @@ function savePlayer() {
 
 async function removePlayer(id) {
   if (!(await askConfirm('ลบผู้เล่นนี้?', { okText: 'ลบ', danger: true }))) return;
+  refreshTitles(); // save titles they already hold before they drop out of the rankings
   state.players = state.players.filter(p => p.id !== id);
   state.activePlayers.delete(id);
   delete state.stats[id];
+  cleanLocks(); // their partner goes back to normal random pairing
   save();
   closeModal('modal-player');
   renderPlayers();
@@ -2081,6 +2319,7 @@ function renderRandomPage() {
     rrInfo.textContent = 'โหมดพบทุกคู่เหมาะสำหรับจำนวนผู้เล่นไม่มาก และจำนวนผู้เล่นต้องลงตัวเป็นทีม';
   }
 
+  renderLockInfo();
   const onCourt = Math.min(have, needed);
   const tile = (ic, n, label) => `<div class="tile"><div class="tile-top">${ic}<span class="tile-num">${n}</span></div><div class="tile-label">${label}</div></div>`;
   document.getElementById('random-summary').innerHTML =
@@ -2223,7 +2462,7 @@ const matchupKey = (A, B) => [teamKey(A), teamKey(B)].sort().join(' vs ');
 function lineupAvoidSet(matches) {
   const avoid = new Set();
   matches.forEach(m => {
-    m.teams.forEach(t => { if (t.length > 1) avoid.add(teamKey(t)); });
+    m.teams.forEach(t => { if (t.length > 1 && !isLockedTeam(t)) avoid.add(teamKey(t)); }); // a locked pair stays together
     avoid.add(matchupKey(m.teams[0], m.teams[1]));
   });
   return avoid;
@@ -2240,6 +2479,8 @@ function scoreLineup(cfg, stats, balanced, skillOf, courts, avoid) {
     // Singles: the opponent is the "partner" that matters, so weigh it like a teammate repeat
     const singles = A.length === 1;
     [A, B].forEach(team => {
+      // A locked pair always teams up — that's not a repeat to steer away from
+      if (isLockedTeam(team)) return;
       for (let i = 0; i < team.length; i++)
         for (let j = i + 1; j < team.length; j++) score += pairPenalty(stats, team[i], team[j], true, courts);
     });
@@ -2271,10 +2512,28 @@ function findBestLineup(players, courts, mode, balanced, recentCourts, pairStats
   // Swapping two players on the same team changes nothing — skip those
   const sameTeam = (i, j) => Math.floor(i / per) === Math.floor(j / per);
 
+  // Locked pairs (doubles only): each gets a whole team; its two players never move apart
+  const locks = mode === 'doubles' ? activeLocks(new Set(ids)) : [];
+  const lockedId = new Set(locks.flat());
+  const nTeams = courts * 2;
+  const startArr = () => {
+    if (!locks.length) return shuffle([...ids]);
+    const arr = new Array(ids.length);
+    const teamOrder = shuffle([...Array(nTeams).keys()]);
+    shuffle([...locks]).forEach((pr, i) => { arr[teamOrder[i] * 2] = pr[0]; arr[teamOrder[i] * 2 + 1] = pr[1]; });
+    const rest = shuffle(ids.filter(id => !lockedId.has(id)));
+    for (let i = 0; i < arr.length; i++) if (arr[i] === undefined) arr[i] = rest.pop();
+    return arr;
+  };
+  // Swap whole teams t and u (moves a locked pair to another court / side)
+  const swapTeams = (arr, t, u) => {
+    for (let k = 0; k < per; k++) [arr[t * per + k], arr[u * per + k]] = [arr[u * per + k], arr[t * per + k]];
+  };
+
   let best = null, bestScore = Infinity;
   const starts = ids.length <= 4 ? 6 : 40;
   for (let s = 0; s < starts; s++) {
-    const arr = shuffle([...ids]);
+    const arr = startArr();
     let score = evalArr(arr);
     let improved = true;
     while (improved) {
@@ -2282,10 +2541,22 @@ function findBestLineup(players, courts, mode, balanced, recentCourts, pairStats
       for (let i = 0; i < arr.length; i++) {
         for (let j = i + 1; j < arr.length; j++) {
           if (sameTeam(i, j)) continue;
+          if (lockedId.has(arr[i]) || lockedId.has(arr[j])) continue; // keep locked pairs whole
           [arr[i], arr[j]] = [arr[j], arr[i]];
           const ns = evalArr(arr);
           if (ns < score - 1e-9) { score = ns; improved = true; }
           else [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+      }
+      if (locks.length) {
+        for (let t = 0; t < nTeams; t++) {
+          for (let u = t + 1; u < nTeams; u++) {
+            if (Math.floor(t / 2) === Math.floor(u / 2)) continue; // same court: just sides
+            swapTeams(arr, t, u);
+            const ns = evalArr(arr);
+            if (ns < score - 1e-9) { score = ns; improved = true; }
+            else swapTeams(arr, t, u);
+          }
         }
       }
     }
@@ -2361,17 +2632,23 @@ function doRandomize(avoid) {
     if (activePlayers.length < perTeam * 2 || activePlayers.length % perTeam !== 0) return;
     // balancedShuffle: sort by skill DESC but shuffle randomly within same-skill group
     // This ensures different pairings each RR session even when all players have same skill
-    const sorted = balancedShuffle([...activePlayers]);
     const nTeams = activePlayers.length / perTeam;
-    const teams = Array.from({ length: nTeams }, () => []);
+    let teams = Array.from({ length: nTeams }, () => []);
 
     if (mode === 'doubles') {
+      // Locked pairs are teams as they are; everyone else is paired below
+      const locks = activeLocks(new Set(activePlayers.map(p => p.id)));
+      const lockedId = new Set(locks.flat());
+      const sorted = balancedShuffle(activePlayers.filter(p => !lockedId.has(p.id)));
+      const n = sorted.length / 2;
       // Fold pairing: strongest with weakest, 2nd with 2nd-weakest, ... → balanced teams
       // With balancedShuffle, order within skill groups is randomized → different teams each time
-      for (let i = 0; i < nTeams; i++) {
-        teams[i] = [sorted[i].id, sorted[2 * nTeams - 1 - i].id];
+      teams = locks.map(pr => [...pr]);
+      for (let i = 0; i < n; i++) {
+        teams.push([sorted[i].id, sorted[2 * n - 1 - i].id]);
       }
     } else {
+      const sorted = balancedShuffle([...activePlayers]);
       sorted.forEach((p, i) => { teams[i] = [p.id]; });
     }
     shuffle(teams);
@@ -2405,8 +2682,16 @@ function doRandomize(avoid) {
 
   // Whoever played most recently (then most games today) sits out first; ties at random
   const benchCount = activePlayers.length - needed;
-  const byRecent = shuffle([...activePlayers]).sort((a, b) => waitOrder(b, a));
-  const benchIds = new Set(byRecent.slice(0, benchCount).map(p => p.id));
+  let benchIds;
+  if (mode === 'doubles' && activeLocks(new Set(activePlayers.map(p => p.id))).length) {
+    // Locked pairs play or sit out together
+    const units = shuffle(lockUnits(activePlayers)).sort(unitWaitOrder);
+    const playIds = new Set((takeUnits(units, needed) || []).flat().map(p => p.id));
+    benchIds = new Set(activePlayers.filter(p => !playIds.has(p.id)).map(p => p.id));
+  } else {
+    const byRecent = shuffle([...activePlayers]).sort((a, b) => waitOrder(b, a));
+    benchIds = new Set(byRecent.slice(0, benchCount).map(p => p.id));
+  }
   const bench = activePlayers.filter(p => benchIds.has(p.id));
   const playing = activePlayers.filter(p => !benchIds.has(p.id));
 
@@ -2707,8 +2992,11 @@ function recordWin(matchIdx, teamIdx) {
   state.matchHistory.unshift(histRecord);
   if (state.matchHistory.length > MATCH_HISTORY_LIMIT) {
     // remember how many decided games fall off the end, so totals stay right
-    state.archivedMatchCount = (state.archivedMatchCount || 0) +
-      state.matchHistory.slice(MATCH_HISTORY_LIMIT).filter(x => x.winner).length;
+    const dropped = state.matchHistory.slice(MATCH_HISTORY_LIMIT).filter(x => x.winner);
+    state.archivedMatchCount = (state.archivedMatchCount || 0) + dropped.length;
+    // ...and keep a compact copy (~70 bytes each) so yearly rankings and titles still count them
+    const won = x => x.winner.join(',') === (x.teams[0] || []).join(',') ? 0 : 1;
+    state.gameArchive = [...dropped.map(x => ({ d: x.date, a: x.teams[0], b: x.teams[1], w: won(x) })), ...(state.gameArchive || [])];
     state.matchHistory = state.matchHistory.slice(0, MATCH_HISTORY_LIMIT);
   }
   // Pairing only looks at the last few dozen games; cap these so storage doesn't fill up over months
@@ -2873,15 +3161,54 @@ function startNextOnCourt(idx) {
   state.currentMatches.forEach((x, i) => {
     if (i !== idx && !x.done) [...x.teams[0], ...x.teams[1]].forEach(id => busy.add(id));
   });
-  const free = state.players.filter(p => state.activePlayers.has(p.id) && !busy.has(p.id));
+  let free = state.players.filter(p => state.activePlayers.has(p.id) && !busy.has(p.id));
   if (free.length < need) { notify(`ผู้เล่นว่างมีแค่ ${free.length} คน ต้องการ ${need} คน`); return; }
+  const balanced = (m.randomMode || randomMode) === 'balanced';
+  const pairStats = buildPairStats();
+  let best = null;
 
+  // Locked pairs: someone whose partner is still on another court waits for them
+  // (unless that leaves too few to fill this court); a free pair goes on together.
+  if (mode === 'doubles' && (state.lockedPairs || []).length) {
+    const waiting = free.filter(p => { const q = lockPartner(p.id); return q && busy.has(q) && state.activePlayers.has(q); });
+    if (waiting.length && free.length - waiting.length >= need) free = free.filter(p => !waiting.includes(p));
+  }
+  const freeLocks = mode === 'doubles' ? activeLocks(new Set(free.map(p => p.id))) : [];
+  if (freeLocks.length) {
+    const units = shuffle(lockUnits(free)).sort(unitWaitOrder);
+    const first = takeUnits(units, need);
+    if (first) {
+      // Units that waited longer than the last one picked are certain; ties with it
+      // are the pool to choose from, as in the normal path below.
+      const cutoff = first[first.length - 1];
+      const tieOrLater = first.reduce((c, u) => (unitWaitOrder(u, c) > 0 ? u : c), cutoff);
+      const sure = first.filter(u => unitWaitOrder(u, tieOrLater) < 0);
+      const pool = units.filter(u => !sure.includes(u) && unitWaitOrder(u, tieOrLater) === 0);
+      const k = need - sure.reduce((s, u) => s + u.length, 0);
+      const picks = [];
+      const combo = (start, chosen, size) => {
+        if (picks.length >= 200) return;
+        if (size === k) { picks.push(chosen.slice()); return; }
+        for (let i = start; i < pool.length; i++) {
+          if (size + pool[i].length > k) continue;
+          chosen.push(pool[i]); combo(i + 1, chosen, size + pool[i].length); chosen.pop();
+        }
+      };
+      combo(0, [], 0);
+      if (!picks.length) picks.push(first.filter(u => !sure.includes(u)));
+      picks.forEach(pick => {
+        const r = findBestLineup([...sure, ...pick].flat(), 1, mode, balanced, state.currentMatches.length, pairStats);
+        if (!best || r.score < best.score) best = r;
+      });
+    }
+  }
+
+  if (!best) {
   const ordered = shuffle([...free]).sort(waitOrder);
   const cutoff = ordered[need - 1];
   const sure = ordered.filter(p => waitOrder(p, cutoff) < 0);
   const pool = ordered.filter(p => waitOrder(p, cutoff) === 0);
   const k = need - sure.length;
-  const balanced = (m.randomMode || randomMode) === 'balanced';
 
   const picks = [];
   if (pool.length <= 10) {
@@ -2893,12 +3220,11 @@ function startNextOnCourt(idx) {
   } else {
     for (let t = 0; t < 40; t++) picks.push(shuffle([...pool]).slice(0, k));
   }
-  let best = null;
-  const pairStats = buildPairStats();
   picks.forEach(pick => {
     const r = findBestLineup([...sure, ...pick], 1, mode, balanced, state.currentMatches.length, pairStats);
     if (!best || r.score < best.score) best = r;
   });
+  }
 
   const teams = best.matches[0].teams;
   // Each court counts its own rounds; state.round tracks the furthest one (page header)
@@ -3079,13 +3405,14 @@ let selectedPlayerForProfile = null;
 let currentHistoryFilter = 'all';
 
 // --- ELO Calculation ---
-function calcEloScores() {
+// histArg: only these games (e.g. this month's); default is the whole history
+function calcEloScores(histArg) {
   const K = 32;
   const BASE = 1000;
   const elo = {};
   state.players.forEach(p => { elo[p.id] = BASE; });
 
-  const hist = [...(state.matchHistory || [])].reverse(); // oldest first
+  const hist = [...(Array.isArray(histArg) ? histArg : allGames())].reverse(); // oldest first
   hist.forEach(m => {
     if (!m.winner) return;
     const teamA = m.teams[0] || [];
@@ -3115,7 +3442,7 @@ function calcEloScores() {
 // --- Golden Pairs Calculation ---
 function calcGoldenPairs() {
   const pairWins = {};
-  (state.matchHistory || []).forEach(m => {
+  allGames().forEach(m => {
     if (!m.winner) return;
     const winTeam = m.winner;
     for (let i = 0; i < winTeam.length; i++) {
@@ -3181,6 +3508,177 @@ function switchRankTab(rt) {
   document.getElementById('rank-tab-wr').classList.toggle('active', rt === 'wr');
   document.getElementById('rank-tab-elo').classList.toggle('active', rt === 'elo');
   renderStatsRanking();
+}
+
+let currentRankPeriod = 'all'; // 'all' | 'month'
+function switchRankPeriod(pr) {
+  currentRankPeriod = pr;
+  ['all', 'year', 'month'].forEach(k => document.getElementById('rank-period-' + k).classList.toggle('active', pr === k));
+  renderStatsRanking();
+}
+
+// =================== RANKING: shared by the stats page and the viewer link ===================
+function rankMonthKey(d) { const x = new Date(d); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0'); }
+function rankMonthLabel(key) { const [y, m] = key.split('-').map(Number); return new Date(y, m - 1, 1).toLocaleDateString('th-TH', { month: 'long', year: 'numeric' }); }
+const RANK_MIN = { all: 5, year: 10, month: 3 }; // games needed to rank by win rate
+function rankYearLabel(key) { return 'ปี ' + (Number(key) + 543); } // Thai calendar year, e.g. ปี 2569
+function rankPeriodKey(period, d) { return period === 'year' ? String(new Date(d).getFullYear()) : rankMonthKey(d); }
+
+// Every decided game we still have, newest first: the full history plus the
+// compact copies of games that fell off its 500-game limit.
+function allGames() {
+  const arch = (state.gameArchive || []).filter(g => g && g.d && Array.isArray(g.a) && Array.isArray(g.b))
+    .map(g => ({ date: g.d, teams: [g.a, g.b], winner: g.w === 1 ? g.b : g.a }));
+  return [...(state.matchHistory || []).filter(m => m.winner), ...arch];
+}
+function gamesIn(period, key) {
+  return allGames().filter(m => m.date && rankPeriodKey(period, m.date) === key);
+}
+
+// Organizer side: one row per player for the whole history, one year or one month.
+// key defaults to the current year / month.
+function rankRowsFor(period, key) {
+  const hist = period === 'all' ? null : gamesIn(period, key || rankPeriodKey(period, Date.now()));
+  const elo = calcEloScores(hist || undefined);
+  return state.players.map(p => {
+    let w, l;
+    if (hist) {
+      w = 0; l = 0;
+      hist.forEach(m => {
+        if (!(m.teams[0] || []).includes(p.id) && !(m.teams[1] || []).includes(p.id)) return;
+        if (m.winner.includes(p.id)) w++; else l++;
+      });
+    } else {
+      const s = state.stats[p.id] || {};
+      w = s.wins || 0; l = s.losses || 0;
+    }
+    const total = w + l;
+    return { key: p.id, name: p.name, av: size => renderTierAvatar(p, size), w, l, total, wr: total ? Math.round(w / total * 100) : 0, elo: Math.round(elo[p.id] || 1000) };
+  }).filter(r => period === 'all' || r.total > 0);
+}
+
+// =================== PLAYER OF THE MONTH / YEAR ===================
+// Winner = best win rate among players with enough games in that month/year
+// (ties: more wins). Worked out from the games, then saved in state.titles so
+// the honour roll survives "ล้างประวัติ" and players who leave the club.
+// A month/year is locked (final) the first time it's worked out after it ends.
+const TITLE_MIN = { month: 5, year: 20 };
+function computeTitle(period, key) {
+  const rows = rankRowsFor(period, key);
+  const { ranked } = rankSort(rows, true, TITLE_MIN[period]);
+  return {
+    top: ranked.slice(0, 3).map(r => ({ id: r.key, n: r.name, w: r.w, l: r.l, wr: r.wr })),
+    games: gamesIn(period, key).length,
+    players: rows.length,
+  };
+}
+function refreshTitles() {
+  const titles = state.titles || (state.titles = {});
+  const nowKey = { month: rankPeriodKey('month', Date.now()), year: rankPeriodKey('year', Date.now()) };
+  const keys = { month: new Set(), year: new Set() };
+  allGames().forEach(m => { if (m.date) { keys.month.add(rankPeriodKey('month', m.date)); keys.year.add(rankPeriodKey('year', m.date)); } });
+  let changed = false;
+  ['month', 'year'].forEach(period => keys[period].forEach(key => {
+    const id = (period === 'month' ? 'm:' : 'y:') + key;
+    if (titles[id] && titles[id].final) return;
+    const t = computeTitle(period, key);
+    t.final = key < nowKey[period]; // the period is over → lock it
+    if (JSON.stringify(t) !== JSON.stringify(titles[id])) { titles[id] = t; changed = true; }
+  }));
+  return changed;
+}
+// [{ id, period, key, label, current, top, games }] newest first
+function titleList(period) {
+  const pre = period === 'month' ? 'm:' : 'y:';
+  const nowKey = rankPeriodKey(period, Date.now());
+  return Object.entries(state.titles || {}).filter(([id]) => id.startsWith(pre)).map(([id, t]) => {
+    const key = id.slice(2);
+    return { id, period, key, label: period === 'month' ? rankMonthLabel(key) : rankYearLabel(key), current: key === nowKey, top: t.top || [], games: t.games || 0 };
+  }).sort((a, b) => b.key.localeCompare(a.key));
+}
+
+// Honour roll HTML — used by Hall of Fame and the viewer link.
+// avatarOf(entry, size) draws the picture; click(entry) adds an onclick (optional).
+function titleRollHtml(list, period, avatarOf, click) {
+  const min = TITLE_MIN[period];
+  if (!list.length) return `<div class="card tiny" style="text-align:center;">ยังไม่มีข้อมูล · จะเริ่มบันทึกเมื่อมีผลแข่ง</div>`;
+  return `<div class="title-roll">` + list.map(t => {
+    const c = t.top[0];
+    const runners = t.top.slice(1).map((r, i) => `<span>${i + 2}. ${escHtml(r.n)} <small>${r.wr}%</small></span>`).join('');
+    return `<div class="title-row ${t.current ? 'current' : ''}">
+      <div class="title-when"><b>${escHtml(t.label)}</b>${t.current ? '<span class="chip orange" style="padding:1px 7px;">กำลังลุ้น</span>' : ''}</div>
+      ${c ? `<div class="title-champ" ${click ? click(c) : ''}>
+          <div class="title-av">${avatarOf(c, 48)}<span class="title-medal">${icon('crown', 'fill:var(--gold)')}</span></div>
+          <div style="min-width:0;flex:1;"><b>${escHtml(c.n)}</b><small>อัตราชนะ <b class="w">${c.wr}%</b> · ชนะ ${c.w} แพ้ ${c.l}</small></div>
+        </div>
+        ${runners ? `<div class="title-runners">${runners}</div>` : ''}`
+      : `<div class="tiny">ยังไม่มีใครเล่นครบ ${min} แมทช์${t.games ? ` (${t.games} แมทช์ในช่วงนี้)` : ''}</div>`}
+    </div>`;
+  }).join('') + `</div>`;
+}
+
+// → { ranked, others }: others = too few games to rank by win rate
+function rankSort(rows, byWr, min) {
+  if (!byWr) return { ranked: [...rows].sort((a, b) => b.elo - a.elo || b.wr - a.wr), others: [] };
+  return {
+    ranked: rows.filter(r => r.total >= min).sort((a, b) => b.wr - a.wr || b.w - a.w || b.elo - a.elo),
+    others: rows.filter(r => r.total < min).sort((a, b) => b.total - a.total || b.wr - a.wr),
+  };
+}
+
+// opt: { byWr, min, click(row) → attribute string, me: key to highlight }
+function rankingHtml({ ranked, others }, opt) {
+  const { byWr, min, click, me } = opt;
+  const pod = (r, place) => {
+    if (!r) return `<div class="pod p${place} empty"><div class="pod-base">${place}</div></div>`;
+    const main = byWr ? `<span class="lbl">อัตราชนะ</span>${r.wr}<small>%</small>` : `${r.elo.toLocaleString()}<small>ELO</small>`;
+    const sub = byWr ? `คะแนน ${r.elo.toLocaleString()}` : `อัตราชนะ ${r.wr}%`;
+    return `<div class="pod p${place} ${r.key === me ? 'me' : ''}" ${click(r)}>
+      ${place === 1 ? `<div class="pod-crown">${icon('crown', 'fill:var(--gold)')}</div>` : ''}
+      <div class="pod-av">${r.av(place === 1 ? 84 : 64)}</div>
+      <div class="pod-name">${escHtml(r.name)}</div>
+      <div class="pod-main">${main}</div>
+      <div class="pod-wl">ชนะ <span class="w">${r.w}</span> · แพ้ <span class="l">${r.l}</span></div>
+      <div class="pod-sub">${sub}</div>
+      <div class="pod-base">${place}</div>
+    </div>`;
+  };
+  const row = (r, no) => `<div class="rank-row ${r.key === me ? 'me' : ''}" ${click(r)}>
+    <div class="rank-no">${no}</div>
+    <div class="rank-player">${r.av(40)}<div style="min-width:0;"><b>${escHtml(r.name)}</b><small>${r.total} แมทช์</small></div></div>
+    <div class="rank-nums">
+      <div class="${byWr ? '' : 'hl'}"><b>${r.elo.toLocaleString()}</b><span>คะแนน</span></div>
+      <div><b><span class="w">${r.w}</span>-<span class="l">${r.l}</span></b><span>ชนะ-แพ้</span></div>
+      <div class="${byWr ? 'hl' : ''}"><b>${r.wr}%</b><span>อัตราชนะ</span></div>
+    </div>
+  </div>`;
+  const top = ranked.slice(0, 3), rest = ranked.slice(3);
+  return (top.length ? `<div class="podium-card"><div class="podium">${pod(top[1], 2)}${pod(top[0], 1)}${pod(top[2], 3)}</div></div>` : '')
+    + (rest.length ? `<div class="rank-list">${rest.map((r, i) => row(r, i + 4)).join('')}</div>` : '')
+    + (others.length ? `<div class="rank-group">ยังลงแข่งไม่ถึง ${min} แมทช์</div><div class="rank-list">${others.map(r => row(r, '–')).join('')}</div>` : '')
+    + (!ranked.length && !others.length ? `<div class="empty-state"><div class="icon">🏆</div><p>ยังไม่มีผลการแข่งขัน${opt.when || ''}</p></div>` : '');
+}
+
+// Who a player wins with and loses to → { mates: {id:{w,l}}, opps: {id:{w,l}} }
+function headToHead(id) {
+  const mates = {}, opps = {};
+  const add = (o, k, won) => { const x = o[k] || (o[k] = { w: 0, l: 0 }); if (won) x.w++; else x.l++; };
+  allGames().forEach(m => {
+    if (!m.winner) return;
+    const side = (m.teams[0] || []).includes(id) ? 0 : (m.teams[1] || []).includes(id) ? 1 : -1;
+    if (side < 0) return;
+    const won = m.winner.includes(id);
+    m.teams[side].forEach(x => { if (x !== id) add(mates, x, won); });
+    m.teams[1 - side].forEach(x => add(opps, x, won));
+  });
+  return { mates, opps };
+}
+// Best partner (most wins together) and nemesis (beats this player most, at least 2 losses)
+function bestPartnerAndNemesis(id) {
+  const { mates, opps } = headToHead(id);
+  const bp = Object.entries(mates).filter(([, v]) => v.w > 0).sort((a, b) => b[1].w - a[1].w || a[1].l - b[1].l)[0];
+  const nm = Object.entries(opps).filter(([, v]) => v.l >= 2 && v.l > v.w).sort((a, b) => (b[1].l - b[1].w) - (a[1].l - a[1].w) || b[1].l - a[1].l)[0];
+  return { bp, nm };
 }
 
 function renderStats() {
@@ -3265,51 +3763,23 @@ function renderStatsRanking() {
     return;
   }
   noteEl.style.display = '';
-  const rankCell = i => i < 3 ? `<span class="medal m${i + 1}">${i + 1}</span>` : `<span style="display:inline-block;width:26px;text-align:center;">${i + 1}</span>`;
-  const playerCell = (p, sub) => `<div class="rank-player">${renderTierAvatar(p, 40)}<div style="min-width:0;"><b>${escHtml(p.name)}</b><small>${sub}</small></div></div>`;
-
-  if (currentRankTab === 'wr') {
-    // Players with too few matches would top the table on a lucky 1/1 — rank them after everyone else
-    const MIN_MATCHES = 5;
-    const rows = players.map(p => {
-      const s = state.stats[p.id] || {};
-      const w = s.wins || 0, l = s.losses || 0, total = w + l;
-      return { p, w, l, total, wr: total ? Math.round(w / total * 100) : 0 };
-    });
-    const qualified = rows.filter(r => r.total >= MIN_MATCHES).sort((a, b) => b.wr - a.wr || b.w - a.w);
-    const others = rows.filter(r => r.total < MIN_MATCHES).sort((a, b) => b.total - a.total || b.wr - a.wr);
-    noteEl.innerHTML = `${icon('info')}<span>จัดอันดับเฉพาะผู้เล่นที่ลงแข่งอย่างน้อย ${MIN_MATCHES} แมทช์<br><small>(เพื่อให้สถิติมีความน่าเชื่อถือ)${others.length ? ' · คนที่ยังไม่ถึงแสดงท้ายตาราง' : ''}</small></span>`;
-    const rowHtml = (r, rank) => `<tr>
-      <td>${rank}</td>
-      <td>${playerCell(r.p, `${r.total} แมทช์`)}</td>
-      <td class="num">${r.w} / ${r.l}</td>
-      <td class="pct ${typeof rank === 'string' && rank.includes('medal') ? 'top' : ''}">${r.wr}%</td>
-    </tr>`;
-    el.innerHTML = `<div class="card" style="padding:4px 10px;"><table class="rank-table">
-      <thead><tr><th style="width:40px;">#</th><th>ผู้เล่น</th><th class="num">ชนะ / แพ้</th><th style="text-align:right;">อัตราชนะ</th></tr></thead>
-      <tbody>
-        ${qualified.map((r, i) => rowHtml(r, rankCell(i))).join('')}
-        ${others.map(r => rowHtml(r, '<span style="display:inline-block;width:26px;text-align:center;" class="muted">–</span>')).join('')}
-      </tbody>
-    </table></div>`;
-  } else {
-    const elo = calcEloScores();
-    const sorted = [...players].sort((a, b) => (elo[b.id]||1000) - (elo[a.id]||1000));
-    noteEl.innerHTML = `${icon('info')}<span>คะแนน ELO เริ่มต้นที่ 1000 และเปลี่ยนตามผลแข่งขัน<br><small>(ชนะคู่ที่เก่งกว่าได้คะแนนมากกว่า)</small></span>`;
-    el.innerHTML = `<div class="card" style="padding:4px 10px;"><table class="rank-table">
-      <thead><tr><th style="width:40px;">#</th><th>ผู้เล่น</th><th class="num">ELO</th><th style="text-align:right;">+/-</th></tr></thead>
-      <tbody>${sorted.map((p, i) => {
-        const score = Math.round(elo[p.id] || 1000);
-        const delta = score - 1000;
-        return `<tr>
-          <td>${rankCell(i)}</td>
-          <td>${playerCell(p, `ฝีมือ ${p.skill}.0`)}</td>
-          <td class="num" style="font-weight:600;">${score.toLocaleString()}</td>
-          <td class="pct" style="font-size:14px;color:${delta >= 0 ? 'var(--green)' : 'var(--red)'};">${delta >= 0 ? '+' : ''}${delta}</td>
-        </tr>`;
-      }).join('')}</tbody>
-    </table></div>`;
-  }
+  // Every player gets the same numbers (ELO score, W/L, win rate); the tab only
+  // decides the order and which number is the headline.
+  const period = currentRankPeriod;
+  const inWhen = { all: '', year: 'ในปีนี้', month: 'ในเดือนนี้' }[period];
+  const byWr = currentRankTab === 'wr';
+  const min = RANK_MIN[period];
+  const sorted = rankSort(rankRowsFor(period), byWr, min);
+  const monthBtn = document.getElementById('rank-period-month');
+  if (monthBtn) monthBtn.textContent = 'เดือนนี้ · ' + new Date().toLocaleDateString('th-TH', { month: 'short' });
+  const yearBtn = document.getElementById('rank-period-year');
+  if (yearBtn) yearBtn.textContent = rankYearLabel(new Date().getFullYear());
+  noteEl.innerHTML = byWr
+    // Players with too few matches would top the win-rate table on a lucky 1/1 — rank them after everyone else
+    ? `${icon('info')}<span>จัดอันดับเฉพาะผู้เล่นที่ลงแข่งอย่างน้อย ${min} แมทช์${inWhen}<br><small>(เพื่อให้สถิติมีความน่าเชื่อถือ)${sorted.others.length ? ' · คนที่ยังไม่ถึงแสดงท้ายสุด' : ''}</small></span>`
+    : `${icon('info')}<span>คะแนน ELO เริ่มต้นที่ 1000 และเปลี่ยนตามผลแข่งขัน${period === 'month' ? ' (นับใหม่ทุกต้นเดือน)' : period === 'year' ? ' (นับใหม่ทุกต้นปี)' : ''}<br><small>(ชนะคู่ที่เก่งกว่าได้คะแนนมากกว่า)</small></span>`;
+  el.innerHTML = rankingHtml(sorted, { byWr, min, when: inWhen, click: r => `onclick="openPlayerStats('${r.key}')"` })
+    + `<button class="btn btn-outline btn-full" style="margin-top:14px;" onclick="openStatsShareModal()">${icon('broadcast')}ให้คนอื่นดูหน้าอันดับผ่านลิงก์</button>`;
 }
 
 // =================== TAB 3: PLAYERS ===================
@@ -3356,14 +3826,24 @@ function renderPlayerProfile(id) {
 
   const recent = (state.matchHistory || []).filter(m => [...(m.teams[0] || []), ...(m.teams[1] || [])].includes(id)).slice(0, 4);
 
-  const top2Partners = Object.entries(getPartnerStats(id)).sort((a, b) => b[1] - a[1]).slice(0, 2);
-  const partnerHtml = top2Partners.length ? `<div class="card">
-      <div class="card-title">คู่หูที่ชนะด้วยกันมากสุด</div>
-      ${top2Partners.map(([pid, wins]) => {
-        const pp = state.players.find(x => x.id === pid);
-        return `<div class="list-row">${renderTierAvatar(pp || { name: getPlayerName(pid), skill: 0 }, 30)}<span class="list-name">${escHtml(pp ? pp.name : getPlayerName(pid))}</span><span style="color:var(--green);font-weight:600;font-size:13px;">ชนะด้วยกัน ${wins}</span></div>`;
-      }).join('')}
-    </div>` : '';
+  // Head-to-head: who they win with, and who they meet across the net
+  const { mates, opps } = headToHead(id);
+  const h2hRow = (pid, v, note) => {
+    const pp = state.players.find(x => x.id === pid);
+    const g = v.w + v.l;
+    return `<div class="list-row h2h-row">${renderTierAvatar(pp || { name: getPlayerName(pid), skill: 0 }, 30)}<span class="list-name">${escHtml(pp ? pp.name : getPlayerName(pid))}${note || ''}</span>
+      <span class="h2h-wl"><b class="w">${v.w}</b>-<b class="l">${v.l}</b><small>${g ? Math.round(v.w / g * 100) : 0}%</small></span></div>`;
+  };
+  const topMates = Object.entries(mates).filter(([, v]) => v.w > 0).sort((a, b) => b[1].w - a[1].w || a[1].l - b[1].l).slice(0, 3);
+  const topOpps = Object.entries(opps).sort((a, b) => (b[1].w + b[1].l) - (a[1].w + a[1].l) || b[1].l - a[1].l).slice(0, 5);
+  const { nm } = bestPartnerAndNemesis(id);
+  const partnerHtml = (topMates.length ? `<div class="card">
+      <div class="card-title">คู่หูที่ชนะด้วยกันมากสุด <small class="muted">(ชนะ-แพ้ เมื่ออยู่ทีมเดียวกัน)</small></div>
+      ${topMates.map(([pid, v]) => h2hRow(pid, v)).join('')}
+    </div>` : '') + (topOpps.length ? `<div class="card">
+      <div class="card-title">เจอกันบ่อย (ฝั่งตรงข้าม) <small class="muted">(ชนะ-แพ้ ของ ${escHtml(p.name)})</small></div>
+      ${topOpps.map(([pid, v]) => h2hRow(pid, v, nm && nm[0] === pid ? ' <span class="chip red" style="padding:1px 7px;">คู่ปรับ</span>' : '')).join('')}
+    </div>` : '');
 
   el.innerHTML = `
     <div class="card">
@@ -3397,6 +3877,7 @@ function renderPlayerProfile(id) {
 }
 
 // =================== TAB 4: HALL OF FAME ===================
+let fameShowAllMonths = false;
 function renderStatsFame() {
   const el = document.getElementById('stats-fame-list');
   const players = state.players;
@@ -3446,7 +3927,18 @@ function renderStatsFame() {
         : '<div class="tiny" style="text-align:center;padding:10px;font-size:13px;">ยังไม่มีข้อมูล</div>'}
     </div>`;
 
-  let html = '';
+  // Player of the year / month honour roll
+  if (refreshTitles()) save();
+  const titleAv = (c, size) => renderTierAvatar(state.players.find(p => p.id === c.id) || { name: c.n }, size);
+  const titleClick = c => state.players.some(p => p.id === c.id) ? `onclick="openPlayerStats('${c.id}')" style="cursor:pointer;"` : '';
+  const months = titleList('month');
+  const showAllMonths = fameShowAllMonths || months.length <= 6;
+  let html = `<div class="section-h" style="margin-top:0;"><h3>👑 ผู้เล่นประจำปี</h3><span class="tiny">อัตราชนะสูงสุด · เล่น ${TITLE_MIN.year}+ แมทช์</span></div>`
+    + titleRollHtml(titleList('year'), 'year', titleAv, titleClick)
+    + `<div class="section-h"><h3>🏅 ผู้เล่นประจำเดือน</h3><span class="tiny">อัตราชนะสูงสุด · เล่น ${TITLE_MIN.month}+ แมทช์</span></div>`
+    + titleRollHtml(showAllMonths ? months : months.slice(0, 6), 'month', titleAv, titleClick)
+    + (!showAllMonths ? `<button class="link-btn" style="margin:2px auto 0;display:flex;" onclick="fameShowAllMonths=true;renderStatsFame()">ดูทุกเดือน (${months.length})${icon('chevron-right')}</button>` : '')
+    + `<div class="section-h"><h3>สถิติตลอดกาล</h3></div>`;
   html += card('ผู้เล่นที่ชนะมากที่สุด', mvp, mvp && laurel(mvp), mvp && escHtml(mvp.name), mvp && `ชนะ ${st(mvp).wins} แมทช์`);
   html += card('อัตราชนะดีที่สุด', bestWr, bestWr && laurel(bestWr), bestWr && `${Math.round(wrOf(bestWr) * 100)}%`,
     bestWr && `${escHtml(bestWr.name)} · ชนะ ${st(bestWr).wins || 0} / ${totalOf(bestWr)} แมทช์`);
@@ -3565,8 +4057,10 @@ function renderMatchHistory() {
 }
 
 async function clearMatchHistory() {
-  if (!(await askConfirm('ล้างประวัติการแข่งขันทั้งหมด?\nสถิติ ชนะ/แพ้ ELO และ Hall of Fame ของทุกคนจะเริ่มนับใหม่ด้วย', { okText: 'ล้างประวัติ', danger: true }))) return;
+  if (!(await askConfirm('ล้างประวัติการแข่งขันทั้งหมด?\nสถิติ ชนะ/แพ้ ELO อันดับ และ Hall of Fame ของทุกคนจะเริ่มนับใหม่ด้วย\n(ทำเนียบผู้เล่นประจำเดือน/ปีที่ผ่านมายังเก็บไว้)', { okText: 'ล้างประวัติ', danger: true }))) return;
+  refreshTitles(true); // freeze every title earned so far before the games are gone
   state.matchHistory = [];
+  state.gameArchive = [];
   state.stats = {};
   state.archivedMatchCount = 0;
   state.currentMatches.forEach(m => { delete m._undo; }); // nothing left to undo against
@@ -3697,6 +4191,7 @@ function doReset() {
   const keepMatchHistory = state.matchHistory;
   const keepStockHistory = state.stockHistory;
   state.players = [];
+  state.lockedPairs = [];
   state.stats = {};
   state.currentMatches = [];
   state.pairHistory = [];
@@ -5092,9 +5587,12 @@ function newRoomId() {
   return Array.from(buf, n => chars[n % chars.length]).join('');
 }
 
-function liveViewerUrl(cfg) {
+// Share links go through queue.html / rank.html: small pages that carry the
+// link preview (picture + title in LINE) and pass straight on to the app.
+// Older links straight to index.html?watch=… still work, just without the preview.
+function liveViewerUrl(cfg, page) {
   const base = location.protocol === 'file:' ? PUBLIC_APP_URL : location.origin + location.pathname;
-  return `${base}?watch=${cfg.room}&db=${cfg.db}`;
+  return `${base.replace(/[^/]*$/, '')}${page || 'queue.html'}?watch=${cfg.room}&db=${cfg.db}`;
 }
 
 function liveEndpoint(cfg) {
@@ -5122,6 +5620,7 @@ function liveThumb(p) {
       c.getContext('2d').drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, LIVE_THUMB, LIVE_THUMB);
       liveThumbs.set(p.id, { key, url: c.toDataURL('image/jpeg', 0.72) });
       livePublishSoon(300); // send again now that the picture is ready
+      statsPublishSoon(600);
     } catch (e) {}
   };
   img.src = p.photo;
@@ -5338,6 +5837,184 @@ function shareLiveLink() {
   shareOrCopy(`🏸 ดูคิวการแข่งขันแบดได้ที่ลิงก์นี้ (อัปเดตอัตโนมัติ)\n${liveViewerUrl(liveCfg())}`, 'คิวการแข่งขัน');
 }
 
+// =================== LIVE STATS: organizer side ===================
+// A second, separate link that shows the ranking only. It uses its own room id
+// under the same /live/ path, so the Firebase rules set up for the queue already
+// allow it, and it can stay on between sessions while the queue link is off.
+// Sent: nicknames, wins/losses, ELO, last 5 results, best partner / nemesis —
+// never skill levels, real names, fees or debts.
+const STATS_KEYS = { room: 'bmt_statsRoom', on: 'bmt_statsOn' };
+let statsTimer = null, statsLastSent = '', statsStatus = { state: 'idle', at: 0, msg: '' };
+
+function statsCfg() {
+  return {
+    db: localStorage.getItem(LIVE_KEYS.db) || '',
+    room: localStorage.getItem(STATS_KEYS.room) || '',
+    on: localStorage.getItem(STATS_KEYS.on) === '1',
+  };
+}
+function statsViewerUrl(cfg) { return liveViewerUrl(cfg, 'rank.html'); }
+
+function buildStatsSnapshot() {
+  const mk = rankMonthKey(Date.now());
+  const all = rankRowsFor('all');
+  const mon = new Map(rankRowsFor('month').map(r => [r.key, r]));
+  const yr = new Map(rankRowsFor('year').map(r => [r.key, r]));
+  const players = all.filter(r => r.total > 0).map(r => {
+    const s = state.stats[r.key] || {};
+    const m = mon.get(r.key), y = yr.get(r.key);
+    const { bp, nm } = bestPartnerAndNemesis(r.key);
+    const x = { n: r.name, w: r.w, l: r.l, e: r.elo, f: getPlayerForm(r.key).slice(-5).join('') };
+    if (m) x.mo = [m.w, m.l, m.elo];
+    if (y) x.yr = [y.w, y.l, y.elo];
+    if (s.streak >= 2 && (s.streakType === 'win' || s.streakType === 'loss')) x.s = (s.streakType === 'win' ? 'w' : 'l') + s.streak;
+    if (bp) x.bp = [getPlayerName(bp[0]), bp[1].w, bp[1].l];
+    if (nm) x.nm = [getPlayerName(nm[0]), nm[1].w, nm[1].l];
+    return x;
+  });
+  // Honour roll: every year, the latest 12 months — top 3 each as [name, w, l, wr]
+  refreshTitles();
+  const roll = (period, n) => titleList(period).slice(0, n).map(t => [t.key, t.top.map(c => [c.n, c.w, c.l, c.wr]), t.games]);
+  const hof = { y: roll('year', 20), m: roll('month', 12), min: TITLE_MIN };
+  return { v: 1, kind: 'stats', mk, yk: rankPeriodKey('year', Date.now()), ml: rankMonthLabel(mk), min: RANK_MIN, players, hof };
+}
+
+// Profile pictures go in best-ranked first until the update nears the size limit
+function statsSnapshotString() {
+  const snap = buildStatsSnapshot();
+  let size = JSON.stringify(snap).length;
+  const av = {};
+  [...snap.players].sort((a, b) => b.e - a.e).forEach(x => {
+    const p = state.players.find(pp => pp.name === x.n);
+    const url = liveThumb(p);
+    if (!url || av[x.n]) return;
+    const add = url.length + x.n.length * 6 + 16;
+    if (size + add > LIVE_MAX_CHARS) return;
+    av[x.n] = url;
+    size += add;
+  });
+  if (Object.keys(av).length) snap.av = av;
+  return JSON.stringify(snap);
+}
+
+function statsPublishSoon(delay) {
+  if (WATCH || !statsCfg().on) return;
+  clearTimeout(statsTimer);
+  statsTimer = setTimeout(() => statsPublish(false), delay == null ? 1500 : delay);
+}
+
+async function statsPublish(force) {
+  const cfg = statsCfg();
+  if (WATCH || !cfg.on || !cfg.db || !cfg.room) return;
+  const d = statsSnapshotString();
+  if (!force && d === statsLastSent) return;
+  try {
+    const res = await fetch(liveEndpoint(cfg), { method: 'PUT', body: JSON.stringify({ d, t: Date.now() }) });
+    if (!res.ok) throw new Error(res.status === 401 || res.status === 403 ? 'denied' : 'http');
+    statsLastSent = d;
+    statsStatus = { state: 'ok', at: Date.now(), msg: '' };
+  } catch (e) {
+    statsStatus = {
+      state: 'err', at: Date.now(),
+      msg: e.message === 'denied' ? 'ฐานข้อมูลไม่อนุญาตให้บันทึก — ตรวจ Rules ใน Firebase อีกครั้ง'
+                                  : 'ส่งข้อมูลไม่สำเร็จ (อินเทอร์เน็ตหลุด?) จะลองใหม่อัตโนมัติ',
+    };
+    clearTimeout(statsTimer);
+    statsTimer = setTimeout(() => statsPublish(true), 30000);
+  }
+  if (document.getElementById('modal-stats-share').classList.contains('show')) renderStatsShareModal();
+}
+window.addEventListener('online', () => { if (!WATCH) statsPublish(true); });
+
+function openStatsShareModal() {
+  renderStatsShareModal();
+  openModal('modal-stats-share');
+}
+
+function renderStatsShareModal() {
+  const cfg = statsCfg();
+  const el = document.getElementById('stats-share-body');
+  if (!cfg.db) {
+    el.innerHTML = `
+      <p class="live-p">ตั้งค่าครั้งเดียว (ใช้ฐานข้อมูลเดียวกับลิงก์ดูคิว): วางที่อยู่ Realtime Database จาก Firebase<br><small class="muted">(Firebase › Realtime Database › แท็บ Data › คัดลอกลิงก์ที่ขึ้นต้นด้วย https://)</small></p>
+      <div class="form-group">
+        <input class="input" id="stats-db-input" placeholder="https://xxxx-default-rtdb.asia-southeast1.firebasedatabase.app" autocomplete="off" spellcheck="false">
+      </div>
+      <button class="btn btn-lime btn-full" onclick="saveStatsDb()">บันทึกและเริ่มให้ดูอันดับ</button>`;
+    return;
+  }
+  if (!cfg.on) {
+    el.innerHTML = `
+      <p class="live-p">เมื่อเปิด คนที่มีลิงก์จะเห็นหน้าอันดับแบบดูอย่างเดียว (โพเดียม · ตลอดกาล / เดือนนี้ · Win Rate / ELO) และเลือกชื่อตัวเองเพื่อดูสถิติของตัวเองได้<br><small class="muted">เป็นลิงก์แยกจากลิงก์ดูคิว · ส่งเฉพาะชื่อเล่นกับผลแข่ง ไม่ส่งระดับฝีมือ ชื่อจริง หรือค่าใช้จ่าย</small></p>
+      <button class="btn btn-lime btn-full btn-lg" onclick="setStatsOn(true)">${icon('broadcast')}เริ่มให้ดูอันดับ</button>`;
+    return;
+  }
+  const url = statsViewerUrl(cfg);
+  let qrSvg = '';
+  try { const q = qrcode(0, 'M'); q.addData(url); q.make(); qrSvg = q.createSvgTag({ cellSize: 4, margin: 2, scalable: true }); } catch (e) {}
+  const st = statsStatus.state === 'ok'
+    ? `<span class="live-st ok">✓ ส่งอันดับล่าสุดเมื่อ ${new Date(statsStatus.at).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</span>`
+    : statsStatus.state === 'err' ? `<span class="live-st err">${escHtml(statsStatus.msg)}</span>` : '<span class="live-st">กำลังส่งข้อมูล…</span>';
+  el.innerHTML = `
+    <div class="live-qr">${qrSvg}</div>
+    <p class="live-p" style="text-align:center;">ให้คนในกลุ่มสแกน QR หรือเปิดลิงก์นี้<br>${st}</p>
+    <div class="live-link">${escHtml(url)}</div>
+    <div class="modal-btns">
+      <button class="btn btn-outline" onclick="copyStatsLink()">${icon('copy')}คัดลอกลิงก์</button>
+      <button class="btn btn-lime" onclick="shareStatsLink()">${icon('share')}ส่งเข้ากลุ่ม</button>
+    </div>
+    <div class="live-actions">
+      <button class="link-btn" onclick="rotateStatsRoom()">เปลี่ยนลิงก์ใหม่</button>
+      <button class="link-btn" style="color:var(--red);" onclick="setStatsOn(false)">หยุดให้ดูอันดับ</button>
+    </div>
+    <div class="tiny" style="margin-top:8px;">อันดับอัปเดตเองทุกครั้งที่บันทึกผลแข่ง · ลิงก์นี้เปิดดูได้ตลอด แม้ไม่ได้เปิดลิงก์ดูคิว · ปักหมุดไว้ในกลุ่ม LINE ได้เลย</div>`;
+}
+
+async function saveStatsDb() {
+  const host = parseDbHost(document.getElementById('stats-db-input').value);
+  if (!host) { notify('ที่อยู่ไม่ถูกต้อง\nต้องเป็นลิงก์ Realtime Database ที่ลงท้ายด้วย\n.firebasedatabase.app หรือ .firebaseio.com'); return; }
+  localStorage.setItem(LIVE_KEYS.db, host);
+  await setStatsOn(true);
+}
+
+async function setStatsOn(on) {
+  const cfg = statsCfg();
+  if (on) {
+    if (!cfg.room) localStorage.setItem(STATS_KEYS.room, newRoomId());
+    localStorage.setItem(STATS_KEYS.on, '1');
+    statsStatus = { state: 'idle', at: 0, msg: '' };
+    renderStatsShareModal();
+    await statsPublish(true);
+  } else {
+    if (!(await askConfirm('หยุดให้ดูอันดับ?\nคนที่เปิดลิงก์อยู่จะเห็นว่าปิดแล้ว (ลิงก์เดิมกลับมาใช้ได้เมื่อเปิดอีกครั้ง)'))) return;
+    localStorage.setItem(STATS_KEYS.on, '0');
+    clearTimeout(statsTimer);
+    try { await fetch(liveEndpoint(cfg), { method: 'DELETE' }); } catch (e) {}
+    statsLastSent = '';
+    renderStatsShareModal();
+  }
+}
+
+async function rotateStatsRoom() {
+  if (!(await askConfirm('สร้างลิงก์ใหม่?\nลิงก์และ QR เดิมจะใช้ไม่ได้ ต้องส่งลิงก์ใหม่ให้กลุ่มอีกครั้ง', { okText: 'สร้างลิงก์ใหม่' }))) return;
+  try { await fetch(liveEndpoint(statsCfg()), { method: 'DELETE' }); } catch (e) {}
+  localStorage.setItem(STATS_KEYS.room, newRoomId());
+  statsLastSent = '';
+  renderStatsShareModal();
+  await statsPublish(true);
+}
+
+function copyStatsLink() {
+  const url = statsViewerUrl(statsCfg());
+  (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject())
+    .then(() => notify('คัดลอกลิงก์แล้ว'))
+    .catch(() => notify('คัดลอกอัตโนมัติไม่ได้ กรุณาคัดลอกลิงก์นี้:\n\n' + url));
+}
+
+function shareStatsLink() {
+  shareOrCopy(`🏆 ดูอันดับนักแบดของก๊วนได้ที่ลิงก์นี้ (อัปเดตอัตโนมัติ)\n${statsViewerUrl(statsCfg())}`, 'อันดับนักแบด');
+}
+
 // =================== LIVE QUEUE: viewer page ===================
 let watchData;           // undefined = loading, null = not shared / stopped
 let watchUpdated = 0, watchES = null, watchConn = 'connecting';
@@ -5348,9 +6025,12 @@ function startWatchMode() {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-watch').classList.add('active');
   currentPage = 'watch';
-  document.title = 'คิวการแข่งขัน · Badminton Match';
+  const what = WATCH.stats ? 'อันดับนักแบด' : 'คิวการแข่งขัน';
+  document.title = what + ' · Badminton Match';
   document.getElementById('appbar-title').className = 'appbar-title';
-  document.getElementById('appbar-title').innerHTML = `${icon('trophy')}<span>คิวการแข่งขัน</span>`;
+  document.getElementById('appbar-title').innerHTML = `${icon(WATCH.stats ? 'chart' : 'trophy')}<span>${what}</span>`;
+  if (WATCH.stats) document.getElementById('page-watch').classList.add('watch-stats');
+  else watchKeepAwake();
   renderWatch();
   watchConnect();
   setInterval(renderWatch, 30000); // keep "x นาทีที่แล้ว" fresh
@@ -5424,8 +6104,83 @@ async function watchFetch() {
 
 function setWatchMe(name) {
   try { if (name) localStorage.setItem(WATCH_ME_KEY, name); else localStorage.removeItem(WATCH_ME_KEY); } catch (e) {}
+  watchLastTone = null; // a new name starts fresh — no alert for where they already are
+  watchFocus = '';
   renderWatch();
 }
+
+// --- "Your turn is near" alert (queue link) ---
+// Sound + vibration + a flashing banner when the chosen player moves into the next
+// game or gets put on court. Only fires on a change, never on first opening the page.
+let watchLastTone = null, watchFlash = false, watchAudio = null, watchWake = null;
+const WATCH_ALERT_KEY = 'watch_alert';
+function watchAlertOn() { try { return localStorage.getItem(WATCH_ALERT_KEY) === '1'; } catch (e) { return false; } }
+
+function toggleWatchAlert() {
+  const on = !watchAlertOn();
+  try { localStorage.setItem(WATCH_ALERT_KEY, on ? '1' : '0'); } catch (e) {}
+  if (on) {
+    // Sound must be unlocked by a tap (iPhone); play a short test tone now
+    try { watchAudio = watchAudio || new (window.AudioContext || window.webkitAudioContext)(); watchAudio.resume(); } catch (e) {}
+    watchBeep(1);
+    try { navigator.vibrate && navigator.vibrate(80); } catch (e) {}
+    try { if (window.Notification && Notification.permission === 'default') Notification.requestPermission(); } catch (e) {}
+  }
+  watchKeepAwake();
+  renderWatch();
+}
+
+function watchBeep(times) {
+  const ctx = watchAudio;
+  if (!ctx) return;
+  try {
+    for (let i = 0; i < times; i++) {
+      const t = ctx.currentTime + i * 0.35;
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(i % 2 ? 1175 : 880, t);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.4, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
+      o.connect(g).connect(ctx.destination);
+      o.start(t); o.stop(t + 0.3);
+    }
+  } catch (e) {}
+}
+
+// Keep the screen on while the alert is on, so the page stays open (where supported)
+async function watchKeepAwake() {
+  try {
+    if (watchAlertOn() && !document.hidden && navigator.wakeLock && !watchWake) {
+      watchWake = await navigator.wakeLock.request('screen');
+      watchWake.addEventListener('release', () => { watchWake = null; });
+    } else if (!watchAlertOn() && watchWake) {
+      await watchWake.release(); watchWake = null;
+    }
+  } catch (e) { watchWake = null; }
+}
+
+function watchCheckAlert(me, s) {
+  const prev = watchLastTone;
+  watchLastTone = s.tone;
+  if (prev === null || prev === s.tone || !watchAlertOn()) return;
+  if (s.tone !== 'next' && s.tone !== 'play') return;
+  if (prev === 'play') return; // just finished a game and went straight back to the top — no need to shout
+  try { watchAudio && watchAudio.resume(); } catch (e) {}
+  watchBeep(s.tone === 'play' ? 4 : 3);
+  try { navigator.vibrate && navigator.vibrate([300, 150, 300, 150, 300]); } catch (e) {}
+  const msg = s.tone === 'play' ? `${me} · ${s.title}` : `${me} · ได้ลงเกมถัดไป เตรียมตัวได้เลย`;
+  try { if (document.hidden && window.Notification && Notification.permission === 'granted') new Notification('🏸 ใกล้ถึงคิวแล้ว', { body: msg }); } catch (e) {}
+  watchFlash = true;
+  const base = document.title;
+  if (!base.startsWith('🔔')) document.title = '🔔 ' + base;
+  setTimeout(() => {
+    watchFlash = false;
+    document.title = document.title.replace(/^🔔 /, '');
+    renderWatch();
+  }, 12000);
+}
+document.addEventListener('visibilitychange', () => { if (WATCH && !document.hidden) watchKeepAwake(); });
 
 function minutesAgo(t) {
   const m = Math.floor((Date.now() - t) / 60000);
@@ -5457,14 +6212,16 @@ function renderWatch() {
   const el = document.getElementById('watch-content');
   if (!el) return;
   const head = `<div class="watch-top">${watchConnHtml()}${watchData && watchUpdated ? `<span class="tiny">อัปเดต ${minutesAgo(watchUpdated)}</span>` : ''}</div>`;
+  const what = WATCH.stats ? 'อันดับ' : 'คิว';
   if (watchData === undefined) {
-    el.innerHTML = head + `<div class="empty-state" style="padding-top:60px;"><div class="icon">🏸</div><p>กำลังโหลดคิวการแข่งขัน…</p></div>`;
+    el.innerHTML = head + `<div class="empty-state" style="padding-top:60px;"><div class="icon">${WATCH.stats ? '🏆' : '🏸'}</div><p>กำลังโหลด${what}…</p></div>`;
     return;
   }
-  if (!watchData) {
-    el.innerHTML = head + `<div class="empty-state" style="padding-top:60px;"><div class="icon">🏸</div><p>ผู้จัดยังไม่ได้เปิดให้ดูคิว<br>หรือปิดไปแล้ว</p><p class="tiny" style="margin-top:8px;">หน้านี้จะแสดงคิวเองเมื่อผู้จัดเปิด</p></div>`;
+  if (!watchData || (watchData.kind === 'stats') !== !!WATCH.stats) {
+    el.innerHTML = head + `<div class="empty-state" style="padding-top:60px;"><div class="icon">${WATCH.stats ? '🏆' : '🏸'}</div><p>ผู้จัดยังไม่ได้เปิดให้ดู${what}<br>หรือปิดไปแล้ว</p><p class="tiny" style="margin-top:8px;">หน้านี้จะแสดง${what}เองเมื่อผู้จัดเปิด</p></div>`;
     return;
   }
+  if (WATCH.stats) { renderWatchStats(el, head); return; }
   const d = watchData;
   const e = escHtml;
   let me = '';
@@ -5499,7 +6256,14 @@ function renderWatch() {
       ${names.map(n => `<option value="${e(n)}" ${n === me ? 'selected' : ''}>${e(n)}</option>`).join('')}
       ${me && !all.has(me) ? `<option value="${e(me)}" selected>${e(me)}</option>` : ''}
     </select>
-    ${me ? (() => { const s = watchMyStatus(d, me); return `<div class="watch-status ${s.tone}"><b>${e(me)} · ${s.title}</b>${s.sub ? `<span>${s.sub}</span>` : ''}</div>`; })() : ''}
+    ${me ? (() => {
+      const s = watchMyStatus(d, me);
+      watchCheckAlert(me, s);
+      const on = watchAlertOn();
+      return `<div class="watch-status ${s.tone}${watchFlash ? ' flash' : ''}"><b>${e(me)} · ${s.title}</b>${s.sub ? `<span>${s.sub}</span>` : ''}</div>
+        <button class="watch-alert-btn ${on ? 'on' : ''}" onclick="toggleWatchAlert()">${on ? '🔔 เปิดเตือนแล้ว · จะมีเสียงและสั่นเมื่อได้ลงเกมถัดไป' : '🔕 เปิดเตือนเมื่อใกล้ถึงคิว'}</button>
+        ${on ? '<div class="tiny" style="margin-top:4px;">เปิดหน้านี้ค้างไว้ (ระบบพยายามไม่ให้จอดับ) · iPhone ไม่สั่น แต่มีเสียงถ้าไม่ได้ปิดเสียงเครื่อง</div>' : ''}`;
+    })() : ''}
   </div>`;
 
   // --- courts ---
@@ -5544,6 +6308,128 @@ function renderWatch() {
         `<div class="wq-row ${i === 0 ? 'first' : ''}"><span class="wq-label">${label(i)}</span><span class="wq-names">${g.map(nm).join(', ')}</span></div>`).join('') +
         `<div class="tiny" style="padding-top:8px;">เรียงตามเวลารอ คนที่รอนานกว่าได้ลงก่อน · ผู้จัดอาจปรับคู่ตามความเหมาะสม</div></div>`;
     }
+  }
+  el.innerHTML = html;
+}
+
+// After a reload the sound has to be unlocked again by any tap on the page
+document.addEventListener('pointerdown', () => {
+  if (!WATCH || WATCH.stats || !watchAlertOn()) return;
+  try { watchAudio = watchAudio || new (window.AudioContext || window.webkitAudioContext)(); watchAudio.resume(); } catch (e) {}
+  watchKeepAwake();
+});
+
+// =================== LIVE STATS: viewer page ===================
+let wsPeriod = 'all', wsBy = 'wr', watchFocus = '';
+function setWsView(k, v) { if (k === 'p') wsPeriod = v; else wsBy = v; renderWatch(); }
+function setWatchFocus(name) {
+  watchFocus = name;
+  renderWatch();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderWatchStats(el, head) {
+  const d = watchData;
+  const e = escHtml;
+  let me = '';
+  try { me = localStorage.getItem(WATCH_ME_KEY) || ''; } catch (err) {}
+  const list = Array.isArray(d.players) ? d.players.filter(x => x && typeof x.n === 'string') : [];
+  const num = v => Math.max(0, Math.round(Number(v) || 0));
+  // Month / year data only counts if it's for the month / year we're in now
+  const periodOk = { all: true, month: d.mk === rankMonthKey(Date.now()), year: d.yk === rankPeriodKey('year', Date.now()) };
+  const month = wsPeriod === 'month', part = wsPeriod !== 'all';
+  const inWhen = { all: '', year: 'ในปีนี้', month: 'ในเดือนนี้' }[wsPeriod];
+  const min = (d.min && num(d.min[wsPeriod])) || RANK_MIN[wsPeriod];
+  const avOk = u => typeof u === 'string' && u.length < 20000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(u);
+  const avatarOf = n => size => renderTierAvatar({ name: n, photo: avOk((d.av || {})[n]) ? d.av[n] : null }, size);
+  const rows = list.map(x => {
+    const src = wsPeriod === 'month' ? x.mo : x.yr;
+    const pp = part ? (periodOk[wsPeriod] && Array.isArray(src) ? src : [0, 0, 1000]) : [x.w, x.l, x.e];
+    const w = num(pp[0]), l = num(pp[1]), total = w + l;
+    return { key: x.n, name: x.n, av: avatarOf(x.n), w, l, total, wr: total ? Math.round(w / total * 100) : 0, elo: num(pp[2]) || 1000, x };
+  }).filter(r => !part || r.total > 0);
+  const byWr = wsBy === 'wr';
+  const sorted = rankSort(rows, byWr, min);
+  const names = list.map(x => x.n).sort((a, b) => a.localeCompare(b, 'th'));
+
+  let html = head;
+  html += `<div class="watch-me">
+    <select class="select" onchange="setWatchMe(this.value)" aria-label="เลือกชื่อของคุณ">
+      <option value="">🔎 เลือกชื่อของคุณ เพื่อดูสถิติและอันดับของคุณ</option>
+      ${names.map(n => `<option value="${e(n)}" ${n === me ? 'selected' : ''}>${e(n)}</option>`).join('')}
+    </select>
+  </div>`;
+
+  // --- player card: the one tapped in the list, otherwise "me" ---
+  const focus = (watchFocus && list.find(x => x.n === watchFocus)) ? watchFocus : me;
+  const fx = list.find(x => x.n === focus);
+  if (fx) {
+    const r = rows.find(rr => rr.key === focus);
+    const pos = sorted.ranked.findIndex(rr => rr.key === focus);
+    const w = r ? r.w : 0, l = r ? r.l : 0, total = w + l, wr = total ? Math.round(w / total * 100) : 0;
+    const form = String(fx.f || '').replace(/[^WL]/g, '').slice(-5).split('').filter(Boolean);
+    const dots = [...Array(5 - form.length).fill(null), ...form].map(x =>
+      x === null ? '<span class="wl-dot e">–</span>' : `<span class="wl-dot ${x === 'W' ? 'w' : 'l'}">${x}</span>`).join('');
+    const sm = /^([wl])(\d{1,3})$/.exec(String(fx.s || ''));
+    const streak = sm ? (sm[1] === 'w' ? `<span class="chip orange">🔥 ชนะ ${sm[2]} รวด</span>` : `<span class="chip red">แพ้ ${sm[2]} รวด</span>`) : '';
+    const rel = (arr, label, cls) => Array.isArray(arr) && typeof arr[0] === 'string'
+      ? `<div class="list-row h2h-row">${avatarOf(arr[0])(30)}<span class="list-name"><small class="muted" style="display:block;font-size:11px;">${label}</small>${e(arr[0])}</span>
+          <span class="h2h-wl"><b class="w">${num(arr[1])}</b>-<b class="l">${num(arr[2])}</b><small>${cls}</small></span></div>` : '';
+    const isMe = focus === me;
+    html += `<div class="card ws-card ${isMe ? 'mine' : ''}">
+      ${!isMe ? `<button class="ws-back" onclick="setWatchFocus('')" aria-label="ปิด">${icon('x')}</button>` : ''}
+      <div class="profile-top">
+        ${avatarOf(focus)(72)}
+        <div style="flex:1;min-width:0;">
+          <div class="profile-name"><span>${e(focus)}</span></div>
+          <div class="profile-chips">
+            ${pos >= 0 ? `<span class="chip blue">อันดับ ${pos + 1} · ${byWr ? 'Win Rate' : 'ELO'}${month ? ' เดือนนี้' : part ? ' ปีนี้' : ''}</span>` : `<span class="chip">ยังไม่ติดอันดับ${byWr ? ` (ต้องเล่น ${min} แมทช์)` : ''}</span>`}
+            <span class="chip">ELO ${(r ? r.elo : num(fx.e)).toLocaleString()}</span>
+            ${streak}
+          </div>
+        </div>
+      </div>
+      <div class="stat4">
+        <div><b>${total}</b><span>แมทช์${month ? 'เดือนนี้' : part ? 'ปีนี้' : ''}</span></div>
+        <div><b style="color:var(--green);">${w}</b><span>ชนะ</span></div>
+        <div><b style="color:var(--red);">${l}</b><span>แพ้</span></div>
+        <div><b style="color:var(--green);">${wr}%</b><span>อัตราชนะ</span></div>
+      </div>
+      <div style="font-size:14px;font-weight:500;margin-bottom:8px;">ผลการแข่งขันล่าสุด</div>
+      <div class="wl-row">${dots}</div>
+      ${rel(fx.bp, 'คู่หูที่ชนะด้วยกันมากสุด', 'ด้วยกัน')}${rel(fx.nm, 'คู่ปรับ (แพ้ให้บ่อยสุด)', 'เจอกัน')}
+    </div>`;
+  }
+
+  html += `<div class="seg pill">
+      <button class="seg-btn ${byWr ? 'active' : ''}" onclick="setWsView('b','wr')">Win Rate</button>
+      <button class="seg-btn ${byWr ? '' : 'active'}" onclick="setWsView('b','elo')">ELO</button>
+    </div>
+    <div class="seg pill sm rank-period">
+      <button class="seg-btn ${wsPeriod === 'all' ? 'active' : ''}" onclick="setWsView('p','all')">ตลอดกาล</button>
+      <button class="seg-btn ${wsPeriod === 'year' ? 'active' : ''}" onclick="setWsView('p','year')">${rankYearLabel(new Date().getFullYear())}</button>
+      <button class="seg-btn ${month ? 'active' : ''}" onclick="setWsView('p','month')">เดือนนี้ · ${new Date().toLocaleDateString('th-TH', { month: 'short' })}</button>
+    </div>
+    <div class="tiny" style="text-align:center;margin:-4px 0 10px;">${byWr ? `จัดอันดับเฉพาะคนที่เล่นอย่างน้อย ${min} แมทช์${inWhen}` : `ELO เริ่มที่ 1000 ชนะคู่ที่เก่งกว่าได้คะแนนมากกว่า${month ? ' · นับใหม่ทุกต้นเดือน' : part ? ' · นับใหม่ทุกต้นปี' : ''}`} · แตะชื่อเพื่อดูสถิติ</div>`;
+  html += rankingHtml(sorted, { byWr, min, when: inWhen, me, click: r => `onclick="setWatchFocus(this.dataset.n)" data-n="${e(r.key)}"` });
+
+  // --- honour roll (player of the year / month) ---
+  const hof = d.hof && typeof d.hof === 'object' ? d.hof : null;
+  if (hof) {
+    const nowKey = { year: rankPeriodKey('year', Date.now()), month: rankMonthKey(Date.now()) };
+    const parse = (arr, period) => (Array.isArray(arr) ? arr : []).filter(t => Array.isArray(t) && typeof t[0] === 'string' && /^\d{4}(-\d{2})?$/.test(t[0])).map(t => ({
+      key: t[0], current: t[0] === nowKey[period], games: num(t[2]),
+      label: period === 'month' ? rankMonthLabel(t[0]) : rankYearLabel(t[0]),
+      top: (Array.isArray(t[1]) ? t[1] : []).filter(c => Array.isArray(c) && typeof c[0] === 'string').slice(0, 3)
+        .map(c => ({ n: c[0], w: num(c[1]), l: num(c[2]), wr: num(c[3]) })),
+    }));
+    const tmin = hof.min || TITLE_MIN;
+    const av = (c, size) => avatarOf(c.n)(size);
+    const tap = c => list.some(x => x.n === c.n) ? `onclick="setWatchFocus(this.dataset.n)" data-n="${e(c.n)}" style="cursor:pointer;"` : '';
+    html += `<div class="section-h" style="margin-top:22px;"><h3>👑 ผู้เล่นประจำปี</h3><span class="tiny">อัตราชนะสูงสุด · เล่น ${num(tmin.year) || TITLE_MIN.year}+ แมทช์</span></div>`
+      + titleRollHtml(parse(hof.y, 'year'), 'year', av, tap)
+      + `<div class="section-h"><h3>🏅 ผู้เล่นประจำเดือน</h3><span class="tiny">อัตราชนะสูงสุด · เล่น ${num(tmin.month) || TITLE_MIN.month}+ แมทช์</span></div>`
+      + titleRollHtml(parse(hof.m, 'month'), 'month', av, tap);
   }
   el.innerHTML = html;
 }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Share link for the ranking. LINE / Facebook read the preview below
+     (they don't run scripts); people's browsers go straight on to the app. -->
+<title>อันดับนักแบด · Badminton Match</title>
+<meta name="description" content="โพเดียม อันดับเดือน / ปี / ตลอดกาล สถิติของคุณ และทำเนียบผู้เล่นประจำเดือน">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Badminton Match">
+<meta property="og:title" content="🏆 อันดับนักแบดของก๊วน">
+<meta property="og:description" content="โพเดียม · อันดับเดือน / ปี / ตลอดกาล · สถิติของคุณ · ทำเนียบผู้เล่นประจำเดือน">
+<meta property="og:image" content="https://jidunkung-design.github.io/badminton/og-rank.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="อันดับนักแบดมินตัน">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#13254a">
+<link rel="icon" type="image/png" href="icon-192.png">
+<script>
+  // index.html shows the ranking page when the link carries v=stats
+  (function () {
+    var q = new URLSearchParams(location.search);
+    q.set('v', 'stats');
+    window.__go = 'index.html?' + q.toString();
+    location.replace(window.__go + location.hash);
+  })();
+</script>
+<style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#eef2f1;color:#13254a;font-family:system-ui,sans-serif;}a{color:#13254a;}</style>
+</head>
+<body>
+<p>กำลังเปิดหน้าอันดับ… <a id="go" href="index.html">แตะที่นี่ถ้ายังไม่เปิด</a></p>
+<script>document.getElementById('go').href = window.__go || 'index.html';</script>
+</body>
+</html>
