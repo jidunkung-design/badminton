@@ -1,6 +1,8 @@
 <!DOCTYPE html>
+<!-- Badminton Match · v2.2.0 · 2026-11-29 -->
 <html lang="th">
 <head>
+<meta name="app-version" content="2.2.0">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
@@ -1027,6 +1029,33 @@
   .rst-player span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
   .rst-player.picked { border-color: var(--lime-border); background: var(--lime-soft); font-weight: 600; }
   .rst-player:disabled { opacity: 0.6; cursor: default; }
+  /* Version */
+  .app-menu .menu-version { color: var(--text2); font-size: 13px; }
+  .ver-hero { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+  .ver-hero b { font-size: 26px; font-weight: 700; }
+  .ver-hero span { color: var(--text2); font-size: 13px; }
+  .ver-status { font-size: 13px; padding: 9px 12px; border-radius: 10px; background: var(--surface2); margin-bottom: 14px; }
+  .ver-status.ok { background: var(--green-soft); color: #17773f; font-weight: 600; }
+  .ver-status.warn { background: var(--gold-soft); color: #8a5a00; }
+  .ver-log { max-height: 50vh; overflow-y: auto; }
+  .ver-entry { border-top: 1px solid var(--border); padding: 10px 0; }
+  .ver-entry-head { display: flex; justify-content: space-between; font-size: 14px; }
+  .ver-entry-head span { color: var(--text2); font-size: 12px; }
+  .ver-entry.cur .ver-entry-head b { color: #17773f; }
+  .ver-entry ul { margin: 6px 0 0 18px; padding: 0; font-size: 13px; color: var(--text2); line-height: 1.6; }
+  /* Ranking rules */
+  .rules h4 { font-size: 15px; font-weight: 600; margin: 14px 0 6px; }
+  .rules h4:first-child { margin-top: 0; }
+  .rules p { font-size: 14px; line-height: 1.6; margin: 0 0 6px; }
+  .rules .muted { color: var(--text2); font-size: 13px; }
+  .rules-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 4px 0 6px; }
+  .rules-table th { font-weight: 500; color: var(--text2); text-align: center; padding: 4px; font-size: 12px; }
+  .rules-table td { padding: 7px 4px; border-top: 1px solid var(--border); text-align: center; }
+  .rules-table td:first-child { text-align: left; font-weight: 500; }
+  .rules-link { display: flex; align-items: center; gap: 4px; margin: 12px auto 0; font-size: 13px; }
+  .rules-link .ic { font-size: 15px; }
+  .new-tag { font-size: 10px; font-weight: 700; background: var(--lime); color: var(--text); border-radius: 6px; padding: 2px 5px; }
+  #modal-rank-rules .modal { max-height: 88vh; overflow-y: auto; }
 </style>
 </head>
 <body>
@@ -1051,6 +1080,8 @@
     <button id="menu-install" onclick="toggleAppMenu(false);showInstallHelp()"><i data-icon="plus"></i>ติดตั้งเป็นแอปบนหน้าจอโฮม</button>
     <hr>
     <button class="danger" onclick="toggleAppMenu(false);confirmReset()"><i data-icon="trash"></i>รีเซ็ตข้อมูล</button>
+    <hr>
+    <button class="menu-version" onclick="toggleAppMenu(false);openAbout()"><i data-icon="info"></i><span id="menu-version-text">เวอร์ชัน</span></button>
   </div>
 </header>
 
@@ -1609,6 +1640,29 @@
     </div>
     <div id="rr-swap-body"></div>
     <button class="btn btn-lime btn-full" style="margin-top:12px;" onclick="closeModal('modal-rr-swap')">เสร็จ</button>
+  </div>
+</div>
+
+<!-- Modal: version + what's new -->
+<div class="modal-overlay" id="modal-about">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">เวอร์ชันและสิ่งที่อัปเดต</div>
+      <button class="modal-close" onclick="closeModal('modal-about')" aria-label="ปิด"><i data-icon="x"></i></button>
+    </div>
+    <div id="about-body"></div>
+  </div>
+</div>
+
+<!-- Modal: how the ranking works (organizer app and the shared ranking page) -->
+<div class="modal-overlay" id="modal-rank-rules">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">กติกาการจัดอันดับ</div>
+      <button class="modal-close" onclick="closeModal('modal-rank-rules')" aria-label="ปิด"><i data-icon="x"></i></button>
+    </div>
+    <div id="rank-rules-body"></div>
+    <button class="btn btn-lime btn-full" style="margin-top:14px;" onclick="closeModal('modal-rank-rules')">เข้าใจแล้ว</button>
   </div>
 </div>
 
@@ -3558,7 +3612,20 @@ function switchRankPeriod(pr) {
 // =================== RANKING: shared by the stats page and the viewer link ===================
 function rankMonthKey(d) { const x = new Date(d); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0'); }
 function rankMonthLabel(key) { const [y, m] = key.split('-').map(Number); return new Date(y, m - 1, 1).toLocaleDateString('th-TH', { month: 'long', year: 'numeric' }); }
-const RANK_MIN = { all: 5, year: 10, month: 3 }; // games needed to rank by win rate
+// To be ranked a player needs BOTH: this many play days and this many games in the period.
+// One Saturday is ~6–8 games, so counting days stops a single lucky day from topping the table.
+const RANK_MIN = { all: { d: 3, g: 15 }, year: { d: 6, g: 30 }, month: { d: 2, g: 10 } };
+const ELO_MIN_DAYS = 2; // ELO: players on fewer days are "ใหม่" — score shown, but not on the podium yet
+// Accepts { d, g } or an old plain game count
+function normRule(v, fallback) {
+  if (typeof v === 'number') return { d: 0, g: Math.max(0, v) };
+  if (v && typeof v === 'object') return { d: Math.max(0, Number(v.d) || 0), g: Math.max(0, Number(v.g) || 0) };
+  return fallback ? normRule(fallback) : { d: 0, g: 0 };
+}
+function ruleText(rule) {
+  const r = normRule(rule);
+  return [r.d ? `มา ${r.d} วัน` : '', r.g ? `${r.g} เกม` : ''].filter(Boolean).join(' และ ');
+}
 function rankYearLabel(key) { return 'ปี ' + (Number(key) + 543); } // Thai calendar year, e.g. ปี 2569
 function rankPeriodKey(period, d) { return period === 'year' ? String(new Date(d).getFullYear()) : rankMonthKey(d); }
 
@@ -3578,6 +3645,13 @@ function gamesIn(period, key) {
 function rankRowsFor(period, key) {
   const hist = period === 'all' ? null : gamesIn(period, key || rankPeriodKey(period, Date.now()));
   const elo = calcEloScores(hist || undefined);
+  // Distinct play days per player in the period
+  const dayset = {};
+  (hist || allGames()).forEach(m => {
+    if (!m.date) return;
+    const dk = toDateInput(new Date(m.date));
+    [...(m.teams[0] || []), ...(m.teams[1] || [])].forEach(id => { (dayset[id] || (dayset[id] = new Set())).add(dk); });
+  });
   return state.players.map(p => {
     let w, l;
     if (hist) {
@@ -3591,7 +3665,7 @@ function rankRowsFor(period, key) {
       w = s.wins || 0; l = s.losses || 0;
     }
     const total = w + l;
-    return { key: p.id, name: p.name, av: size => renderTierAvatar(p, size), w, l, total, wr: total ? Math.round(w / total * 100) : 0, elo: Math.round(elo[p.id] || 1000) };
+    return { key: p.id, name: p.name, av: size => renderTierAvatar(p, size), w, l, total, days: dayset[p.id] ? dayset[p.id].size : 0, wr: total ? Math.round(w / total * 100) : 0, elo: Math.round(elo[p.id] || 1000) };
   }).filter(r => period === 'all' || r.total > 0);
 }
 
@@ -3600,7 +3674,7 @@ function rankRowsFor(period, key) {
 // (ties: more wins). Worked out from the games, then saved in state.titles so
 // the honour roll survives "ล้างประวัติ" and players who leave the club.
 // A month/year is locked (final) the first time it's worked out after it ends.
-const TITLE_MIN = { month: 5, year: 20 };
+const TITLE_MIN = { month: { d: 2, g: 10 }, year: { d: 6, g: 30 } };
 function computeTitle(period, key) {
   const rows = rankRowsFor(period, key);
   const { ranked } = rankSort(rows, true, TITLE_MIN[period]);
@@ -3650,17 +3724,29 @@ function titleRollHtml(list, period, avatarOf, click) {
           <div style="min-width:0;flex:1;"><b>${escHtml(c.n)}</b><small>อัตราชนะ <b class="w">${c.wr}%</b> · ชนะ ${c.w} แพ้ ${c.l}</small></div>
         </div>
         ${runners ? `<div class="title-runners">${runners}</div>` : ''}`
-      : `<div class="tiny">ยังไม่มีใครเล่นครบ ${min} แมทช์${t.games ? ` (${t.games} แมทช์ในช่วงนี้)` : ''}</div>`}
+      : `<div class="tiny">ยังไม่มีใครครบเกณฑ์ (${ruleText(min)})${t.games ? ` · ${t.games} แมทช์ในช่วงนี้` : ''}</div>`}
     </div>`;
   }).join('') + `</div>`;
 }
 
 // → { ranked, others }: others = too few games to rank by win rate
-function rankSort(rows, byWr, min) {
-  if (!byWr) return { ranked: [...rows].sort((a, b) => b.elo - a.elo || b.wr - a.wr), others: [] };
+// rule: { d, g } (or an old plain game count). Rows without a day count (old shared
+// data) are judged on games only.
+function rankEligible(r, rule) {
+  const x = normRule(rule);
+  return r.total >= x.g && (r.days == null || r.days >= x.d);
+}
+function rankSort(rows, byWr, rule) {
+  if (!byWr) {
+    const x = rule == null ? { d: ELO_MIN_DAYS, g: 0 } : normRule(rule);
+    return {
+      ranked: rows.filter(r => r.total > 0 && rankEligible(r, x)).sort((a, b) => b.elo - a.elo || b.wr - a.wr),
+      others: rows.filter(r => !(r.total > 0 && rankEligible(r, x))).sort((a, b) => b.total - a.total || b.elo - a.elo),
+    };
+  }
   return {
-    ranked: rows.filter(r => r.total >= min).sort((a, b) => b.wr - a.wr || b.w - a.w || b.elo - a.elo),
-    others: rows.filter(r => r.total < min).sort((a, b) => b.total - a.total || b.wr - a.wr),
+    ranked: rows.filter(r => rankEligible(r, rule)).sort((a, b) => b.wr - a.wr || b.w - a.w || b.elo - a.elo),
+    others: rows.filter(r => !rankEligible(r, rule)).sort((a, b) => b.total - a.total || b.wr - a.wr),
   };
 }
 
@@ -3681,9 +3767,11 @@ function rankingHtml({ ranked, others }, opt) {
       <div class="pod-base">${place}</div>
     </div>`;
   };
+  const rule = byWr ? normRule(min) : { d: ELO_MIN_DAYS, g: 0 };
+  const progress = r => [rule.d ? `${r.days == null ? '?' : Math.min(r.days, rule.d)}/${rule.d} วัน` : '', rule.g ? `${Math.min(r.total, rule.g)}/${rule.g} เกม` : ''].filter(Boolean).join(' · ');
   const row = (r, no) => `<div class="rank-row ${r.key === me ? 'me' : ''}" ${click(r)}>
-    <div class="rank-no">${no}</div>
-    <div class="rank-player">${r.av(40)}<div style="min-width:0;"><b>${escHtml(r.name)}</b><small>${r.total} แมทช์</small></div></div>
+    <div class="rank-no">${no === '–' && !byWr ? '<span class="new-tag">ใหม่</span>' : no}</div>
+    <div class="rank-player">${r.av(40)}<div style="min-width:0;"><b>${escHtml(r.name)}</b><small>${no === '–' ? `ความคืบหน้า ${progress(r)}` : `${r.total} แมทช์${r.days != null ? ` · ${r.days} วัน` : ''}`}</small></div></div>
     <div class="rank-nums">
       <div class="${byWr ? '' : 'hl'}"><b>${r.elo.toLocaleString()}</b><span>คะแนน</span></div>
       <div><b><span class="w">${r.w}</span>-<span class="l">${r.l}</span></b><span>ชนะ-แพ้</span></div>
@@ -3693,7 +3781,8 @@ function rankingHtml({ ranked, others }, opt) {
   const top = ranked.slice(0, 3), rest = ranked.slice(3);
   return (top.length ? `<div class="podium-card"><div class="podium">${pod(top[1], 2)}${pod(top[0], 1)}${pod(top[2], 3)}</div></div>` : '')
     + (rest.length ? `<div class="rank-list">${rest.map((r, i) => row(r, i + 4)).join('')}</div>` : '')
-    + (others.length ? `<div class="rank-group">ยังลงแข่งไม่ถึง ${min} แมทช์</div><div class="rank-list">${others.map(r => row(r, '–')).join('')}</div>` : '')
+    + (others.length ? `<div class="rank-group">${byWr ? `กำลังเก็บสถิติ · ติดอันดับเมื่อ${ruleText(rule)}${opt.when || ''}` : `ผู้เล่นใหม่ · ขึ้นอันดับ ELO เมื่อมาเล่นครบ ${ELO_MIN_DAYS} วัน${opt.when || ''}`}</div><div class="rank-list">${others.map(r => row(r, '–')).join('')}</div>` : '')
+    + `<button class="link-btn rules-link" onclick="openRankRules()">${icon('info')}กติกาการจัดอันดับ</button>`
     + (!ranked.length && !others.length ? `<div class="empty-state"><div class="icon">🏆</div><p>ยังไม่มีผลการแข่งขัน${opt.when || ''}</p></div>` : '');
 }
 
@@ -3806,7 +3895,7 @@ function renderStatsRanking() {
   const period = currentRankPeriod;
   const inWhen = { all: '', year: 'ในปีนี้', month: 'ในเดือนนี้' }[period];
   const byWr = currentRankTab === 'wr';
-  const min = RANK_MIN[period];
+  const min = byWr ? RANK_MIN[period] : null;
   const sorted = rankSort(rankRowsFor(period), byWr, min);
   const monthBtn = document.getElementById('rank-period-month');
   if (monthBtn) monthBtn.textContent = 'เดือนนี้ · ' + new Date().toLocaleDateString('th-TH', { month: 'short' });
@@ -3814,8 +3903,8 @@ function renderStatsRanking() {
   if (yearBtn) yearBtn.textContent = rankYearLabel(new Date().getFullYear());
   noteEl.innerHTML = byWr
     // Players with too few matches would top the win-rate table on a lucky 1/1 — rank them after everyone else
-    ? `${icon('info')}<span>จัดอันดับเฉพาะผู้เล่นที่ลงแข่งอย่างน้อย ${min} แมทช์${inWhen}<br><small>(เพื่อให้สถิติมีความน่าเชื่อถือ)${sorted.others.length ? ' · คนที่ยังไม่ถึงแสดงท้ายสุด' : ''}</small></span>`
-    : `${icon('info')}<span>คะแนน ELO เริ่มต้นที่ 1000 และเปลี่ยนตามผลแข่งขัน${period === 'month' ? ' (นับใหม่ทุกต้นเดือน)' : period === 'year' ? ' (นับใหม่ทุกต้นปี)' : ''}<br><small>(ชนะคู่ที่เก่งกว่าได้คะแนนมากกว่า)</small></span>`;
+    ? `${icon('info')}<span>ติดอันดับเมื่อ${ruleText(min)}${inWhen}<br><small>คนที่ยังไม่ครบอยู่ในกลุ่ม "กำลังเก็บสถิติ" · <a href="#" onclick="openRankRules();return false;">ดูกติกา</a></small></span>`
+    : `${icon('info')}<span>คะแนน ELO เริ่มต้นที่ 1000 และเปลี่ยนตามผลแข่งขัน${period === 'month' ? ' (นับใหม่ทุกต้นเดือน)' : period === 'year' ? ' (นับใหม่ทุกต้นปี)' : ''}<br><small>ชนะคู่ที่เก่งกว่าได้คะแนนมากกว่า · ผู้เล่นใหม่ขึ้นอันดับเมื่อมาครบ ${ELO_MIN_DAYS} วัน · <a href="#" onclick="openRankRules();return false;">ดูกติกา</a></small></span>`;
   el.innerHTML = rankingHtml(sorted, { byWr, min, when: inWhen, click: r => `onclick="openPlayerStats('${r.key}')"` })
     + `<button class="btn btn-outline btn-full" style="margin-top:14px;" onclick="openStatsShareModal()">${icon('broadcast')}ให้คนอื่นดูหน้าอันดับผ่านลิงก์</button>`;
 }
@@ -3971,9 +4060,9 @@ function renderStatsFame() {
   const titleClick = c => state.players.some(p => p.id === c.id) ? `onclick="openPlayerStats('${c.id}')" style="cursor:pointer;"` : '';
   const months = titleList('month');
   const showAllMonths = fameShowAllMonths || months.length <= 6;
-  let html = `<div class="section-h" style="margin-top:0;"><h3>👑 ผู้เล่นประจำปี</h3><span class="tiny">อัตราชนะสูงสุด · เล่น ${TITLE_MIN.year}+ แมทช์</span></div>`
+  let html = `<div class="section-h" style="margin-top:0;"><h3>👑 ผู้เล่นประจำปี</h3><span class="tiny">อัตราชนะสูงสุด · ${ruleText(TITLE_MIN.year)}ขึ้นไป</span></div>`
     + titleRollHtml(titleList('year'), 'year', titleAv, titleClick)
-    + `<div class="section-h"><h3>🏅 ผู้เล่นประจำเดือน</h3><span class="tiny">อัตราชนะสูงสุด · เล่น ${TITLE_MIN.month}+ แมทช์</span></div>`
+    + `<div class="section-h"><h3>🏅 ผู้เล่นประจำเดือน</h3><span class="tiny">อัตราชนะสูงสุด · ${ruleText(TITLE_MIN.month)}ขึ้นไป</span></div>`
     + titleRollHtml(showAllMonths ? months : months.slice(0, 6), 'month', titleAv, titleClick)
     + (!showAllMonths ? `<button class="link-btn" style="margin:2px auto 0;display:flex;" onclick="fameShowAllMonths=true;renderStatsFame()">ดูทุกเดือน (${months.length})${icon('chevron-right')}</button>` : '')
     + `<div class="section-h"><h3>สถิติตลอดกาล</h3></div>`;
@@ -5423,6 +5512,7 @@ function toggleAppMenu(force) {
   const m = document.getElementById('app-menu');
   const show = force === undefined ? !m.classList.contains('show') : force;
   m.classList.toggle('show', show);
+  if (show) renderVersionLabel();
   if (show) renderBackupHint();
 }
 
@@ -5644,6 +5734,49 @@ function saveHistoryEdit(id) {
 }
 
 
+
+// =================== RANKING RULES (shown in the app and on the shared ranking page) ===================
+function openRankRules() {
+  const R = RANK_MIN, T = TITLE_MIN;
+  const row = (label, rule) => `<tr><td>${label}</td><td><b>${normRule(rule).d}</b> วัน</td><td><b>${normRule(rule).g}</b> เกม</td></tr>`;
+  document.getElementById('rank-rules-body').innerHTML = `
+    <div class="rules">
+      <h4>🏸 วัดผลยังไง</h4>
+      <p><b>Win Rate</b> = ชนะกี่เปอร์เซ็นต์ของเกมที่เล่น เช่น เล่น 20 ชนะ 12 = 60%</p>
+      <p><b>ELO</b> = คะแนนฝีมือ ทุกคนเริ่มที่ 1,000 ชนะได้คะแนน แพ้เสียคะแนน
+        <span class="muted">ชนะทีมที่เก่งกว่าได้คะแนนมาก ชนะทีมที่อ่อนกว่าได้น้อย</span></p>
+      <p>เกมประเภทคู่ ผลชนะ/แพ้นับให้ทั้งสองคนในทีม</p>
+
+      <h4>✅ เงื่อนไขติดอันดับ Win Rate</h4>
+      <p>ต้องครบ<b>ทั้งสองข้อ</b> คือจำนวนวันที่มาเล่น และจำนวนเกม</p>
+      <table class="rules-table">
+        <tr><th></th><th>มาเล่นอย่างน้อย</th><th>และเล่นอย่างน้อย</th></tr>
+        ${row('เดือนนี้', R.month)}${row('ปีนี้', R.year)}${row('ตลอดกาล', R.all)}
+      </table>
+      <p class="muted">อันดับเดือนเริ่มนับใหม่ทุกต้นเดือน จึงขึ้นตั้งแต่เสาร์ที่ ${normRule(R.month).d} ของเดือน</p>
+
+      <h4>🆕 ELO สำหรับผู้เล่นใหม่</h4>
+      <p>เห็นคะแนนตั้งแต่เกมแรก แต่ขึ้นอันดับเมื่อมาเล่นครบ <b>${ELO_MIN_DAYS} วัน</b> เพราะช่วงแรกคะแนนยังขึ้นลงแรง</p>
+
+      <h4>⏳ ยังไม่ครบเกณฑ์?</h4>
+      <p>อยู่ในกลุ่ม <b>"กำลังเก็บสถิติ"</b> เห็นผลชนะ แพ้ และอัตราชนะของตัวเองตามปกติ พร้อมบอกว่าครบไปเท่าไรแล้ว
+        มาเล่นจนครบเมื่อไร ขึ้นอันดับให้เองทันที</p>
+
+      <h4>🤝 ทำไมต้องนับวันด้วย</h4>
+      <p>มาเล่นวันเดียวก็ได้ 6–8 เกมแล้ว ถ้านับแค่จำนวนเกม คนที่มาครั้งเดียวแล้วบังเอิญชนะรวด จะขึ้นอันดับ 1
+        เหนือคนที่มาประจำทุกสัปดาห์ การนับวันทำให้ทุกคนเทียบกันจากผลงานหลายสัปดาห์ แฟร์กับทั้งคนประจำและคนใหม่</p>
+
+      <h4>👑 ผู้เล่นประจำเดือน / ปี</h4>
+      <p>อัตราชนะสูงสุดในกลุ่มที่ผ่านเกณฑ์ (ถ้าเท่ากัน ดูคนที่ชนะมากกว่า)</p>
+      <table class="rules-table">
+        <tr><th></th><th>มาเล่นอย่างน้อย</th><th>และเล่นอย่างน้อย</th></tr>
+        ${row('ประจำเดือน', T.month)}${row('ประจำปี', T.year)}
+      </table>
+      <p class="muted">ผลของเดือน/ปีที่จบแล้วจะถูกบันทึกไว้ในทำเนียบ</p>
+    </div>`;
+  openModal('modal-rank-rules');
+}
+
 // =================== RR: SWAP PARTNERS ===================
 // Tap one player, then a player in another team: they change places. Every
 // match still to be played follows the new teams; recorded games stay as played.
@@ -5708,6 +5841,97 @@ function swapRRPlayers(a, b) {
   save();
   renderMatchPage();
   return true;
+}
+
+
+// =================== APP VERSION ===================
+// Bump with every update:  major.minor.patch
+//   patch (2.1.0 → 2.1.1) small fix or tweak · minor (2.1 → 2.2) new feature · major = big rework
+// Add a line to CHANGELOG at the same time (newest first).
+const APP_VERSION = '2.2.0';
+const APP_BUILD_DATE = '2026-11-29';
+const CHANGELOG = [
+  { v: '2.2.0', d: '2026-11-29', items: [
+    'เกณฑ์ติดอันดับใหม่: นับทั้งจำนวนวันที่มาเล่นและจำนวนเกม (เดือน 2 วัน/10 เกม · ปี 6 วัน/30 เกม · ตลอดกาล 3 วัน/15 เกม)',
+    'ผู้เล่นประจำเดือน 2 วัน/10 เกม · ประจำปี 6 วัน/30 เกม',
+    'ELO: ผู้เล่นใหม่ขึ้นอันดับเมื่อมาครบ 2 วัน',
+    'คนที่ยังไม่ครบเกณฑ์อยู่ในกลุ่ม "กำลังเก็บสถิติ" พร้อมบอกว่าครบไปเท่าไร',
+    'เพิ่มหน้า "กติกาการจัดอันดับ" ทั้งในแอปและในหน้าดูอันดับที่แชร์',
+  ] },
+  { v: '2.1.0', d: '2026-11-28', items: [
+    'แก้ไขผู้เล่นย้อนหลังในประวัติการแข่งขัน (สถิติ อันดับ คู่หู/คู่ปรับ คำนวณใหม่ให้)',
+    'แลกคู่เองในโหมด Round Robin พร้อมป้ายเตือนคู่ที่เคยคู่กันมาแล้ว',
+    'แสดงเวอร์ชันในเมนู และเช็กว่าบน GitHub เป็นเวอร์ชันเดียวกันไหม',
+  ] },
+  { v: '2.0.0', d: '2026-11-27', items: [
+    'อันดับแบบโพเดียม (เดือน / ปี / ตลอดกาล) และผู้เล่นประจำเดือน / ปี',
+    'ล็อกคู่ · ลิงก์ดูอันดับ · เตือนเมื่อใกล้ถึงคิว · รูปพรีวิวเวลาแชร์ลิงก์ใน LINE',
+  ] },
+];
+
+function fmtVersionDate(d) {
+  return new Date(d + 'T12:00:00').toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function renderVersionLabel() {
+  const el = document.getElementById('menu-version-text');
+  if (el) el.innerHTML = `เวอร์ชัน ${APP_VERSION}<small class="menu-sub">${fmtVersionDate(APP_BUILD_DATE)} · กดดูสิ่งที่อัปเดต</small>`;
+}
+
+// Compare numeric versions: 1 if a > b, -1 if a < b, 0 if equal
+function compareVersions(a, b) {
+  const pa = String(a).split('.').map(n => parseInt(n) || 0), pb = String(b).split('.').map(n => parseInt(n) || 0);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    if ((pa[i] || 0) !== (pb[i] || 0)) return (pa[i] || 0) > (pb[i] || 0) ? 1 : -1;
+  }
+  return 0;
+}
+
+// The version actually published on GitHub Pages (read from its index.html)
+async function fetchPublishedVersion() {
+  const url = PUBLIC_APP_URL + 'index.html?vcheck=' + Date.now();
+  const ctrl = window.AbortController ? new AbortController() : null;
+  const timer = setTimeout(() => ctrl && ctrl.abort(), 8000);
+  try {
+    const res = await fetch(url, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined });
+    if (!res.ok) return null;
+    const text = await res.text();
+    const m = text.match(/const APP_VERSION = '([0-9.]+)'/) || text.match(/name="app-version" content="([0-9.]+)"/);
+    return m ? m[1] : 'ไม่มีเลขเวอร์ชัน';
+  } catch (e) {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function openAbout() {
+  renderAbout('checking');
+  openModal('modal-about');
+  const pub = await fetchPublishedVersion();
+  renderAbout(pub);
+}
+
+function renderAbout(pub) {
+  let status;
+  if (pub === 'checking') status = `<div class="ver-status">กำลังเช็กเวอร์ชันบน GitHub…</div>`;
+  else if (pub === null) status = `<div class="ver-status warn">เช็กเวอร์ชันบน GitHub ไม่ได้ (ไม่มีอินเทอร์เน็ต?)</div>`;
+  else if (pub === 'ไม่มีเลขเวอร์ชัน') status = `<div class="ver-status warn">บน GitHub ยังเป็นไฟล์รุ่นก่อนมีเลขเวอร์ชัน · ยังไม่ได้อัปโหลดตัวนี้</div>`;
+  else {
+    const c = compareVersions(APP_VERSION, pub);
+    status = c === 0 ? `<div class="ver-status ok">✓ บน GitHub เป็นเวอร์ชัน ${escHtml(pub)} ตรงกับที่เปิดอยู่</div>`
+      : c > 0 ? `<div class="ver-status warn">บน GitHub ยังเป็นเวอร์ชัน ${escHtml(pub)} · ไฟล์นี้ใหม่กว่า ยังไม่ได้อัปโหลด</div>`
+      : `<div class="ver-status warn">บน GitHub มีเวอร์ชัน ${escHtml(pub)} ซึ่งใหม่กว่าที่เปิดอยู่ · ปิดแล้วเปิดแอปใหม่เพื่ออัปเดต</div>`;
+  }
+  document.getElementById('about-body').innerHTML = `
+    <div class="ver-hero"><b>v${APP_VERSION}</b><span>${fmtVersionDate(APP_BUILD_DATE)}</span></div>
+    ${status}
+    <div class="ver-log">
+      ${CHANGELOG.map(c => `<div class="ver-entry${c.v === APP_VERSION ? ' cur' : ''}">
+        <div class="ver-entry-head"><b>v${c.v}</b><span>${fmtVersionDate(c.d)}</span></div>
+        <ul>${c.items.map(x => `<li>${escHtml(x)}</li>`).join('')}</ul>
+      </div>`).join('')}
+    </div>`;
 }
 
 // =================== SESSION CALC: participants ===================
@@ -6045,9 +6269,9 @@ function buildStatsSnapshot() {
     const s = state.stats[r.key] || {};
     const m = mon.get(r.key), y = yr.get(r.key);
     const { bp, nm } = bestPartnerAndNemesis(r.key);
-    const x = { n: r.name, w: r.w, l: r.l, e: r.elo, f: getPlayerForm(r.key).slice(-5).join('') };
-    if (m) x.mo = [m.w, m.l, m.elo];
-    if (y) x.yr = [y.w, y.l, y.elo];
+    const x = { n: r.name, w: r.w, l: r.l, e: r.elo, d: r.days, f: getPlayerForm(r.key).slice(-5).join('') };
+    if (m) x.mo = [m.w, m.l, m.elo, m.days];
+    if (y) x.yr = [y.w, y.l, y.elo, y.days];
     if (s.streak >= 2 && (s.streakType === 'win' || s.streakType === 'loss')) x.s = (s.streakType === 'win' ? 'w' : 'l') + s.streak;
     if (bp) x.bp = [getPlayerName(bp[0]), bp[1].w, bp[1].l];
     if (nm) x.nm = [getPlayerName(nm[0]), nm[1].w, nm[1].l];
@@ -6057,7 +6281,7 @@ function buildStatsSnapshot() {
   refreshTitles();
   const roll = (period, n) => titleList(period).slice(0, n).map(t => [t.key, t.top.map(c => [c.n, c.w, c.l, c.wr]), t.games]);
   const hof = { y: roll('year', 20), m: roll('month', 12), min: TITLE_MIN };
-  return { v: 1, kind: 'stats', mk, yk: rankPeriodKey('year', Date.now()), ml: rankMonthLabel(mk), min: RANK_MIN, players, hof };
+  return { v: 1, kind: 'stats', mk, yk: rankPeriodKey('year', Date.now()), ml: rankMonthLabel(mk), min: RANK_MIN, eloDays: ELO_MIN_DAYS, players, hof };
 }
 
 // Profile pictures go in best-ranked first until the update nears the size limit
@@ -6520,17 +6744,18 @@ function renderWatchStats(el, head) {
   const periodOk = { all: true, month: d.mk === rankMonthKey(Date.now()), year: d.yk === rankPeriodKey('year', Date.now()) };
   const month = wsPeriod === 'month', part = wsPeriod !== 'all';
   const inWhen = { all: '', year: 'ในปีนี้', month: 'ในเดือนนี้' }[wsPeriod];
-  const min = (d.min && num(d.min[wsPeriod])) || RANK_MIN[wsPeriod];
+  const min = normRule(d.min && d.min[wsPeriod], RANK_MIN[wsPeriod]);
   const avOk = u => typeof u === 'string' && u.length < 20000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(u);
   const avatarOf = n => size => renderTierAvatar({ name: n, photo: avOk((d.av || {})[n]) ? d.av[n] : null }, size);
   const rows = list.map(x => {
     const src = wsPeriod === 'month' ? x.mo : x.yr;
     const pp = part ? (periodOk[wsPeriod] && Array.isArray(src) ? src : [0, 0, 1000]) : [x.w, x.l, x.e];
     const w = num(pp[0]), l = num(pp[1]), total = w + l;
-    return { key: x.n, name: x.n, av: avatarOf(x.n), w, l, total, wr: total ? Math.round(w / total * 100) : 0, elo: num(pp[2]) || 1000, x };
+    const dayVal = part ? pp[3] : x.d;
+    return { key: x.n, name: x.n, av: avatarOf(x.n), w, l, total, days: dayVal == null ? null : num(dayVal), wr: total ? Math.round(w / total * 100) : 0, elo: num(pp[2]) || 1000, x };
   }).filter(r => !part || r.total > 0);
   const byWr = wsBy === 'wr';
-  const sorted = rankSort(rows, byWr, min);
+  const sorted = rankSort(rows, byWr, byWr ? min : null);
   const names = list.map(x => x.n).sort((a, b) => a.localeCompare(b, 'th'));
 
   let html = head;
@@ -6564,7 +6789,7 @@ function renderWatchStats(el, head) {
         <div style="flex:1;min-width:0;">
           <div class="profile-name"><span>${e(focus)}</span></div>
           <div class="profile-chips">
-            ${pos >= 0 ? `<span class="chip blue">อันดับ ${pos + 1} · ${byWr ? 'Win Rate' : 'ELO'}${month ? ' เดือนนี้' : part ? ' ปีนี้' : ''}</span>` : `<span class="chip">ยังไม่ติดอันดับ${byWr ? ` (ต้องเล่น ${min} แมทช์)` : ''}</span>`}
+            ${pos >= 0 ? `<span class="chip blue">อันดับ ${pos + 1} · ${byWr ? 'Win Rate' : 'ELO'}${month ? ' เดือนนี้' : part ? ' ปีนี้' : ''}</span>` : `<span class="chip" onclick="openRankRules()">ยังไม่ติดอันดับ · ${byWr ? `ความคืบหน้า ${[min.d ? `${Math.min(r && r.days != null ? r.days : 0, min.d)}/${min.d} วัน` : '', min.g ? `${Math.min(total, min.g)}/${min.g} เกม` : ''].filter(Boolean).join(' · ')}` : `มาแล้ว ${Math.min(r && r.days != null ? r.days : 0, ELO_MIN_DAYS)}/${ELO_MIN_DAYS} วัน`} ⓘ</span>`}
             <span class="chip">ELO ${(r ? r.elo : num(fx.e)).toLocaleString()}</span>
             ${streak}
           </div>
@@ -6591,7 +6816,7 @@ function renderWatchStats(el, head) {
       <button class="seg-btn ${wsPeriod === 'year' ? 'active' : ''}" onclick="setWsView('p','year')">${rankYearLabel(new Date().getFullYear())}</button>
       <button class="seg-btn ${month ? 'active' : ''}" onclick="setWsView('p','month')">เดือนนี้ · ${new Date().toLocaleDateString('th-TH', { month: 'short' })}</button>
     </div>
-    <div class="tiny" style="text-align:center;margin:-4px 0 10px;">${byWr ? `จัดอันดับเฉพาะคนที่เล่นอย่างน้อย ${min} แมทช์${inWhen}` : `ELO เริ่มที่ 1000 ชนะคู่ที่เก่งกว่าได้คะแนนมากกว่า${month ? ' · นับใหม่ทุกต้นเดือน' : part ? ' · นับใหม่ทุกต้นปี' : ''}`} · แตะชื่อเพื่อดูสถิติ</div>`;
+    <div class="tiny" style="text-align:center;margin:-4px 0 10px;">${byWr ? `ติดอันดับเมื่อ${ruleText(min)}${inWhen}` : `ELO เริ่มที่ 1000 ชนะคู่ที่เก่งกว่าได้คะแนนมากกว่า${month ? ' · นับใหม่ทุกต้นเดือน' : part ? ' · นับใหม่ทุกต้นปี' : ''} · ผู้เล่นใหม่ขึ้นอันดับเมื่อมาครบ ${ELO_MIN_DAYS} วัน`} · แตะชื่อเพื่อดูสถิติ · <a href="#" onclick="openRankRules();return false;">ดูกติกา</a></div>`;
   html += rankingHtml(sorted, { byWr, min, when: inWhen, me, click: r => `onclick="setWatchFocus(this.dataset.n)" data-n="${e(r.key)}"` });
 
   // --- honour roll (player of the year / month) ---
@@ -6607,9 +6832,9 @@ function renderWatchStats(el, head) {
     const tmin = hof.min || TITLE_MIN;
     const av = (c, size) => avatarOf(c.n)(size);
     const tap = c => list.some(x => x.n === c.n) ? `onclick="setWatchFocus(this.dataset.n)" data-n="${e(c.n)}" style="cursor:pointer;"` : '';
-    html += `<div class="section-h" style="margin-top:22px;"><h3>👑 ผู้เล่นประจำปี</h3><span class="tiny">อัตราชนะสูงสุด · เล่น ${num(tmin.year) || TITLE_MIN.year}+ แมทช์</span></div>`
+    html += `<div class="section-h" style="margin-top:22px;"><h3>👑 ผู้เล่นประจำปี</h3><span class="tiny">อัตราชนะสูงสุด · ${ruleText(normRule(tmin.year, TITLE_MIN.year))}ขึ้นไป</span></div>`
       + titleRollHtml(parse(hof.y, 'year'), 'year', av, tap)
-      + `<div class="section-h"><h3>🏅 ผู้เล่นประจำเดือน</h3><span class="tiny">อัตราชนะสูงสุด · เล่น ${num(tmin.month) || TITLE_MIN.month}+ แมทช์</span></div>`
+      + `<div class="section-h"><h3>🏅 ผู้เล่นประจำเดือน</h3><span class="tiny">อัตราชนะสูงสุด · ${ruleText(normRule(tmin.month, TITLE_MIN.month))}ขึ้นไป</span></div>`
       + titleRollHtml(parse(hof.m, 'month'), 'month', av, tap);
   }
   el.innerHTML = html;
@@ -7244,7 +7469,7 @@ async function exportBackup() {
     const k = localStorage.key(i);
     if (k && k.startsWith('bmt_') && !BACKUP_SKIP_KEYS.includes(k)) data[k] = localStorage.getItem(k);
   }
-  const payload = { app: BACKUP_APP, version: 1, exportedAt: new Date().toISOString(), data };
+  const payload = { app: BACKUP_APP, version: 1, appVersion: APP_VERSION, exportedAt: new Date().toISOString(), data };
   const name = `badminton-backup-${toDateInput(new Date())}.json`;
   const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
   const done = () => { try { localStorage.setItem('bmt_lastBackup', new Date().toISOString()); } catch (e) {} };
