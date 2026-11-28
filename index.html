@@ -1005,6 +1005,28 @@
   .watch-court .wc-vs { align-self: center; margin: 0; font-size: 13px; }
   .watch-court.is-done .wp-av { filter: none; opacity: 1; }
   .watch-court .wc-team.won .wp-av { box-shadow: 0 0 0 2px var(--gold); }
+  /* Edit players of a past game */
+  .edit-players { margin: 12px 0 4px; border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
+  .edit-players summary { cursor: pointer; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 6px; list-style: none; }
+  .edit-players summary::-webkit-details-marker { display: none; }
+  .edit-players summary small { color: var(--text2); font-weight: 400; }
+  .edit-seats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+  .edit-seat-col .select { margin-bottom: 6px; }
+  .edit-players .warn-note { margin-top: 6px; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+  /* RR partner swap */
+  .chip.chip-warn { background: var(--gold-soft); }
+  .rr-swap-btn { margin-left: auto; }
+  .rr-swap-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .rr-swap-team { border: 1px solid var(--border); border-radius: 12px; padding: 8px; }
+  .rr-swap-team.warn { border-color: var(--gold); background: var(--gold-soft); }
+  .rst-head { display: flex; justify-content: space-between; align-items: center; gap: 4px; font-size: 13px; margin-bottom: 6px; flex-wrap: wrap; }
+  .rst-tag { font-size: 11px; color: var(--text2); }
+  .rst-tag.warn { color: #9a6a00; font-weight: 600; }
+  .rst-players { display: flex; flex-direction: column; gap: 4px; }
+  .rst-player { display: flex; align-items: center; gap: 8px; padding: 6px; border-radius: 10px; border: 1.5px solid transparent; background: var(--surface); cursor: pointer; font: inherit; color: inherit; text-align: left; min-width: 0; }
+  .rst-player span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
+  .rst-player.picked { border-color: var(--lime-border); background: var(--lime-soft); font-weight: 600; }
+  .rst-player:disabled { opacity: 0.6; cursor: default; }
 </style>
 </head>
 <body>
@@ -1578,6 +1600,18 @@
   </div>
 </div>
 
+<!-- Modal: swap partners between Round Robin teams -->
+<div class="modal-overlay" id="modal-rr-swap">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">แลกคู่ Round Robin</div>
+      <button class="modal-close" onclick="closeModal('modal-rr-swap')" aria-label="ปิด"><i data-icon="x"></i></button>
+    </div>
+    <div id="rr-swap-body"></div>
+    <button class="btn btn-lime btn-full" style="margin-top:12px;" onclick="closeModal('modal-rr-swap')">เสร็จ</button>
+  </div>
+</div>
+
 <!-- Modal: Confirm Reset -->
 <div class="modal-overlay" id="modal-reset">
   <div class="modal">
@@ -1814,6 +1848,7 @@ function save() {
     localStorage.setItem('bmt_playDay', state.playDay || '');
     localStorage.setItem('bmt_rrActive', state.rrActive);
     localStorage.setItem('bmt_rrTeams', JSON.stringify(state.rrTeams));
+    localStorage.setItem('bmt_rrStartedAt', state.rrStartedAt || '');
     localStorage.setItem('bmt_rrRounds', JSON.stringify(state.rrRounds));
     localStorage.setItem('bmt_rrRoundIdx', state.rrRoundIdx);
     localStorage.setItem('bmt_rrRoundQueue', JSON.stringify(state.rrRoundQueue));
@@ -1867,6 +1902,7 @@ function load() {
     state.playDay = localStorage.getItem('bmt_playDay') || '';
     state.rrActive = localStorage.getItem('bmt_rrActive') === 'true';
     state.rrTeams = JSON.parse(localStorage.getItem('bmt_rrTeams') || '[]');
+    state.rrStartedAt = localStorage.getItem('bmt_rrStartedAt') || '';
     state.rrRounds = JSON.parse(localStorage.getItem('bmt_rrRounds') || '[]');
     state.rrRoundIdx = parseInt(localStorage.getItem('bmt_rrRoundIdx') || '0');
     state.rrRoundQueue = JSON.parse(localStorage.getItem('bmt_rrRoundQueue') || '[]');
@@ -2662,6 +2698,7 @@ function doRandomize(avoid) {
 
     state.rrActive = true;
     state.rrTeams = teams;
+    state.rrStartedAt = new Date().toISOString(); // games before this count as "เคยคู่กัน" 
     state.rrRounds = rounds;
     state.rrRoundIdx = 0;
     state.rrRoundQueue = rrRoundQueue;
@@ -2797,7 +2834,8 @@ function renderMatchPage() {
       </div>
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
       <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;">
-        ${state.rrTeams.map((teamIds, ti) => `<span class="chip"><b>ทีม ${ti + 1}</b>&nbsp;${teamIds.map(id => escHtml(getPlayerName(id))).join(' & ')}</span>`).join('')}
+        ${state.rrTeams.map((teamIds, ti) => { const n = rrTimesTogether(teamIds); return `<span class="chip${n ? ' chip-warn' : ''}"><b>ทีม ${ti + 1}</b>&nbsp;${teamIds.map(id => escHtml(getPlayerName(id))).join(' & ')}${n ? ` · เคยคู่กัน ${n}` : ''}</span>`; }).join('')}
+        ${state.rrTeams.some(t => t.length === 2) ? `<button class="btn btn-outline btn-sm rr-swap-btn" onclick="openRRSwap()">${icon('swap')}แลกคู่</button>` : ''}
       </div>
     </div>`;
   }
@@ -4097,6 +4135,7 @@ function openEditHistoryModal(id) {
   if (!h) return;
   const winnerIds = h.winner ? h.winner.join(',') : null;
   editHistoryChoice = !winnerIds ? -1 : (h.teams[0].join(',') === winnerIds ? 0 : 1);
+  editHistoryTeams = h.teams.map(t => [...t]);
   renderEditHistory(id);
   openModal('modal-edit-history');
 }
@@ -4119,23 +4158,9 @@ function applyResultToStats(teams, winner, sign) {
 function setHistoryWinner(id, teamIdx) {
   const h = state.matchHistory.find(x => x.id === id);
   if (!h) return;
-  const newWinner = teamIdx === -1 ? null : h.teams[teamIdx];
-  const key = w => (w ? w.join(',') : '');
-  if (key(newWinner) !== key(h.winner)) {
-    // take the old result back out, then count the new one
-    applyResultToStats(h.teams, h.winner, -1);
-    h.winner = newWinner;
-    applyResultToStats(h.teams, newWinner, 1);
-    refreshStreaks([...h.teams[0], ...h.teams[1]]);
-    // If this game is still shown on a court, keep it in sync and drop its
-    // "undo" snapshot — restoring that would overwrite the edit just made.
-    state.currentMatches.forEach(m => {
-      if (m._undo && m._undo.histId === id) { m.winner = newWinner; delete m._undo; }
-    });
-  }
-  save();
-  closeModal('modal-edit-history');
-  renderStatsHistory();
+  editHistoryTeams = h.teams.map(t => [...t]);
+  editHistoryChoice = teamIdx;
+  saveHistoryEdit(id);
 }
 
 // =================== MODAL ===================
@@ -5475,6 +5500,7 @@ function matchRowHtml(m, perspectiveId) {
 
 let historyPlayerFilter = '';
 let editHistoryChoice = null;
+let editHistoryTeams = null; // working copy of the teams while the edit window is open
 
 function setHistoryPlayer(id) {
   historyPlayerFilter = id;
@@ -5495,15 +5521,29 @@ function chooseHistoryWinner(id, idx) {
 function renderEditHistory(id) {
   const h = state.matchHistory.find(x => x.id === id);
   if (!h) return;
+  if (!editHistoryTeams) editHistoryTeams = h.teams.map(t => [...t]);
   const winnerIds = h.winner ? h.winner.join(',') : null;
   const original = !winnerIds ? -1 : (h.teams[0].join(',') === winnerIds ? 0 : 1);
+  const nameOf = pid => (state.players.find(p => p.id === pid) || {}).name || (h.names && h.names[pid]) || getPlayerName(pid);
+  const changed = JSON.stringify(editHistoryTeams) !== JSON.stringify(h.teams);
   const teamBox = (idx) => {
-    const players = (h.teams[idx] || []).map(pid => state.players.find(p => p.id === pid) || { name: getPlayerName(pid), skill: 0 });
+    const players = (editHistoryTeams[idx] || []).map(pid => state.players.find(p => p.id === pid) || { name: nameOf(pid), skill: 0 });
     const win = editHistoryChoice === idx;
     return `<button class="edit-team ${win ? 'win' : ''}" onclick="chooseHistoryWinner('${id}', ${idx})">
       <h5>${win ? icon('trophy', 'color:var(--gold)') : ''}ทีม ${idx ? 'B' : 'A'}</h5>
       ${players.map(p => `<div>${renderTierAvatar(p, 24)}<span>${escHtml(p.name)}</span></div>`).join('')}
     </button>`;
+  };
+  // One dropdown per seat. Everyone in the club can be picked; a player who has
+  // since been deleted stays selectable for the seat they already had.
+  const inGame = new Set(editHistoryTeams.flat());
+  const seatSelect = (t, k) => {
+    const cur = editHistoryTeams[t][k];
+    const opts = state.players.map(p => p.id)
+      .filter(pid => pid === cur || !inGame.has(pid))
+      .map(pid => `<option value="${pid}" ${pid === cur ? 'selected' : ''}>${escHtml(nameOf(pid))}</option>`);
+    if (!state.players.some(p => p.id === cur)) opts.unshift(`<option value="${cur}" selected>${escHtml(nameOf(cur))} (ลบแล้ว)</option>`);
+    return `<select class="select" onchange="setHistorySeat('${id}', ${t}, ${k}, this.value)" aria-label="ทีม ${t ? 'B' : 'A'} คนที่ ${k + 1}">${opts.join('')}</select>`;
   };
   const resultText = i => i === -1 ? 'ไม่มีผล' : `ทีม ${i ? 'B' : 'A'} ชนะ`;
   document.getElementById('edit-history-teams').innerHTML = `
@@ -5522,11 +5562,152 @@ function renderEditHistory(id) {
       </div>
     </div>
     <div class="edit-teams">${teamBox(0)}<div class="vs">VS</div>${teamBox(1)}</div>
-    <div class="old-result">ผลที่บันทึกไว้เดิม : ${original === -1 ? '' : icon('trophy', 'color:var(--gold)')} <b>${resultText(original)}</b></div>
+    <details class="edit-players" ${changed ? 'open' : ''}>
+      <summary>${icon('users')}แก้ไขผู้เล่นในแมทช์นี้ <small>(กรณีบันทึกคนผิด)</small></summary>
+      <div class="edit-seats">
+        ${[0, 1].map(t => `<div class="edit-seat-col"><div class="form-label">ทีม ${t ? 'B' : 'A'}</div>${editHistoryTeams[t].map((_, k) => seatSelect(t, k)).join('')}</div>`).join('')}
+      </div>
+      ${changed ? `<div class="warn-note">เปลี่ยนผู้เล่นแล้ว — สถิติ อันดับ และคู่หู/คู่ปรับจะคำนวณใหม่ตอนกดบันทึก
+        <button class="link-btn" onclick="resetHistorySeats('${id}')">คืนค่าเดิม</button></div>` : ''}
+    </details>
+    <div class="old-result">ผลที่บันทึกไว้เดิม : ${original === -1 ? '' : icon('trophy', 'color:var(--gold)')} <b>${resultText(original)}</b>
+      ${changed ? `<br><small class="muted">ผู้เล่นเดิม: ${h.teams.map(t => t.map(nameOf).map(escHtml).join(' & ')).join(' vs ')}</small>` : ''}</div>
     <div class="modal-btns">
       <button class="btn btn-outline" onclick="closeModal('modal-edit-history')">ยกเลิก</button>
-      <button class="btn btn-lime" onclick="setHistoryWinner('${id}', editHistoryChoice)">บันทึกผลการแข่งขัน</button>
+      <button class="btn btn-lime" onclick="saveHistoryEdit('${id}')">บันทึกการแก้ไข</button>
     </div>`;
+}
+
+function setHistorySeat(id, t, k, pid) {
+  if (!editHistoryTeams || !pid) return;
+  editHistoryTeams[t][k] = pid;
+  renderEditHistory(id);
+}
+
+function resetHistorySeats(id) {
+  const h = state.matchHistory.find(x => x.id === id);
+  if (!h) return;
+  editHistoryTeams = h.teams.map(t => [...t]);
+  renderEditHistory(id);
+}
+
+// Save winner and/or players of a past game. The old result is taken out of the
+// stats, the game is rewritten, then counted again — so wins, losses, streaks,
+// rankings, partners and nemeses all follow the corrected line-up.
+function saveHistoryEdit(id) {
+  const h = state.matchHistory.find(x => x.id === id);
+  if (!h) return;
+  const teams = (editHistoryTeams || h.teams).map(t => [...t]);
+  const ids = teams.flat();
+  if (ids.some(x => !x) || new Set(ids).size !== ids.length) { notify('มีผู้เล่นซ้ำกันในแมทช์นี้\nแต่ละคนลงได้ตำแหน่งเดียว'); return; }
+  const teamsChanged = JSON.stringify(teams) !== JSON.stringify(h.teams);
+  const newWinner = editHistoryChoice === -1 ? null : teams[editHistoryChoice];
+  const key = w => (w ? w.join(',') : '');
+  if (!teamsChanged && key(newWinner) === key(h.winner)) { closeModal('modal-edit-history'); return; }
+
+  const oldIds = [...h.teams[0], ...h.teams[1]];
+  applyResultToStats(h.teams, h.winner, -1);
+
+  if (teamsChanged) {
+    // Games-today count (used to keep play time fair) moves to the right person
+    if (h.date && toDateInput(new Date(h.date)) === state.playDay && state.playCount) {
+      oldIds.filter(x => !ids.includes(x)).forEach(x => { if (state.playCount[x]) state.playCount[x]--; });
+      ids.filter(x => !oldIds.includes(x)).forEach(x => { state.playCount[x] = (state.playCount[x] || 0) + 1; });
+    }
+    // Pair logs used to avoid repeat pairings
+    const pk = (a, b) => (a < b ? { a, b } : { a: b, b: a });
+    state.pairHistory = (state.pairHistory || []).filter(x => x.matchId !== h.matchId);
+    state.teammateHistory = (state.teammateHistory || []).filter(x => x.matchId !== h.matchId);
+    for (let i = 0; i < ids.length; i++) for (let j = i + 1; j < ids.length; j++) state.pairHistory.push({ ...pk(ids[i], ids[j]), matchId: h.matchId });
+    teams.forEach(t => { for (let i = 0; i < t.length; i++) for (let j = i + 1; j < t.length; j++) state.teammateHistory.push({ ...pk(t[i], t[j]), matchId: h.matchId }); });
+    h.teams = teams;
+    h.names = Object.assign({}, h.names || {}, Object.fromEntries(ids.map(x => [x, getPlayerName(x)])));
+    h.edited = new Date().toISOString();
+  }
+  h.winner = newWinner;
+  applyResultToStats(h.teams, h.winner, 1);
+  refreshStreaks([...new Set([...oldIds, ...ids])]);
+
+  // Titles for a finished month/year are locked — let this game's month/year be worked out again
+  if (h.date && state.titles) {
+    ['m:' + rankPeriodKey('month', h.date), 'y:' + rankPeriodKey('year', h.date)].forEach(k => { if (state.titles[k]) state.titles[k].final = false; });
+  }
+  // If this game is still shown on a court, keep it in sync and drop its
+  // "undo" snapshot — restoring that would overwrite the edit just made.
+  state.currentMatches.forEach(m => {
+    if (m._undo && m._undo.histId === id) { m.teams = h.teams.map(t => [...t]); m.winner = h.winner; delete m._undo; }
+  });
+  editHistoryTeams = null;
+  save();
+  closeModal('modal-edit-history');
+  renderStatsHistory();
+}
+
+
+// =================== RR: SWAP PARTNERS ===================
+// Tap one player, then a player in another team: they change places. Every
+// match still to be played follows the new teams; recorded games stay as played.
+let rrSwapPick = null;
+
+// How many times these two were partners before this Round Robin started
+function rrTimesTogether(team) {
+  if (!team || team.length !== 2) return 0;
+  const [a, b] = team;
+  const before = state.rrStartedAt || '';
+  return allGames().filter(m => (!before || !m.date || m.date < before) &&
+    m.teams.some(t => t.includes(a) && t.includes(b))).length;
+}
+
+function openRRSwap() {
+  rrSwapPick = null;
+  renderRRSwap();
+  openModal('modal-rr-swap');
+}
+
+function renderRRSwap() {
+  const el = document.getElementById('rr-swap-body');
+  const played = state.rrDoneMatches || 0;
+  el.innerHTML = `
+    <p class="live-p">${rrSwapPick ? `เลือก <b>${escHtml(getPlayerName(rrSwapPick))}</b> แล้ว · แตะผู้เล่นในทีมอื่นเพื่อสลับกัน` : 'แตะผู้เล่นคนแรก แล้วแตะผู้เล่นในทีมอื่นเพื่อสลับกัน'}</p>
+    ${played ? `<div class="warn-note" style="margin-bottom:10px;">บันทึกผลไปแล้ว ${played} แมทช์ · แมทช์ที่บันทึกแล้วไม่เปลี่ยน มีผลกับแมทช์ที่เหลือ</div>` : ''}
+    <div class="rr-swap-list">
+      ${state.rrTeams.map((team, ti) => {
+        const n = rrTimesTogether(team);
+        const locked = isLockedTeam(team);
+        return `<div class="rr-swap-team${n ? ' warn' : ''}">
+          <div class="rst-head"><b>ทีม ${ti + 1}</b>${locked ? '<span class="rst-tag">🔒 ล็อกคู่</span>' : n ? `<span class="rst-tag warn">เคยคู่กัน ${n} ครั้ง</span>` : ''}</div>
+          <div class="rst-players">${team.map(pid => `<button class="rst-player${rrSwapPick === pid ? ' picked' : ''}" ${locked ? 'disabled' : ''} onclick="pickRRSwap('${pid}')">${renderTierAvatar(state.players.find(p => p.id === pid) || { name: getPlayerName(pid), skill: 0 }, 26)}<span>${escHtml(getPlayerName(pid))}</span></button>`).join('')}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function pickRRSwap(pid) {
+  if (!rrSwapPick || rrSwapPick === pid) { rrSwapPick = rrSwapPick === pid ? null : pid; renderRRSwap(); return; }
+  const ta = state.rrTeams.findIndex(t => t.includes(rrSwapPick));
+  const tb = state.rrTeams.findIndex(t => t.includes(pid));
+  if (ta < 0 || tb < 0) { rrSwapPick = null; renderRRSwap(); return; }
+  if (ta === tb) { rrSwapPick = pid; renderRRSwap(); return; } // same team → just change the pick
+  swapRRPlayers(rrSwapPick, pid);
+  rrSwapPick = null;
+  renderRRSwap();
+}
+
+function swapRRPlayers(a, b) {
+  const ta = state.rrTeams.findIndex(t => t.includes(a));
+  const tb = state.rrTeams.findIndex(t => t.includes(b));
+  if (ta < 0 || tb < 0 || ta === tb) return false;
+  if (isLockedTeam(state.rrTeams[ta]) || isLockedTeam(state.rrTeams[tb])) { notify('ทีมนี้ล็อกคู่ไว้ แลกคู่ไม่ได้\nปลดล็อกได้ที่หน้าผู้เล่น'); return false; }
+  state.rrTeams[ta] = state.rrTeams[ta].map(x => (x === a ? b : x));
+  state.rrTeams[tb] = state.rrTeams[tb].map(x => (x === b ? a : x));
+  // Courts still in play take the new teams; finished courts keep what was played
+  state.currentMatches.forEach(m => {
+    if (!m.rrMatch || m.done) return;
+    m.teams = [[...state.rrTeams[m.teamIdxA]], [...state.rrTeams[m.teamIdxB]]];
+  });
+  save();
+  renderMatchPage();
+  return true;
 }
 
 // =================== SESSION CALC: participants ===================
